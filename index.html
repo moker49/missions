@@ -1,82 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Perk Tracker</title>
   <style>
     body {
       font-family: sans-serif;
       margin: 0;
       padding: 1rem;
-      background: #f2f2f2;
+      background: #f0f0f0;
     }
-    .player {
-      margin-bottom: 2rem;
-      background: white;
-      padding: 1rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+
+    .player-header {
+      text-align: center;
+      margin-bottom: 1rem;
     }
-    .perk-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr); /* 1 for row headers */
+      gap: 4px;
     }
-    .perk {
-      width: 40px;
-      height: 40px;
+
+    .grid-header {
       background: #ccc;
+      padding: 0.5rem;
+      text-align: center;
+      font-weight: bold;
       border-radius: 4px;
+    }
+
+    .grid-cell {
+      background: white;
+      padding: 0.25rem;
+      min-height: 60px;
+      text-align: center;
+      border-radius: 6px;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
+    }
+
+    .perk-dots {
+      display: flex;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 1px solid #555;
+      background: #fff;
       cursor: pointer;
     }
-    .perk.active {
+
+    .dot.filled {
       background: #4caf50;
-      color: white;
-    }
-    .perk-counter {
-      margin-top: 0.5rem;
-      font-weight: bold;
+      border-color: #4caf50;
     }
   </style>
 </head>
 <body>
 
-  <div class="player" id="player1">
+  <div class="player-header">
     <h2>Player 1</h2>
-    <div class="perk-grid" data-player="1">
-      <!-- 20 perks -->
-      <div class="perk">1</div>
-      <div class="perk">2</div>
-      <!-- ... -->
-    </div>
-    <div class="perk-counter">Perks: <span>0</span></div>
+    <div>Perk Points Used: <span id="perk-used">0</span> / <span id="perk-max">15</span></div>
+  </div>
+
+  <div class="grid-container" id="grid">
+    <!-- Top-left corner -->
+    <div></div>
+    <!-- Column headers -->
+    <div class="grid-header">1</div>
+    <div class="grid-header">2</div>
+    <div class="grid-header">3</div>
+    <div class="grid-header">4</div>
+    <div class="grid-header">5</div>
+
+    <!-- Rows -->
+    <!-- Row: Type A -->
+    <div class="grid-header">Type A</div>
+    <div class="grid-cell" data-points="1"></div>
+    <div class="grid-cell" data-points="2"></div>
+    <div class="grid-cell" data-points="3"></div>
+    <div class="grid-cell" data-points="2"></div>
+    <div class="grid-cell" data-points="4"></div>
+
+    <!-- Row: Type B -->
+    <div class="grid-header">Type B</div>
+    <div class="grid-cell" data-points="1"></div>
+    <div class="grid-cell" data-points="1"></div>
+    <div class="grid-cell" data-points="2"></div>
+    <div class="grid-cell" data-points="3"></div>
+    <div class="grid-cell" data-points="2"></div>
+
+    <!-- Row: Type C -->
+    <div class="grid-header">Type C</div>
+    <div class="grid-cell" data-points="2"></div>
+    <div class="grid-cell" data-points="3"></div>
+    <div class="grid-cell" data-points="1"></div>
+    <div class="grid-cell" data-points="2"></div>
+    <div class="grid-cell" data-points="1"></div>
+
+    <!-- Row: Type D -->
+    <div class="grid-header">Type D</div>
+    <div class="grid-cell" data-points="3"></div>
+    <div class="grid-cell" data-points="2"></div>
+    <div class="grid-cell" data-points="1"></div>
+    <div class="grid-cell" data-points="4"></div>
+    <div class="grid-cell" data-points="2"></div>
+
+    <!-- Row: Type E -->
+    <div class="grid-header">Type E</div>
+    <div class="grid-cell" data-points="1"></div>
+    <div class="grid-cell" data-points="3"></div>
+    <div class="grid-cell" data-points="2"></div>
+    <div class="grid-cell" data-points="2"></div>
+    <div class="grid-cell" data-points="1"></div>
   </div>
 
   <script>
-    document.querySelectorAll('.perk-grid').forEach(grid => {
-      grid.innerHTML = '';
-      for (let i = 1; i <= 20; i++) {
-        const perk = document.createElement('div');
-        perk.classList.add('perk');
-        perk.textContent = i;
-        perk.addEventListener('click', () => {
-          perk.classList.toggle('active');
-          updateCount(grid);
+    const maxPerks = 15;
+    let usedPerks = 0;
+
+    function updatePerkCount() {
+      document.getElementById("perk-used").textContent = usedPerks;
+    }
+
+    function createDots(cell, count) {
+      const container = document.createElement("div");
+      container.classList.add("perk-dots");
+
+      for (let i = 0; i < count; i++) {
+        const dot = document.createElement("div");
+        dot.classList.add("dot");
+        dot.dataset.filled = "false";
+
+        dot.addEventListener("click", () => {
+          const isFilled = dot.classList.contains("filled");
+
+          if (isFilled) {
+            dot.classList.remove("filled");
+            usedPerks--;
+          } else {
+            if (usedPerks >= maxPerks) {
+              alert("Max perk points used!");
+              return;
+            }
+            dot.classList.add("filled");
+            usedPerks++;
+          }
+
+          updatePerkCount();
         });
-        grid.appendChild(perk);
+
+        container.appendChild(dot);
       }
-      updateCount(grid);
+
+      cell.appendChild(container);
+    }
+
+    document.querySelectorAll(".grid-cell").forEach((cell) => {
+      const count = parseInt(cell.dataset.points);
+      createDots(cell, count);
     });
 
-    function updateCount(grid) {
-      const count = grid.querySelectorAll('.perk.active').length;
-      const counter = grid.parentElement.querySelector('.perk-counter span');
-      counter.textContent = count;
-    }
+    updatePerkCount();
+    document.getElementById("perk-max").textContent = maxPerks;
   </script>
 
 </body>
