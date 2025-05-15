@@ -41,6 +41,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      cursor: pointer;
     }
 
     .perk-dots {
@@ -55,7 +56,6 @@
       border-radius: 50%;
       border: 1px solid #555;
       background: #fff;
-      cursor: pointer;
     }
 
     .dot.filled {
@@ -81,7 +81,6 @@
     <div class="grid-header">4</div>
     <div class="grid-header">5</div>
 
-    <!-- Rows -->
     <!-- Row: Type A -->
     <div class="grid-header">Type A</div>
     <div class="grid-cell" data-points="1"></div>
@@ -135,33 +134,37 @@
       const container = document.createElement("div");
       container.classList.add("perk-dots");
 
+      const dots = [];
+
       for (let i = 0; i < count; i++) {
         const dot = document.createElement("div");
         dot.classList.add("dot");
-        dot.dataset.filled = "false";
-
-        dot.addEventListener("click", () => {
-          const isFilled = dot.classList.contains("filled");
-
-          if (isFilled) {
-            dot.classList.remove("filled");
-            usedPerks--;
-          } else {
-            if (usedPerks >= maxPerks) {
-              alert("Max perk points used!");
-              return;
-            }
-            dot.classList.add("filled");
-            usedPerks++;
-          }
-
-          updatePerkCount();
-        });
-
         container.appendChild(dot);
+        dots.push(dot);
       }
 
       cell.appendChild(container);
+
+      let filledCount = 0;
+
+      cell.addEventListener("click", () => {
+        if (filledCount === count) {
+          // Reset
+          dots.forEach(dot => dot.classList.remove("filled"));
+          usedPerks -= filledCount;
+          filledCount = 0;
+        } else {
+          if (usedPerks >= maxPerks) {
+            alert("Max perk points used!");
+            return;
+          }
+          dots[filledCount].classList.add("filled");
+          filledCount++;
+          usedPerks++;
+        }
+
+        updatePerkCount();
+      });
     }
 
     document.querySelectorAll(".grid-cell").forEach((cell) => {
