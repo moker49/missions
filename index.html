@@ -2,179 +2,265 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Perk Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dice Throne Tracker</title>
   <style>
     body {
       font-family: sans-serif;
       margin: 0;
-      padding: 1rem;
+      padding: 0;
       background: #f0f0f0;
     }
 
-    .player-header {
-      text-align: center;
-      margin-bottom: 1rem;
-    }
-
-    .grid-container {
-      display: grid;
-      grid-template-columns: repeat(6, 1fr); /* 1 for row headers */
-      gap: 4px;
-    }
-
-    .grid-header {
-      background: #ccc;
-      padding: 0.5rem;
-      text-align: center;
-      font-weight: bold;
-      border-radius: 4px;
-    }
-
-    .grid-cell {
-      background: white;
-      padding: 0.25rem;
-      min-height: 60px;
-      text-align: center;
-      border-radius: 6px;
+    .tabs {
       display: flex;
-      flex-direction: column;
       justify-content: center;
-      align-items: center;
+      margin: 1rem 0;
+    }
+
+    .tab-button {
+      padding: 10px 20px;
+      margin: 0 5px;
+      border: none;
+      background: #ddd;
       cursor: pointer;
     }
 
-    .perk-dots {
+    .tab-button.active {
+      background: #aaa;
+      color: white;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .scroll-container {
+      overflow-x: auto;
+      padding: 1rem;
+    }
+
+    .grid {
+      display: flex;
+      flex-direction: row;
+      gap: 6px;
+    }
+
+    .column {
+      min-width: 120px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .column-header {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .perk-cell {
+      height: 50px;
+      background: white;
+      border: 1px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .perk-cell .dots {
       display: flex;
       gap: 4px;
-      margin-top: 4px;
     }
 
-    .dot {
-      width: 14px;
-      height: 14px;
+    .perk-cell .dot {
+      width: 10px;
+      height: 10px;
+      background: #ccc;
       border-radius: 50%;
-      border: 1px solid #555;
-      background: #fff;
     }
 
-    .dot.filled {
-      background: #4caf50;
-      border-color: #4caf50;
+    .perk-cell .dot.active {
+      background: #333;
+    }
+
+    .mission-cell {
+      height: 60px;
+      background: white;
+      border: 1px solid #ccc;
+      display: flex;
+      position: relative;
+    }
+
+    .mission-half {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .medal {
+      width: 20px;
+      height: 20px;
+      margin-bottom: 2px;
+      background: gray;
+      border-radius: 50%;
+    }
+
+    .medal.active {
+      background: gold;
+    }
+
+    .count {
+      font-size: 12px;
+    }
+
+    .perfect-checkbox {
+      position: absolute;
+      top: 4px;
+      right: 4px;
     }
   </style>
 </head>
 <body>
-
-  <div class="player-header">
-    <h2>Player 1</h2>
-    <div>Perk Points Used: <span id="perk-used">0</span> / <span id="perk-max">15</span></div>
+  <div class="tabs">
+    <button class="tab-button active" onclick="showTab('perks')">Perks</button>
+    <button class="tab-button" onclick="showTab('missions')">Missions</button>
   </div>
 
-  <div class="grid-container" id="grid">
-    <!-- Top-left corner -->
-    <div></div>
-    <!-- Column headers -->
-    <div class="grid-header">1</div>
-    <div class="grid-header">2</div>
-    <div class="grid-header">3</div>
-    <div class="grid-header">4</div>
-    <div class="grid-header">5</div>
+  <div id="perks" class="tab-content active">
+    <div class="scroll-container">
+      <div class="grid" id="perkGrid"></div>
+    </div>
+  </div>
 
-    <!-- Row: Type A -->
-    <div class="grid-header">Type A</div>
-    <div class="grid-cell" data-points="1"></div>
-    <div class="grid-cell" data-points="2"></div>
-    <div class="grid-cell" data-points="3"></div>
-    <div class="grid-cell" data-points="2"></div>
-    <div class="grid-cell" data-points="4"></div>
-
-    <!-- Row: Type B -->
-    <div class="grid-header">Type B</div>
-    <div class="grid-cell" data-points="1"></div>
-    <div class="grid-cell" data-points="1"></div>
-    <div class="grid-cell" data-points="2"></div>
-    <div class="grid-cell" data-points="3"></div>
-    <div class="grid-cell" data-points="2"></div>
-
-    <!-- Row: Type C -->
-    <div class="grid-header">Type C</div>
-    <div class="grid-cell" data-points="2"></div>
-    <div class="grid-cell" data-points="3"></div>
-    <div class="grid-cell" data-points="1"></div>
-    <div class="grid-cell" data-points="2"></div>
-    <div class="grid-cell" data-points="1"></div>
-
-    <!-- Row: Type D -->
-    <div class="grid-header">Type D</div>
-    <div class="grid-cell" data-points="3"></div>
-    <div class="grid-cell" data-points="2"></div>
-    <div class="grid-cell" data-points="1"></div>
-    <div class="grid-cell" data-points="4"></div>
-    <div class="grid-cell" data-points="2"></div>
-
-    <!-- Row: Type E -->
-    <div class="grid-header">Type E</div>
-    <div class="grid-cell" data-points="1"></div>
-    <div class="grid-cell" data-points="3"></div>
-    <div class="grid-cell" data-points="2"></div>
-    <div class="grid-cell" data-points="2"></div>
-    <div class="grid-cell" data-points="1"></div>
+  <div id="missions" class="tab-content">
+    <div class="scroll-container">
+      <div class="grid" id="missionGrid"></div>
+    </div>
   </div>
 
   <script>
-    const maxPerks = 15;
-    let usedPerks = 0;
+    const perkGrid = document.getElementById('perkGrid');
+    const missionGrid = document.getElementById('missionGrid');
 
-    function updatePerkCount() {
-      document.getElementById("perk-used").textContent = usedPerks;
-    }
+    const perkData = Array(5).fill().map(() => Array(5).fill(0));
+    const missionLayout = [2, 5, 5, 4, 4];
+    const missionData = missionLayout.map(count => Array(count).fill().map(() => ({ stage: 0, boss: 0, perfect: false })));
 
-    function createDots(cell, count) {
-      const container = document.createElement("div");
-      container.classList.add("perk-dots");
+    function renderPerkGrid() {
+      perkGrid.innerHTML = '';
+      for (let col = 0; col < 5; col++) {
+        const column = document.createElement('div');
+        column.className = 'column';
+        column.innerHTML = `<div class="column-header">D${col + 1}</div>`;
 
-      const dots = [];
+        for (let row = 0; row < 5; row++) {
+          const cell = document.createElement('div');
+          cell.className = 'perk-cell';
 
-      for (let i = 0; i < count; i++) {
-        const dot = document.createElement("div");
-        dot.classList.add("dot");
-        container.appendChild(dot);
-        dots.push(dot);
-      }
+          const dots = document.createElement('div');
+          dots.className = 'dots';
 
-      cell.appendChild(container);
-
-      let filledCount = 0;
-
-      cell.addEventListener("click", () => {
-        if (filledCount === count) {
-          // Reset
-          dots.forEach(dot => dot.classList.remove("filled"));
-          usedPerks -= filledCount;
-          filledCount = 0;
-        } else {
-          if (usedPerks >= maxPerks) {
-            alert("Max perk points used!");
-            return;
+          for (let i = 0; i < 4; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'dot';
+            if (i < perkData[col][row]) dot.classList.add('active');
+            dots.appendChild(dot);
           }
-          dots[filledCount].classList.add("filled");
-          filledCount++;
-          usedPerks++;
+
+          cell.appendChild(dots);
+          cell.onclick = () => {
+            perkData[col][row] = (perkData[col][row] + 1) % 5;
+            renderPerkGrid();
+          };
+
+          column.appendChild(cell);
         }
 
-        updatePerkCount();
-      });
+        perkGrid.appendChild(column);
+      }
     }
 
-    document.querySelectorAll(".grid-cell").forEach((cell) => {
-      const count = parseInt(cell.dataset.points);
-      createDots(cell, count);
-    });
+    function renderMissionGrid() {
+      missionGrid.innerHTML = '';
+      for (let col = 0; col < 5; col++) {
+        const column = document.createElement('div');
+        column.className = 'column';
+        column.innerHTML = `<div class="column-header">D${col + 1}</div>`;
 
-    updatePerkCount();
-    document.getElementById("perk-max").textContent = maxPerks;
+        for (let row = 0; row < missionLayout[col]; row++) {
+          const mission = missionData[col][row];
+          const cell = document.createElement('div');
+          cell.className = 'mission-cell';
+
+          const stageHalf = document.createElement('div');
+          stageHalf.className = 'mission-half';
+          const stageMedal = document.createElement('div');
+          stageMedal.className = 'medal';
+          if (mission.stage > 0) stageMedal.classList.add('active');
+          const stageCount = document.createElement('div');
+          stageCount.className = 'count';
+          if (mission.stage > 1) stageCount.textContent = mission.stage;
+          stageHalf.appendChild(stageMedal);
+          stageHalf.appendChild(stageCount);
+
+          stageHalf.onclick = () => {
+            mission.stage++;
+            renderMissionGrid();
+          };
+
+          const bossHalf = document.createElement('div');
+          bossHalf.className = 'mission-half';
+          const bossMedal = document.createElement('div');
+          bossMedal.className = 'medal';
+          if (mission.boss > 0) bossMedal.classList.add('active');
+          const bossCount = document.createElement('div');
+          bossCount.className = 'count';
+          if (mission.boss > 1) bossCount.textContent = mission.boss;
+          bossHalf.appendChild(bossMedal);
+          bossHalf.appendChild(bossCount);
+
+          bossHalf.onclick = () => {
+            mission.boss++;
+            renderMissionGrid();
+          };
+
+          const checkbox = document.createElement('input');
+          checkbox.type = 'checkbox';
+          checkbox.className = 'perfect-checkbox';
+          checkbox.checked = mission.perfect;
+          checkbox.onchange = () => {
+            mission.perfect = checkbox.checked;
+          };
+
+          cell.appendChild(stageHalf);
+          cell.appendChild(bossHalf);
+          cell.appendChild(checkbox);
+          column.appendChild(cell);
+        }
+
+        missionGrid.appendChild(column);
+      }
+    }
+
+    function showTab(id) {
+      document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+      document.querySelector(`[onclick="showTab('${id}')"]`).classList.add('active');
+      document.getElementById(id).classList.add('active');
+    }
+
+    renderPerkGrid();
+    renderMissionGrid();
   </script>
-
 </body>
 </html>
