@@ -72,6 +72,10 @@
       color: white;
     }
 
+    .perk-entry.alt {
+      background: #3d3d3d;
+    }
+
     .perk-icon {
       width: 40px;
       height: 100%;
@@ -131,6 +135,10 @@
       height: 60px;
       background: #333;
       color: white;
+    }
+
+    .mission-entry.alt {
+      background: #3d3d3d;
     }
 
     .mission-toggle {
@@ -218,51 +226,51 @@
     );
 
     function renderPerkGrid() {
-      perkGrid.innerHTML = '';
-      for (let d = 1; d <= 5; d++) {
-        const section = document.createElement('div');
-        section.className = 'perk-section';
+    perkGrid.innerHTML = '';
+    for (let d = 1; d <= 5; d++) {
+      const section = document.createElement('div');
+      section.className = 'perk-section';
 
-        const header = document.createElement('div');
-        header.className = 'perk-header';
-        header.textContent = `Difficulty ${d}`;
-        section.appendChild(header);
+      const header = document.createElement('div');
+      header.className = 'perk-header';
+      header.textContent = `Difficulty ${d}`;
+      section.appendChild(header);
 
-        for (let p = 0; p < 5; p++) {
-          const row = document.createElement('div');
-          row.className = 'perk-entry';
+      for (let p = 0; p < 5; p++) {
+        const row = document.createElement('div');
+        row.className = 'perk-entry' + (p % 2 === 1 ? ' alt' : '');
 
-          const icon = document.createElement('div');
-          icon.className = 'perk-icon';
-          icon.textContent = '★';
+        const icon = document.createElement('div');
+        icon.className = 'perk-icon';
+        icon.textContent = '★';
 
-          const label = document.createElement('div');
-          label.className = 'perk-label';
-          label.textContent = perkNames[d - 1][p];
+        const label = document.createElement('div');
+        label.className = 'perk-label';
+        label.textContent = perkNames[d - 1][p];
 
-          const dots = document.createElement('div');
-          dots.className = 'perk-dots';
+        const dots = document.createElement('div');
+        dots.className = 'perk-dots';
 
-          for (let i = 0; i < 4; i++) {
-            const dot = document.createElement('div');
-            dot.className = 'perk-dot';
-            if (i < perkData[d - 1][p]) dot.classList.add('active');
-            dot.onclick = () => {
-              perkData[d - 1][p] = (perkData[d - 1][p] + 1) % 5;
-              renderPerkGrid();
-            };
-            dots.appendChild(dot);
-          }
-
-          row.appendChild(icon);
-          row.appendChild(label);
-          row.appendChild(dots);
-          section.appendChild(row);
+        for (let i = 0; i < 4; i++) {
+          const dot = document.createElement('div');
+          dot.className = 'perk-dot';
+          if (i < perkData[d - 1][p]) dot.classList.add('active');
+          dot.onclick = () => {
+            perkData[d - 1][p] = (perkData[d - 1][p] + 1) % 5;
+            renderPerkGrid();
+          };
+          dots.appendChild(dot);
         }
 
-        perkGrid.appendChild(section);
+        row.appendChild(icon);
+        row.appendChild(label);
+        row.appendChild(dots);
+        section.appendChild(row);
       }
+
+      perkGrid.appendChild(section);
     }
+  }
 
     function renderMissionGrid() {
       missionGrid.innerHTML = '';
@@ -277,9 +285,9 @@
         section.appendChild(header);
 
         const missions = missionData.filter(m => m.difficulty === d);
-        missions.forEach(mission => {
+        missions.forEach((mission, index) => {
           const row = document.createElement('div');
-          row.className = 'mission-entry';
+          row.className = 'mission-entry' + (index % 2 === 1 ? ' alt' : '');
 
           const toggle = document.createElement('div');
           toggle.className = 'mission-toggle';
