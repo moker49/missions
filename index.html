@@ -44,54 +44,69 @@
       padding: 1rem;
     }
 
-    .grid {
-      display: flex;
-      flex-direction: row;
-      gap: 6px;
-    }
-
-    .column {
-      min-width: 120px;
+    .perk-list {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 20px;
+      font-family: impact, sans-serif;
+      text-transform: uppercase;
     }
 
-    .column-header {
-      text-align: center;
-      font-weight: bold;
-      margin-bottom: 6px;
+    .perk-section {
+      width: 100%;
     }
 
-    .perk-cell {
-      height: 50px;
-      background: white;
-      border: 1px solid #ccc;
+    .perk-header {
+      font-style: italic;
+      background: #2a2e32;
+      color: white;
+      font-size: 1.2rem;
+      padding: 10px;
+    }
+
+    .perk-entry {
+      display: flex;
+      align-items: center;
+      height: 60px;
+      background: #333;
+      color: white;
+    }
+
+    .perk-icon {
+      width: 40px;
+      height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      position: relative;
+      background: #444;
     }
 
-    .perk-cell .dots {
+    .perk-label {
+      flex: 1;
+      padding-left: 10px;
+    }
+
+    .perk-dots {
       display: flex;
       gap: 4px;
+      padding-right: 10px;
     }
 
-    .perk-cell .dot {
+    .perk-dot {
       width: 10px;
       height: 10px;
       background: #ccc;
       border-radius: 50%;
     }
 
-    .perk-cell .dot.active {
-      background: #333;
+    .perk-dot.active {
+      background: #fff;
     }
 
     .mission-list {
       font-family: impact, sans-serif;
+      text-transform: uppercase;
+      font-weight: normal;
       display: flex;
       flex-direction: column;
       gap: 20px;
@@ -104,12 +119,10 @@
 
     .mission-header {
       font-style: italic;
-      text-transform: uppercase;
       background: #2a2e32;
       color: white;
       font-size: 1.2rem;
       padding: 10px;
-      margin-bottom: 0;
     }
 
     .mission-entry {
@@ -118,14 +131,7 @@
       height: 60px;
       background: #333;
       color: white;
-      border-radius: 0;
-      overflow: hidden;
     }
-
-    .mission-entry.alt {
-      background: #3d3d3d;
-    }
-
 
     .mission-toggle {
       width: 40px;
@@ -142,7 +148,6 @@
     }
 
     .mission-label {
-      font-style: italic;
       flex: 1;
       padding-left: 10px;
     }
@@ -178,7 +183,7 @@
 
   <div id="perks" class="tab-content active">
     <div class="scroll-container">
-      <div class="grid" id="perkGrid"></div>
+      <div class="perk-list" id="perkGrid"></div>
     </div>
   </div>
 
@@ -194,6 +199,14 @@
 
     const perkData = Array(5).fill().map(() => Array(5).fill(0));
     const missionPattern = [2, 5, 5, 4, 4];
+    const perkNames = [
+      ["Extra Roll", "Wild Boost", "Regen Boost", "Damage Boost", "Shield"],
+      ["Pierce", "Crit", "Draw Boost", "Evasion", "Fortify"],
+      ["Steal", "Burn", "Heal", "Knockback", "Retaliate"],
+      ["Freeze", "Combo", "Shield Break", "Thorns", "Curse"],
+      ["Snare", "Mark", "Double Up", "Refresh", "Cleanse"]
+    ];
+
     const missionData = missionPattern.flatMap((count, diffIndex) =>
       Array(count).fill().map((_, i) => ({
         name: `D${diffIndex + 1} - Mission ${i + 1}`,
@@ -206,35 +219,48 @@
 
     function renderPerkGrid() {
       perkGrid.innerHTML = '';
-      for (let col = 0; col < 5; col++) {
-        const column = document.createElement('div');
-        column.className = 'column';
-        column.innerHTML = `<div class="column-header">D${col + 1}</div>`;
+      for (let d = 1; d <= 5; d++) {
+        const section = document.createElement('div');
+        section.className = 'perk-section';
 
-        for (let row = 0; row < 5; row++) {
-          const cell = document.createElement('div');
-          cell.className = 'perk-cell';
+        const header = document.createElement('div');
+        header.className = 'perk-header';
+        header.textContent = `Difficulty ${d}`;
+        section.appendChild(header);
+
+        for (let p = 0; p < 5; p++) {
+          const row = document.createElement('div');
+          row.className = 'perk-entry';
+
+          const icon = document.createElement('div');
+          icon.className = 'perk-icon';
+          icon.textContent = '★';
+
+          const label = document.createElement('div');
+          label.className = 'perk-label';
+          label.textContent = perkNames[d - 1][p];
 
           const dots = document.createElement('div');
-          dots.className = 'dots';
+          dots.className = 'perk-dots';
 
           for (let i = 0; i < 4; i++) {
             const dot = document.createElement('div');
-            dot.className = 'dot';
-            if (i < perkData[col][row]) dot.classList.add('active');
+            dot.className = 'perk-dot';
+            if (i < perkData[d - 1][p]) dot.classList.add('active');
+            dot.onclick = () => {
+              perkData[d - 1][p] = (perkData[d - 1][p] + 1) % 5;
+              renderPerkGrid();
+            };
             dots.appendChild(dot);
           }
 
-          cell.appendChild(dots);
-          cell.onclick = () => {
-            perkData[col][row] = (perkData[col][row] + 1) % 5;
-            renderPerkGrid();
-          };
-
-          column.appendChild(cell);
+          row.appendChild(icon);
+          row.appendChild(label);
+          row.appendChild(dots);
+          section.appendChild(row);
         }
 
-        perkGrid.appendChild(column);
+        perkGrid.appendChild(section);
       }
     }
 
@@ -251,10 +277,9 @@
         section.appendChild(header);
 
         const missions = missionData.filter(m => m.difficulty === d);
-        missions.forEach((mission, index) => {
+        missions.forEach(mission => {
           const row = document.createElement('div');
-          row.className = 'mission-entry' + (index % 2 === 1 ? ' alt' : '');
-
+          row.className = 'mission-entry';
 
           const toggle = document.createElement('div');
           toggle.className = 'mission-toggle';
@@ -275,29 +300,18 @@
           const stage = document.createElement('div');
           stage.className = 'count-button count-stage';
           stage.textContent = mission.stage;
-          stage.onclick = (e) => {
-            if (e.button === 0) mission.stage++;
-            renderMissionGrid();
-          };
-          stage.oncontextmenu = (e) => {
-            e.preventDefault();
-            if (mission.stage > 0) mission.stage--;
+          stage.onclick = () => {
+            mission.stage++;
             renderMissionGrid();
           };
 
           const boss = document.createElement('div');
           boss.className = 'count-button count-boss';
           boss.textContent = mission.boss;
-          boss.onclick = (e) => {
-            if (e.button === 0) mission.boss++;
+          boss.onclick = () => {
+            mission.boss++;
             renderMissionGrid();
           };
-          boss.oncontextmenu = (e) => {
-            e.preventDefault();
-            if (mission.boss > 0) mission.boss--;
-            renderMissionGrid();
-          };
-
 
           countContainer.appendChild(stage);
           countContainer.appendChild(boss);
