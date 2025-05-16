@@ -120,6 +120,11 @@
       overflow: hidden;
     }
 
+    .mission-entry.alt {
+      background: #3d3d3d;
+    }
+
+
     .mission-toggle {
       width: 40px;
       height: 100%;
@@ -245,9 +250,10 @@
         section.appendChild(header);
 
         const missions = missionData.filter(m => m.difficulty === d);
-        missions.forEach(mission => {
+        missions.forEach((mission, index) => {
           const row = document.createElement('div');
-          row.className = 'mission-entry';
+          row.className = 'mission-entry' + (index % 2 === 1 ? ' alt' : '');
+
 
           const toggle = document.createElement('div');
           toggle.className = 'mission-toggle';
@@ -268,18 +274,29 @@
           const stage = document.createElement('div');
           stage.className = 'count-button count-stage';
           stage.textContent = mission.stage;
-          stage.onclick = () => {
-            mission.stage++;
+          stage.onclick = (e) => {
+            if (e.button === 0) mission.stage++;
+            renderMissionGrid();
+          };
+          stage.oncontextmenu = (e) => {
+            e.preventDefault();
+            if (mission.stage > 0) mission.stage--;
             renderMissionGrid();
           };
 
           const boss = document.createElement('div');
           boss.className = 'count-button count-boss';
           boss.textContent = mission.boss;
-          boss.onclick = () => {
-            mission.boss++;
+          boss.onclick = (e) => {
+            if (e.button === 0) mission.boss++;
             renderMissionGrid();
           };
+          boss.oncontextmenu = (e) => {
+            e.preventDefault();
+            if (mission.boss > 0) mission.boss--;
+            renderMissionGrid();
+          };
+
 
           countContainer.appendChild(stage);
           countContainer.appendChild(boss);
