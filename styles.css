@@ -19,8 +19,8 @@
 
   /* Perk */
   --color-perk-icon-background: #202427;
-  --color-perk-dot-inactive: #777780;
-  --color-perk-dot-active: #ffffff;
+  --color-perk-inactive: #777780;
+  --color-perk-active: #ffffff;
 
   /* Mission */
   --color-mission-toggle-inactive: rgba(108, 0, 0, 0.5);
@@ -86,7 +86,6 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.25rem; /* 20px */
-  text-transform: uppercase;
 }
 
 .perk-section {
@@ -95,6 +94,7 @@ body {
 
 .perk-header {
   font-style: italic;
+  text-transform: uppercase;
   background: var(--color-header-background);
   color: var(--color-header-text);
   font-size: 1.2rem;
@@ -119,12 +119,22 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  color: var(--color-perk-inactive);
   background: var(--color-perk-icon-background);
+}
+
+.perk-icon.active {
+  color: var(--color-perk-active);
 }
 
 .perk-label {
   flex: 1;
+  color: var(--color-perk-inactive);
   padding-left: 0.625rem; /* 10px */
+}
+
+.perk-label.active {
+  color: var(--color-perk-active);
 }
 
 .perk-dots {
@@ -136,12 +146,12 @@ body {
 .perk-dot {
   width: 10px; /* keep px for small dot */
   height: 10px;
-  background: var(--color-perk-dot-inactive);
+  background: var(--color-perk-inactive);
   border-radius: 50%;
 }
 
 .perk-dot.active {
-  background: var(--color-perk-dot-active);
+  background: var(--color-perk-active);
 }
 
 .mission-list {
