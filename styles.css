@@ -14,11 +14,11 @@
   --color-header-text: #ffffff;
 
   /* Rows */
-  --color-row-even: rgb(42, 46, 50);
-  --color-row-odd: rgb(32, 36, 39);
+  --color-row-even: #2a2e32;
+  --color-row-odd: #202427;
 
   /* Perk */
-  --color-perk-icon-background: hsl(210, 9%, 14%);
+  --color-perk-icon-background: #202427;
   --color-perk-dot-inactive: #cccccc;
   --color-perk-dot-active: #ffffff;
 
@@ -29,8 +29,7 @@
   --color-boss: #412835;
 
   /* Buttons */
-  --color-button-background: #2196f3;
-  --color-button-hover-background: #1976d2;
+  --color-button-background: #202427;
   --color-button-text: #ffffff;
 
   /* Borders */
@@ -244,17 +243,19 @@ body {
   border: 1px solid var(--color-border-medium);
 }
 
+.bottom-bar div {
+  min-width: 4rem;
+  text-align: center;
+}
+
 .bottom-bar button {
+  min-width: 4rem;
   padding: 0.5rem; /* 8px */
   font-size: 1rem; /* 16px */
   border: none;
   background-color: var(--color-button-background);
   color: var(--color-button-text);
   cursor: pointer;
-}
-
-.bottom-bar button:hover {
-  background-color: var(--color-button-hover-background);
 }
 
 .bottom-nav {
