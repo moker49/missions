@@ -4,191 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dice Throne Tracker</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #000;
-    }
-
-    .tabs {
-      display: flex;
-      justify-content: center;
-      margin: 1rem 0;
-    }
-
-    .tab-button {
-      padding: 10px 20px;
-      margin: 0 5px;
-      border: none;
-      background: #ddd;
-      cursor: pointer;
-    }
-
-    .tab-button.active {
-      background: #aaa;
-      color: white;
-    }
-
-    .tab-content {
-      display: none;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    .scroll-container {
-      overflow-x: auto;
-      padding: 1rem;
-    }
-
-    .perk-list {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      font-family: impact, sans-serif;
-      text-transform: uppercase;
-    }
-
-    .perk-section {
-      width: 100%;
-    }
-
-    .perk-header {
-      font-style: italic;
-      background: #2a2e32;
-      color: white;
-      font-size: 1.2rem;
-      padding: 10px;
-    }
-
-    .perk-entry {
-      display: flex;
-      align-items: center;
-      height: 60px;
-      background: #333;
-      color: white;
-    }
-
-    .perk-entry.alt {
-      background: #3d3d3d;
-    }
-
-    .perk-icon {
-      width: 40px;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #444;
-    }
-
-    .perk-label {
-      flex: 1;
-      padding-left: 10px;
-    }
-
-    .perk-dots {
-      display: flex;
-      gap: 4px;
-      padding-right: 10px;
-    }
-
-    .perk-dot {
-      width: 10px;
-      height: 10px;
-      background: #ccc;
-      border-radius: 50%;
-    }
-
-    .perk-dot.active {
-      background: #fff;
-    }
-
-    .mission-list {
-      font-family: impact, sans-serif;
-      text-transform: uppercase;
-      font-weight: normal;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .mission-section {
-      background: none;
-      padding: 0;
-    }
-
-    .mission-header {
-      font-style: italic;
-      background: #2a2e32;
-      color: white;
-      font-size: 1.2rem;
-      padding: 10px;
-    }
-
-    .mission-entry {
-      display: flex;
-      align-items: center;
-      height: 60px;
-      background: #333;
-      color: white;
-    }
-
-    .mission-entry.alt {
-      background: #3d3d3d;
-    }
-
-    .mission-toggle {
-      width: 40px;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: darkred;
-      cursor: pointer;
-    }
-
-    .mission-toggle.active {
-      background: green;
-    }
-
-    .mission-label {
-      flex: 1;
-      padding-left: 10px;
-    }
-
-    .mission-count {
-      display: flex;
-      height: 100%;
-    }
-
-    .count-button {
-      width: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      cursor: pointer;
-    }
-
-    .count-stage {
-      background: #4caf50;
-    }
-
-    .count-boss {
-      background: #3498db;
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL,GRAD@1,200&icon_names=favorite,home,search,settings" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="tabs">
     <button class="tab-button active" onclick="showTab('perks')">Perks</button>
     <button class="tab-button" onclick="showTab('missions')">Missions</button>
   </div>
-
   <div id="perks" class="tab-content active">
     <div class="scroll-container">
       <div class="perk-list" id="perkGrid"></div>
@@ -207,12 +30,23 @@
 
     const perkData = Array(5).fill().map(() => Array(5).fill(0));
     const missionPattern = [2, 5, 5, 4, 4];
+
+    // PERKS
     const perkNames = [
-      ["Extra Roll", "Wild Boost", "Regen Boost", "Damage Boost", "Shield"],
-      ["Pierce", "Crit", "Draw Boost", "Evasion", "Fortify"],
-      ["Steal", "Burn", "Heal", "Knockback", "Retaliate"],
-      ["Freeze", "Combo", "Shield Break", "Thorns", "Curse"],
-      ["Snare", "Mark", "Double Up", "Refresh", "Cleanse"]
+      [
+        { label: "Extra Roll", icons: ["home"] },
+        { label: "Wild Boost", icons: ["home", "home"] },
+        { label: "Regen Boost", icons: ["home"] },
+        { label: "Damage Boost", icons: ["home"] },
+        { label: "Shield", icons: ["home"] }
+      ],
+      [
+        { label: "Pierce", icons: ["home"] },
+        { label: "Crit", icons: ["home"] },
+        { label: "Draw Boost", icons: ["home"] },
+        { label: "Evasion", icons: ["home"] },
+        { label: "Fortify", icons: ["home"] }
+      ],
     ];
 
     const missionData = missionPattern.flatMap((count, diffIndex) =>
@@ -225,53 +59,63 @@
       }))
     );
 
+    // PERK GRID
     function renderPerkGrid() {
-    perkGrid.innerHTML = '';
-    for (let d = 1; d <= 5; d++) {
-      const section = document.createElement('div');
-      section.className = 'perk-section';
+      perkGrid.innerHTML = '';
+      for (let difficulty = 1; difficulty <= perkNames.length; difficulty++) {
+        const section = document.createElement('div');
+        section.className = 'perk-section';
 
-      const header = document.createElement('div');
-      header.className = 'perk-header';
-      header.textContent = `Difficulty ${d}`;
-      section.appendChild(header);
+        const header = document.createElement('div');
+        header.className = 'perk-header';
+        header.textContent = `Difficulty ${difficulty} `;
+        section.appendChild(header);
 
-      for (let p = 0; p < 5; p++) {
-        const row = document.createElement('div');
-        row.className = 'perk-entry' + (p % 2 === 1 ? ' alt' : '');
+        for (let perk = 0; perk < 5; perk++) {
+          const row = document.createElement('div');
+          row.className = 'perk-entry' + (perk % 2 === 1 ? ' alt' : '');
 
-        const icon = document.createElement('div');
-        icon.className = 'perk-icon';
-        icon.textContent = '★';
+          const icon = document.createElement('div');
+          icon.className = 'perk-icon';
+          icon.innerHTML = '';
+          perkNames[difficulty - 1][perk].icons.forEach(iconName => {
+            const i = document.createElement('span');
+            i.className = 'material-symbols-outlined';
+            i.textContent = iconName;
+            icon.appendChild(i);
+          });
 
-        const label = document.createElement('div');
-        label.className = 'perk-label';
-        label.textContent = perkNames[d - 1][p];
 
-        const dots = document.createElement('div');
-        dots.className = 'perk-dots';
+          const label = document.createElement('div');
+          label.className = 'perk-label';
+          label.textContent = perkNames[difficulty - 1][perk].label;
 
-        for (let i = 0; i < 4; i++) {
-          const dot = document.createElement('div');
-          dot.className = 'perk-dot';
-          if (i < perkData[d - 1][p]) dot.classList.add('active');
-          dot.onclick = () => {
-            perkData[d - 1][p] = (perkData[d - 1][p] + 1) % 5;
+          const dots = document.createElement('div');
+          dots.className = 'perk-dots';
+
+          for (let i = 0; i < 4; i++) {
+            const dot = document.createElement('div');
+            dot.className = 'perk-dot';
+            if (i < perkData[difficulty - 1][perk]) dot.classList.add('active');
+            dots.appendChild(dot);
+          }
+
+          row.onclick = () => {
+            perkData[difficulty - 1][perk] = (perkData[difficulty - 1][perk] + 1) % 5;
             renderPerkGrid();
           };
-          dots.appendChild(dot);
+
+          row.appendChild(icon);
+          row.appendChild(label);
+          row.appendChild(dots);
+          section.appendChild(row);
         }
 
-        row.appendChild(icon);
-        row.appendChild(label);
-        row.appendChild(dots);
-        section.appendChild(row);
+        perkGrid.appendChild(section);
       }
-
-      perkGrid.appendChild(section);
     }
-  }
 
+    // MISSION GRID
     function renderMissionGrid() {
       missionGrid.innerHTML = '';
 
@@ -342,8 +186,13 @@
       document.getElementById(id).classList.add('active');
     }
 
-    renderPerkGrid();
-    renderMissionGrid();
+    try {
+      renderPerkGrid();
+      renderMissionGrid();
+    } catch (e) {
+      console.error("Render error:", e);
+    }
+
   </script>
 </body>
 </html>
