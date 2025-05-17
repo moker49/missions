@@ -1,4 +1,4 @@
-import { perks } from "./perks.js";
+import { staticData } from "./staticData.js";
 
 const perkGrid = document.getElementById("perkGrid");
 const missionGrid = document.getElementById("missionGrid");
@@ -11,37 +11,15 @@ function createDiv(className, textContent = "") {
     return el;
 }
 
-// PERKS
-
-const perkData = perks.map((perkRow) => perkRow.map(() => 0));
-const DIFFICULTY_COUNT = perks.length;
-
-const missionCount = [2, 5, 5, 4, 4];
-const missionData = missionCount.flatMap((count, diffIndex) =>
-    Array(count)
-        .fill()
-        .map((_, i) => ({
-            name: `D${diffIndex + 1} - Mission ${i + 1}`,
-            stage: 0,
-            boss: 0,
-            perfect: false,
-            difficulty: diffIndex + 1,
-        }))
-);
-
 // PERK MATH
 function getPerkPointsEarned() {
-    return missionData.reduce((sum, m) => {
-        let points = 0;
-        if (m.perfect) points += 1;
-        if (m.stage > 0) points += m.stage;
-        if (m.boss > 0) points += m.boss;
-        return sum + points;
-    }, 0);
+    return 10;
 }
 
 function getPerkPointsSpent() {
-    return perkData.flat().reduce((a, b) => a + b, 0);
+    return staticData
+        .flatMap(difficulty => difficulty.perks)
+        .reduce((total, perk) => total + (perk.currentPoints ?? 0), 0);
 }
 
 function updatePerkPointsDisplay() {
@@ -55,12 +33,12 @@ function updatePerkPointsDisplay() {
 // PERK GRID
 function renderPerkGrid() {
     perkGrid.innerHTML = "";
-    perks.forEach((perkRow, difficultyIndex) => {
+    staticData.forEach((difficultyObj) => {
         const section = createDiv("perk-section");
-        const header = createDiv("perk-header", `Difficulty ${difficultyIndex + 1}`);
+        const header = createDiv("perk-header", difficultyObj.name);
         section.appendChild(header);
 
-        perkRow.forEach((perkObj, perkIndex) => {
+        difficultyObj.perks.forEach((perkObj, perkIndex) => {
             const row = createDiv("perk-entry" + (perkIndex % 2 === 1 ? " alt" : ""));
 
             const icon = createDiv("perk-icon");
@@ -68,29 +46,31 @@ function renderPerkGrid() {
                 const i = createDiv("material-symbols-outlined", iconName);
                 icon.appendChild(i);
             });
+
             const label = createDiv("perk-label", perkObj.label);
-            if (perkData[difficultyIndex][perkIndex] === perkObj.perkPoints) {
+            if ((perkObj.currentPoints ?? 0) === perkObj.perkPoints) {
                 icon.classList.add("active");
                 label.classList.add("active");
             }
-            const dots = createDiv("perk-dots", perkObj.dots);
+
+            const dots = createDiv("perk-dots");
             for (let i = 0; i < perkObj.perkPoints; i++) {
                 const dot = createDiv("perk-dot");
-                if (i < perkData[difficultyIndex][perkIndex]) {
+                if (i < (perkObj.currentPoints ?? 0)) {
                     dot.classList.add("active");
                 }
                 dots.appendChild(dot);
             }
 
             row.onclick = () => {
-                const current = perkData[difficultyIndex][perkIndex];
+                const current = perkObj.currentPoints ?? 0;
                 const totalSpent = getPerkPointsSpent();
                 const totalEarned = getPerkPointsEarned();
 
                 if (current === perkObj.perkPoints || totalSpent >= totalEarned) {
-                    perkData[difficultyIndex][perkIndex] = 0;
+                    perkObj.currentPoints = 0;
                 } else {
-                    perkData[difficultyIndex][perkIndex] = current + 1;
+                    perkObj.currentPoints = current + 1;
                 }
 
                 renderPerkGrid();
@@ -111,24 +91,17 @@ function renderPerkGrid() {
 function renderMissionGrid() {
     missionGrid.innerHTML = "";
 
-    for (
-        let difficulty = 1;
-        difficulty <= missionCount.length;
-        difficulty++
-    ) {
+    staticData.forEach(({ difficulty, missions }) => {
         const section = createDiv("mission-section");
         const header = createDiv("mission-header", `Difficulty ${difficulty}`);
         section.appendChild(header);
 
-        const missions = missionData.filter(
-            (m) => m.difficulty === difficulty
-        );
         missions.forEach((mission, index) => {
             const row = createDiv("mission-entry" + (index % 2 === 1 ? " alt" : ""));
 
             const toggle = createDiv("mission-toggle");
-            toggle.classList.toggle("material-symbols-outlined", mission.perfect);
-            toggle.classList.toggle("active", mission.perfect);
+            toggle.classList.toggle("material-symbols-outlined", mission.perfect ?? false);
+            toggle.classList.toggle("active", mission.perfect ?? false);
             toggle.textContent = mission.perfect ? "trophy" : "▢";
             toggle.onclick = () => {
                 mission.perfect = !mission.perfect;
@@ -137,16 +110,19 @@ function renderMissionGrid() {
             };
 
             const label = createDiv("mission-label", mission.name);
+
             const countContainer = createDiv("mission-count");
-            const stage = createDiv("count-button count-stage", mission.stage);
+
+            const stage = createDiv("count-button count-stage", mission.stage ?? 0);
             stage.onclick = () => {
-                mission.stage++;
+                mission.stage = (mission.stage ?? 0) + 1;
                 renderMissionGrid();
                 updatePerkPointsDisplay();
             };
-            const boss = createDiv("count-button count-boss", mission.boss);
+
+            const boss = createDiv("count-button count-boss", mission.boss ?? 0);
             boss.onclick = () => {
-                mission.boss++;
+                mission.boss = (mission.boss ?? 0) + 1;
                 renderMissionGrid();
                 updatePerkPointsDisplay();
             };
@@ -162,7 +138,7 @@ function renderMissionGrid() {
         });
 
         missionGrid.appendChild(section);
-    }
+    });
 }
 
 function showTab(id) {
