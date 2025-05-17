@@ -10,8 +10,8 @@ export const staticData = [
             { id: "perk-a5", label: "Re-roll enemy die", icons: ["cycle"], perkPoints: 3 }
         ],
         missions: [
-            { id: "mission-a1", name: "Mission A1" },
-            { id: "mission-a2", name: "Mission A2" },
+            { id: "mission-a1", name: "ock knocks knox" },
+            { id: "mission-a2", name: "morlock massacre" },
         ]
     },
     {
@@ -25,8 +25,11 @@ export const staticData = [
             { id: "perk-b5", label: "Add (Roll 1) to you attack", icons: ["ifl", "swords"], perkPoints: 3 }
         ],
         missions: [
-            { id: "mission-b1", name: "Mission B1" },
-            { id: "mission-b2", name: "Mission B2" },
+            { id: "mission-b1", name: "sauron's hunger" },
+            { id: "mission-b2", name: "nuclear assault" },
+            { id: "mission-b3", name: "the maggia" },
+            { id: "mission-b4", name: "vibranium wars" },
+            { id: "mission-b5", name: "u.n. catastrophe" },
         ]
     },
     {
@@ -38,6 +41,13 @@ export const staticData = [
             { id: "perk-c3", label: "Sell and draw", icons: ["currency_exchange", "library_add"], perkPoints: 3 },
             { id: "perk-c4", label: "Momentum +2", icons: ["add_box"], perkPoints: 2 },
             { id: "perk-c5", label: "Your attack is undefendable", icons: ["remove_moderator"], perkPoints: 4 }
+        ],
+        missions: [
+            { id: "mission-c1", name: "executive crisis" },
+            { id: "mission-c2", name: "savage sentinels" },
+            { id: "mission-c3", name: "goblin surprise" },
+            { id: "mission-c4", name: "asteroid attack" },
+            { id: "mission-c5", name: "shield compromised" },
         ]
     },
     {
@@ -49,6 +59,12 @@ export const staticData = [
             { id: "perk-d3", label: "Free recruit", icons: ["person_add"], perkPoints: 3 },
             { id: "perk-d4", label: "Draw", icons: ["library_add"], perkPoints: 2 },
             { id: "perk-d5", label: "Reduce crisis clock advancement", icons: ["timer_arrow_down"], perkPoints: 3 }
+        ],
+        missions: [
+            { id: "mission-d1", name: "revenge on avengers" },
+            { id: "mission-d2", name: "cosmic clash" },
+            { id: "mission-d3", name: "from hel" },
+            { id: "mission-d4", name: "onslaught's citadel" },
         ]
     },
     {
@@ -60,6 +76,12 @@ export const staticData = [
             { id: "perk-e3", label: "Grant 2 Shield", icons: ["health_and_safety", "health_and_safety"], perkPoints: 4 },
             { id: "perk-e4", label: "CP +1, Draw", icons: ["new_label", "library_add"], perkPoints: 3 },
             { id: "perk-e5", label: "Exhaust without discarding", icons: ["replay"], perkPoints: 4 }
+        ],
+        missions: [
+            { id: "mission-e1", name: "the mind stone" },
+            { id: "mission-e2", name: "demon disaster" },
+            { id: "mission-e3", name: "darkness falls" },
+            { id: "mission-e4", name: "hulk's legacy" },
         ]
     }
 ];
