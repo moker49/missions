@@ -57,17 +57,11 @@ function renderPerkGrid() {
     perkGrid.innerHTML = "";
     perks.forEach((perkRow, difficultyIndex) => {
         const section = createDiv("perk-section");
-        const header = createDiv(
-            "perk-header",
-            `Difficulty ${difficultyIndex + 1}`
-        );
+        const header = createDiv("perk-header", `Difficulty ${difficultyIndex + 1}`);
         section.appendChild(header);
 
         perkRow.forEach((perkObj, perkIndex) => {
-            // const row = createDiv("perk-entry");
-            const row = createDiv(
-                "perk-entry" + (perkIndex % 2 === 1 ? " alt" : "")
-            );
+            const row = createDiv("perk-entry" + (perkIndex % 2 === 1 ? " alt" : ""));
 
             const icon = createDiv("perk-icon");
             perkObj.icons.forEach((iconName) => {
@@ -123,25 +117,17 @@ function renderMissionGrid() {
         difficulty++
     ) {
         const section = createDiv("mission-section");
-        const header = createDiv(
-            "mission-header",
-            `Difficulty ${difficulty}`
-        );
+        const header = createDiv("mission-header", `Difficulty ${difficulty}`);
         section.appendChild(header);
 
         const missions = missionData.filter(
             (m) => m.difficulty === difficulty
         );
         missions.forEach((mission, index) => {
-            const row = createDiv(
-                "mission-entry" + (index % 2 === 1 ? " alt" : "")
-            );
+            const row = createDiv("mission-entry" + (index % 2 === 1 ? " alt" : ""));
 
             const toggle = createDiv("mission-toggle");
-            toggle.classList.toggle(
-                "material-symbols-outlined",
-                mission.perfect
-            );
+            toggle.classList.toggle("material-symbols-outlined", mission.perfect);
             toggle.classList.toggle("active", mission.perfect);
             toggle.textContent = mission.perfect ? "trophy" : "▢";
             toggle.onclick = () => {
@@ -180,21 +166,10 @@ function renderMissionGrid() {
 }
 
 function showTab(id) {
-    document
-        .querySelectorAll(".nav-button")
-        .forEach((btn) => btn.classList.remove("active"));
-    document
-        .querySelectorAll(".tab-content")
-        .forEach((tab) => tab.classList.remove("active"));
-
-    // Activate the matching tab content
+    document.querySelectorAll(".nav-button").forEach((btn) => btn.classList.remove("active"));
+    document.querySelectorAll(".tab-content").forEach((tab) => tab.classList.remove("active"));
     document.getElementById(id).classList.add("active");
-
-    // Activate the corresponding nav button
-    // Match by data-tab attribute (safer than onclick string)
-    document
-        .querySelector(`.nav-button[data-tab="${id}"]`)
-        ?.classList.add("active");
+    document.querySelector(`.nav-button[data-tab="${id}"]`)?.classList.add("active");
 }
 
 try {

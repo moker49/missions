@@ -6,8 +6,7 @@
 
   /* Text */
   --color-text-body: #ffffff;
-  --color-text-nav: #666666;
-  --color-text-nav-active: #000000;
+  --color-text-nav: #000000;
 
   /* Headers */
   --color-header-background: #202427;
@@ -40,7 +39,7 @@
 body {
   font-family: Roboto, sans-serif;
   margin: 0;
-  padding: 0 0 7rem 0; /* 112px = 7rem */
+  padding: 0 0 7.5rem 0; /* 112px = 7rem */
   background: var(--color-background);
   color: var(--color-text-body);
 }
@@ -231,22 +230,22 @@ body {
 .bottom-bar {
   position: fixed;
   box-sizing: border-box;
-  bottom: 3.5rem; /* 56px */
+  bottom: 4rem;
   width: 100%;
   color: var(--color-text-nav);
   background: var(--color-bottom-bar-background);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0.75rem; /* 8px 12px */
+  padding: 0.5rem 0.75rem;
   border-top: 1px solid var(--color-border-light);
   z-index: 2;
-  gap: 0.5rem; /* 8px */
+  gap: 0.5rem;
 }
 
 .bottom-bar input {
   flex: 1;
-  padding: 0.5rem; /* 8px */
+  padding: 0.5rem;
   font-size: 1rem;
   border: 1px solid var(--color-border-medium);
 }
@@ -258,8 +257,8 @@ body {
 
 .bottom-bar button {
   min-width: 4rem;
-  padding: 0.5rem; /* 8px */
-  font-size: 1rem; /* 16px */
+  padding: 0.5rem;
+  font-size: 1rem;
   border: none;
   background-color: var(--color-button-background);
   color: var(--color-button-text);
@@ -271,25 +270,34 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 3.5rem; /* 56px */
+  height: 4rem;
   display: flex;
-  background-color: var(--color-nav-background);
-  border-top: 1px solid var(--color-border-medium);
-  z-index: 999;
+  justify-content: space-around;
+  background: var(--color-nav-background);
 }
 
 .nav-button {
-  flex: 1;
-  border: none;
   background: none;
-  font-size: 1.125rem; /* 18px */
-  padding: 0.625rem 0; /* 10px top & bottom */
+  border: none;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  color: inherit;
+  opacity: 0.4;
   cursor: pointer;
+  height: 100%;
   color: var(--color-text-nav);
+  padding-bottom: env(safe-area-inset-bottom, 8px);
+}
+
+.nav-button .material-symbols-outlined {
+  font-size: 1.5rem;
 }
 
 .nav-button.active {
-  color: var(--color-text-nav-active);
-  font-weight: bold;
-  border-top: 2px solid var(--color-text-nav-active);
+  opacity: 1;
 }
+
