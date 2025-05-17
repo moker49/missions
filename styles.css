@@ -1,9 +1,49 @@
+:root {
+  /* Backgrounds */
+  --color-background: #000000;
+  --color-nav-background: #ffffff;
+  --color-bottom-bar-background: #ffffff;
+
+  /* Text */
+  --color-text-body: #ffffff;
+  --color-text-nav: #666666;
+  --color-text-nav-active: #000000;
+
+  /* Headers */
+  --color-header-background: #202427;
+  --color-header-text: #ffffff;
+
+  /* Rows */
+  --color-row-even: rgb(42, 46, 50);
+  --color-row-odd: rgb(32, 36, 39);
+
+  /* Perk */
+  --color-perk-icon-background: hsl(210, 9%, 14%);
+  --color-perk-dot-inactive: #cccccc;
+  --color-perk-dot-active: #ffffff;
+
+  /* Mission */
+  --color-mission-toggle-inactive: #6c0000;
+  --color-mission-toggle-active: #006c00;
+  --color-stage: #376f6f;
+  --color-boss: #412835;
+
+  /* Buttons */
+  --color-button-background: #2196f3;
+  --color-button-hover-background: #1976d2;
+  --color-button-text: #ffffff;
+
+  /* Borders */
+  --color-border-light: #ddd;
+  --color-border-medium: #ccc;
+}
+
 body {
   font-family: sans-serif;
   margin: 0;
-  padding: 0;
-  background: #000;
-  padding-bottom: 112px;
+  padding: 0 0 7rem 0; /* 112px = 7rem */
+  background: var(--color-background);
+  color: var(--color-text-body);
 }
 
 .tabs {
@@ -13,16 +53,15 @@ body {
 }
 
 .tab-button {
-  padding: 10px 20px;
-  margin: 0 5px;
+  padding: 0.625rem 1.25rem; /* 10px 20px */
+  margin: 0 0.3125rem;       /* 0 5px */
   border: none;
-  background: #ddd;
+  background: var(--color-border-light);
   cursor: pointer;
 }
 
 .tab-button.active {
-  background: #aaa;
-  color: white;
+  color: var(--color-button-text);
 }
 
 .tab-content {
@@ -37,16 +76,17 @@ body {
   overflow-x: auto;
   padding: 1rem;
 }
+
 .perk-points-display {
   text-align: center;
   font-weight: bold;
-  margin: 10px 0;
+  margin: 0.625rem 0; /* 10px 0 */
 }
 
 .perk-list {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1.25rem; /* 20px */
   font-family: impact, sans-serif;
   text-transform: uppercase;
 }
@@ -57,53 +97,53 @@ body {
 
 .perk-header {
   font-style: italic;
-  background: #2a2e32;
-  color: white;
+  background: var(--color-header-background);
+  color: var(--color-header-text);
   font-size: 1.2rem;
-  padding: 10px;
+  padding: 0.625rem; /* 10px */
 }
 
 .perk-entry {
   display: flex;
   align-items: center;
-  height: 60px;
-  background: #333;
-  color: white;
+  height: 60px; /* keep px for row height */
+  background: var(--color-row-even);
+  color: var(--color-text-body);
 }
 
 .perk-entry.alt {
-  background: #3d3d3d;
+  background: var(--color-row-odd);
 }
 
 .perk-icon {
-  width: 60px;
+  width: 60px; /* keep px for icon size */
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #444;
+  background: var(--color-perk-icon-background);
 }
 
 .perk-label {
   flex: 1;
-  padding-left: 10px;
+  padding-left: 0.625rem; /* 10px */
 }
 
 .perk-dots {
   display: flex;
-  gap: 4px;
-  padding-right: 10px;
+  gap: 0.25rem; /* 4px */
+  padding-right: 0.625rem; /* 10px */
 }
 
 .perk-dot {
-  width: 10px;
+  width: 10px; /* keep px for small dot */
   height: 10px;
-  background: #ccc;
+  background: var(--color-perk-dot-inactive);
   border-radius: 50%;
 }
 
 .perk-dot.active {
-  background: #fff;
+  background: var(--color-perk-dot-active);
 }
 
 .mission-list {
@@ -112,7 +152,7 @@ body {
   font-weight: normal;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1.25rem; /* 20px */
 }
 
 .mission-section {
@@ -122,41 +162,41 @@ body {
 
 .mission-header {
   font-style: italic;
-  background: #2a2e32;
-  color: white;
+  background: var(--color-header-background);
+  color: var(--color-header-text);
   font-size: 1.2rem;
-  padding: 10px;
+  padding: 0.625rem; /* 10px */
 }
 
 .mission-entry {
   display: flex;
   align-items: center;
-  height: 60px;
-  background: #333;
-  color: white;
+  height: 60px; /* keep px */
+  background: var(--color-row-even);
+  color: var(--color-text-body);
 }
 
 .mission-entry.alt {
-  background: #3d3d3d;
+  background: var(--color-row-odd);
 }
 
 .mission-toggle {
-  width: 40px;
+  width: 60px; /* keep px */
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: darkred;
+  background: var(--color-mission-toggle-inactive);
   cursor: pointer;
 }
 
 .mission-toggle.active {
-  background: green;
+  background: var(--color-mission-toggle-active);
 }
 
 .mission-label {
   flex: 1;
-  padding-left: 10px;
+  padding-left: 0.625rem; /* 10px */
 }
 
 .mission-count {
@@ -165,55 +205,56 @@ body {
 }
 
 .count-button {
-  width: 50px;
+  width: 60px; /* keep px */
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 20px;
+  font-size: 1.25rem; /* 20px */
   cursor: pointer;
 }
 
 .count-stage {
-  background: #4caf50;
+  background: var(--color-stage);
 }
 
 .count-boss {
-  background: #3498db;
+  background: var(--color-boss);
 }
 
 .bottom-bar {
   position: fixed;
   box-sizing: border-box;
-  bottom: 56px; /* height of nav bar */
+  bottom: 3.5rem; /* 56px */
   width: 100%;
-  background: white;
+  color: var(--color-text-nav);
+  background: var(--color-bottom-bar-background);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 12px;
-  border-top: 1px solid #ddd;
+  padding: 0.5rem 0.75rem; /* 8px 12px */
+  border-top: 1px solid var(--color-border-light);
   z-index: 2;
-  gap: 8px;
+  gap: 0.5rem; /* 8px */
 }
 
 .bottom-bar input {
   flex: 1;
-  padding: 8px;
+  padding: 0.5rem; /* 8px */
   font-size: 1rem;
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-border-medium);
 }
 
 .bottom-bar button {
-  padding: 8px;
-  font-size: 16px;
+  padding: 0.5rem; /* 8px */
+  font-size: 1rem; /* 16px */
   border: none;
-  background-color: #2196f3;
-  color: white;
+  background-color: var(--color-button-background);
+  color: var(--color-button-text);
   cursor: pointer;
 }
 
 .bottom-bar button:hover {
-  background-color: #1976d2;
+  background-color: var(--color-button-hover-background);
 }
 
 .bottom-nav {
@@ -221,10 +262,10 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  height: 56px;
+  height: 3.5rem; /* 56px */
   display: flex;
-  background-color: #fff;
-  border-top: 1px solid #ccc;
+  background-color: var(--color-nav-background);
+  border-top: 1px solid var(--color-border-medium);
   z-index: 999;
 }
 
@@ -232,14 +273,14 @@ body {
   flex: 1;
   border: none;
   background: none;
-  font-size: 18px;
-  padding: 10px 0;
+  font-size: 1.125rem; /* 18px */
+  padding: 0.625rem 0; /* 10px top & bottom */
   cursor: pointer;
-  color: #666;
+  color: var(--color-text-nav);
 }
 
 .nav-button.active {
-  color: #000;
+  color: var(--color-text-nav-active);
   font-weight: bold;
-  border-top: 2px solid #000;
+  border-top: 2px solid var(--color-text-nav-active);
 }
