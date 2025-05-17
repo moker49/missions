@@ -168,6 +168,7 @@ body {
 
 .mission-header {
   font-style: italic;
+  text-transform: uppercase;
   background: var(--color-header-background);
   color: var(--color-header-text);
   font-size: 1.2rem;

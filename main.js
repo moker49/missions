@@ -98,12 +98,12 @@ function renderPerkGrid() {
 function renderMissionGrid() {
     missionGrid.innerHTML = "";
 
-    staticData.forEach(({ difficulty, missions }) => {
+    staticData.forEach((difficultyObj) => {
         const section = createDiv("mission-section");
-        const header = createDiv("mission-header", `Difficulty ${difficulty}`);
+        const header = createDiv("mission-header", difficultyObj.name);
         section.appendChild(header);
 
-        missions.forEach((mission, index) => {
+        difficultyObj.missions.forEach((mission, index) => {
             const row = createDiv("mission-entry" + (index % 2 === 1 ? " alt" : ""));
 
             const toggle = createDiv("mission-toggle");
