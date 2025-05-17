@@ -36,6 +36,11 @@ body {
   overflow-x: auto;
   padding: 1rem;
 }
+.perk-points-display {
+  text-align: center;
+  font-weight: bold;
+  margin: 10px 0;
+}
 
 .perk-list {
   display: flex;
