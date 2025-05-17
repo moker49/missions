@@ -19,7 +19,7 @@
 
   /* Perk */
   --color-perk-icon-background: #202427;
-  --color-perk-dot-inactive: #bbbbbb;
+  --color-perk-dot-inactive: #777780;
   --color-perk-dot-active: #ffffff;
 
   /* Mission */
@@ -38,7 +38,7 @@
 }
 
 body {
-  font-family: sans-serif;
+  font-family: Roboto, sans-serif;
   margin: 0;
   padding: 0 0 7rem 0; /* 112px = 7rem */
   background: var(--color-background);
@@ -86,7 +86,6 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1.25rem; /* 20px */
-  font-family: impact, sans-serif;
   text-transform: uppercase;
 }
 
@@ -131,7 +130,7 @@ body {
 .perk-dots {
   display: flex;
   gap: 0.25rem; /* 4px */
-  padding-right: 0.625rem; /* 10px */
+  padding-right: 1rem; /* 10px */
 }
 
 .perk-dot {
@@ -146,7 +145,6 @@ body {
 }
 
 .mission-list {
-  font-family: impact, sans-serif;
   text-transform: uppercase;
   font-weight: normal;
   display: flex;

@@ -5,7 +5,11 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>Dice Throne Tracker</title>
 		<link
-			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL,GRAD@1,200&icon_names=favorite,home,search,settings"
+			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@1"
+			rel="stylesheet"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Roboto&display=swap"
 			rel="stylesheet"
 		/>
 		<link rel="stylesheet" href="styles.css" />
@@ -152,25 +156,39 @@
 			function renderMissionGrid() {
 				missionGrid.innerHTML = "";
 
-				for (let d = 1; d <= missionCount.length; d++) {
+				for (
+					let difficulty = 1;
+					difficulty <= missionCount.length;
+					difficulty++
+				) {
 					const section = createDiv("mission-section");
-					const header = createDiv("mission-header", `Difficulty ${d}`);
+					const header = createDiv(
+						"mission-header",
+						`Difficulty ${difficulty}`
+					);
 					section.appendChild(header);
 
-					const missions = missionData.filter((m) => m.difficulty === d);
+					const missions = missionData.filter(
+						(m) => m.difficulty === difficulty
+					);
 					missions.forEach((mission, index) => {
 						const row = createDiv(
 							"mission-entry" + (index % 2 === 1 ? " alt" : "")
 						);
 
 						const toggle = createDiv("mission-toggle");
-						if (mission.perfect) toggle.classList.add("active");
-						toggle.textContent = mission.perfect ? "✅" : "▢";
+						toggle.classList.toggle(
+							"material-symbols-outlined",
+							mission.perfect
+						);
+						toggle.classList.toggle("active", mission.perfect);
+						toggle.textContent = mission.perfect ? "trophy" : "▢";
 						toggle.onclick = () => {
 							mission.perfect = !mission.perfect;
 							renderMissionGrid();
 							updatePerkPointsDisplay();
 						};
+
 						const label = createDiv("mission-label", mission.name);
 						const countContainer = createDiv("mission-count");
 						const stage = createDiv("count-button count-stage", mission.stage);
