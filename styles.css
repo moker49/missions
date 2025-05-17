@@ -1,16 +1,16 @@
 :root {
   /* Backgrounds */
   --color-background: #000000;
-  --color-nav-background: #ffffff;
-  --color-bottom-bar-background: #ffffff;
+  --color-nav-background: hsl(210, 25%, 35%);
+  --color-bottom-bar-background: hsl(210, 22%, 45%);
 
   /* Text */
-  --color-text-body: #ffffff;
-  --color-text-nav: #000000;
+  --color-text-body: hsl(206, 10%, 80%);
+  --color-text-nav: hsl(206, 20%, 14%);
 
   /* Headers */
   --color-header-background: #202427;
-  --color-header-text: #ffffff;
+  --color-header-text: hsl(206, 10%, 90%);
 
   /* Rows */
   --color-row-even: #2a2e32;
@@ -19,9 +19,10 @@
   /* Perk */
   --color-perk-icon-background: #202427;
   --color-perk-inactive: #777780;
-  --color-perk-active: #ffffff;
+  --color-perk-active: hsl(206, 10%, 80%);
 
   /* Mission */
+  --color-mission: #777780;
   --color-mission-toggle-inactive: rgba(108, 0, 0, 0.5);
   --color-mission-toggle-active: rgba(0, 108, 0, 0.5);
   --color-stage: rgba(55, 111, 111, 0.0);
@@ -29,11 +30,11 @@
 
   /* Buttons */
   --color-button-background: #202427;
-  --color-button-text: #ffffff;
+  --color-button-text: hsl(206, 10%, 80%);
 
   /* Borders */
   --color-border-light: #ddd;
-  --color-border-medium: #ccc;
+  --color-border-medium: #202427;
 }
 
 body {
@@ -54,7 +55,7 @@ body {
   padding: 0.625rem 1.25rem; /* 10px 20px */
   margin: 0 0.3125rem;       /* 0 5px */
   border: none;
-  background: var(--color-border-light);
+  /* background: var(--color-border-light); */
   cursor: pointer;
 }
 
@@ -154,7 +155,7 @@ body {
 }
 
 .mission-list {
-  text-transform: uppercase;
+  text-transform: capitalize;
   font-weight: normal;
   display: flex;
   flex-direction: column;
@@ -179,7 +180,7 @@ body {
   align-items: center;
   height: 60px; /* keep px */
   background: var(--color-row-even);
-  color: var(--color-text-body);
+  color: var(--color-mission);
 }
 
 .mission-entry.alt {
@@ -238,15 +239,18 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 0.75rem;
-  border-top: 1px solid var(--color-border-light);
+  border-top: 1px solid var(--color-border-medium);
   z-index: 2;
   gap: 0.5rem;
 }
 
 .bottom-bar input {
+  font-family: Roboto, sans-serif;
   flex: 1;
   padding: 0.5rem;
   font-size: 1rem;
+  background-color: transparent;
+  color: var(--color-text-body);
   border: 1px solid var(--color-border-medium);
 }
 
@@ -256,6 +260,7 @@ body {
 }
 
 .bottom-bar button {
+  font-family: Roboto, sans-serif;
   min-width: 4rem;
   padding: 0.5rem;
   font-size: 1rem;
@@ -277,6 +282,7 @@ body {
 }
 
 .nav-button {
+  font-family: Roboto, sans-serif;
   background: none;
   border: none;
   display: flex;
@@ -286,7 +292,7 @@ body {
   justify-content: center;
   font-size: 1rem;
   color: inherit;
-  opacity: 0.4;
+  opacity: 0.5;
   cursor: pointer;
   height: 100%;
   color: var(--color-text-nav);
