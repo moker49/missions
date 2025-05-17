@@ -22,7 +22,7 @@
   --color-perk-active: hsl(206, 10%, 80%);
 
   /* Mission */
-  --color-mission: #777780;
+  --color-mission: hsl(206, 10%, 80%);
   --color-mission-toggle-inactive: rgba(108, 0, 0, 0.5);
   --color-mission-toggle-active: rgba(0, 108, 0, 0.5);
   --color-stage: rgba(55, 111, 111, 0.0);
@@ -55,7 +55,6 @@ body {
   padding: 0.625rem 1.25rem; /* 10px 20px */
   margin: 0 0.3125rem;       /* 0 5px */
   border: none;
-  /* background: var(--color-border-light); */
   cursor: pointer;
 }
 
@@ -199,6 +198,7 @@ body {
 
 .mission-toggle.active {
   background: var(--color-mission-toggle-active);
+  color: var(--color-text-body);
 }
 
 .mission-label {
