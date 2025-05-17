@@ -19,14 +19,14 @@
 
   /* Perk */
   --color-perk-icon-background: #202427;
-  --color-perk-dot-inactive: #cccccc;
+  --color-perk-dot-inactive: #bbbbbb;
   --color-perk-dot-active: #ffffff;
 
   /* Mission */
-  --color-mission-toggle-inactive: #6c0000;
-  --color-mission-toggle-active: #006c00;
-  --color-stage: #376f6f;
-  --color-boss: #412835;
+  --color-mission-toggle-inactive: rgba(108, 0, 0, 0.5);
+  --color-mission-toggle-active: rgba(0, 108, 0, 0.5);
+  --color-stage: rgba(55, 111, 111, 0.5);
+  --color-boss: rgba(65, 40, 53, 0.5);
 
   /* Buttons */
   --color-button-background: #202427;
