@@ -3,6 +3,7 @@ body {
   margin: 0;
   padding: 0;
   background: #000;
+  padding-bottom: 112px;
 }
 
 .tabs {
@@ -178,4 +179,67 @@ body {
 
 .count-boss {
   background: #3498db;
+}
+
+.bottom-bar {
+  position: fixed;
+  box-sizing: border-box;
+  bottom: 56px; /* height of nav bar */
+  width: 100%;
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  border-top: 1px solid #ddd;
+  z-index: 2;
+  gap: 8px;
+}
+
+.bottom-bar input {
+  flex: 1;
+  padding: 8px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+}
+
+.bottom-bar button {
+  padding: 8px;
+  font-size: 16px;
+  border: none;
+  background-color: #2196f3;
+  color: white;
+  cursor: pointer;
+}
+
+.bottom-bar button:hover {
+  background-color: #1976d2;
+}
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  display: flex;
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+  z-index: 999;
+}
+
+.nav-button {
+  flex: 1;
+  border: none;
+  background: none;
+  font-size: 18px;
+  padding: 10px 0;
+  cursor: pointer;
+  color: #666;
+}
+
+.nav-button.active {
+  color: #000;
+  font-weight: bold;
+  border-top: 2px solid #000;
 }

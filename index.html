@@ -11,24 +11,13 @@
 		<link rel="stylesheet" href="styles.css" />
 	</head>
 	<body>
-		<div class="tabs">
-			<button class="tab-button active" onclick="showTab('perks')">
-				Perks
-			</button>
-			<button class="tab-button" onclick="showTab('missions')">Missions</button>
-		</div>
-
-		<div id="perkPointsDisplay" class="perk-points-display">
-			Perk Points: 0 / 0
-		</div>
-
-		<div id="perks" class="tab-content active">
+		<div id="perkTab" class="tab-content active">
 			<div class="scroll-container">
 				<div class="perk-list" id="perkGrid"></div>
 			</div>
 		</div>
 
-		<div id="missions" class="tab-content">
+		<div id="missionTab" class="tab-content">
 			<div class="scroll-container">
 				<div class="mission-list" id="missionGrid"></div>
 			</div>
@@ -99,7 +88,7 @@
 				const spent = getPerkPointsSpent();
 				document.getElementById(
 					"perkPointsDisplay"
-				).textContent = `Perk Points: ${spent} / ${earned}`;
+				).textContent = `${spent} / ${earned}`;
 			}
 
 			// PERK GRID
@@ -114,7 +103,10 @@
 					section.appendChild(header);
 
 					perkRow.forEach((perkObj, perkIndex) => {
-						const row = createDiv("perk-entry");
+						// const row = createDiv("perk-entry");
+						const row = createDiv(
+							"perk-entry" + (perkIndex % 2 === 1 ? " alt" : "")
+						);
 
 						const icon = createDiv("perk-icon");
 						perkObj.icons.forEach((iconName) => {
@@ -210,15 +202,20 @@
 
 			function showTab(id) {
 				document
-					.querySelectorAll(".tab-button")
+					.querySelectorAll(".nav-button")
 					.forEach((btn) => btn.classList.remove("active"));
 				document
 					.querySelectorAll(".tab-content")
 					.forEach((tab) => tab.classList.remove("active"));
-				document
-					.querySelector(`[onclick="showTab('${id}')"]`)
-					.classList.add("active");
+
+				// Activate the matching tab content
 				document.getElementById(id).classList.add("active");
+
+				// Activate the corresponding nav button
+				// Match by data-tab attribute (safer than onclick string)
+				document
+					.querySelector(`.nav-button[data-tab="${id}"]`)
+					?.classList.add("active");
 			}
 
 			try {
@@ -228,5 +225,28 @@
 				console.error("Render error:", e);
 			}
 		</script>
+
+		<div class="bottom-bar">
+			<input type="text" id="playerName" placeholder="Player Name" />
+			<div id="perkPointsDisplay">0 / 0</div>
+			<button id="saveButton">Save</button>
+		</div>
+
+		<div class="bottom-nav">
+			<button
+				data-tab="perkTab"
+				class="nav-button active"
+				onclick="showTab('perkTab')"
+			>
+				Perks
+			</button>
+			<button
+				data-tab="missionTab"
+				class="nav-button"
+				onclick="showTab('missionTab')"
+			>
+				Missions
+			</button>
+		</div>
 	</body>
 </html>
