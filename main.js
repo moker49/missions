@@ -12,14 +12,21 @@ function createDiv(className, textContent = "") {
 }
 
 // PERK MATH
-function getPerkPointsEarned() {
-    return 10;
-}
-
 function getPerkPointsSpent() {
     return staticData
-        .flatMap(difficulty => difficulty.perks)
+        .flatMap(difficulty => difficulty.perks ?? [])
         .reduce((total, perk) => total + (perk.currentPoints ?? 0), 0);
+}
+
+function getPerkPointsEarned() {
+    return staticData
+        .flatMap(difficulty => difficulty.missions ?? [])
+        .reduce((total, mission) => {
+            const stagePoints = mission.stage ?? 0;
+            const bossPoints = mission.boss ?? 0;
+            const perfectPoints = mission.perfect ? 1 : 0;
+            return total + stagePoints + bossPoints + perfectPoints;
+        }, 0);
 }
 
 function updatePerkPointsDisplay() {
