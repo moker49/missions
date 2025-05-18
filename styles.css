@@ -45,6 +45,18 @@ body {
   color: var(--color-text-body);
 }
 
+/* Apply to scrollable containers */
+.hide-scrollbar {
+  overflow: auto;
+  -ms-overflow-style: none;  /* IE & Edge */
+  scrollbar-width: none;     /* Firefox */
+}
+
+/* Chrome, Safari, and modern mobile browsers */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 .tabs {
   display: flex;
   justify-content: center;

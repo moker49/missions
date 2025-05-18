@@ -92,6 +92,7 @@ function renderPerkGrid() {
 
         perkGrid.appendChild(section);
     });
+    perkGrid.classList.add("hide-scrollbar");
 }
 
 // MISSION GRID
@@ -146,6 +147,7 @@ function renderMissionGrid() {
 
         missionGrid.appendChild(section);
     });
+    missionGrid.classList.add("hide-scrollbar");
 }
 
 function showTab(id) {
