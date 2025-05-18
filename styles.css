@@ -1,58 +1,39 @@
 :root {
-  /* Backgrounds */
-  --color-background: #000000;
-  --color-nav-background: hsl(210, 25%, 35%);
-  --color-bottom-bar-background: hsl(210, 22%, 45%);
+  /* Base colors */
+  --background: black;
+  --text-disabled: hsl(200, 10%, 50%);
+  --text-enabled: hsl(200, 10%, 80%);
+  --text-highlight: hsl(200, 10%, 90%);
 
-  /* Text */
-  --color-text-body: hsl(206, 10%, 80%);
-  --color-text-nav: hsl(206, 20%, 14%);
+  /* Table row alternation */
+  --table-row-alt-1: hsl(200, 10%, 18%);
+  --table-row-alt-2: hsl(200, 10%, 14%);
 
-  /* Headers */
-  --color-header-background: #202427;
-  --color-header-text: hsl(206, 10%, 90%);
+  /* Toggles */
+  --toggle-off: hsla(0, 100%, 20%, 0.5);
+  --toggle-on: hsla(120, 100%, 20%, 0.5);
 
-  /* Rows */
-  --color-row-even: #2a2e32;
-  --color-row-odd: #202427;
-
-  /* Perk */
-  --color-perk-icon-background: #202427;
-  --color-perk-inactive: #777780;
-  --color-perk-active: hsl(206, 10%, 80%);
-
-  /* Mission */
-  --color-mission: hsl(206, 10%, 80%);
-  --color-mission-toggle-inactive: rgba(108, 0, 0, 0.5);
-  --color-mission-toggle-active: rgba(0, 108, 0, 0.5);
-  --color-stage: rgba(55, 111, 111, 0.0);
-  --color-boss: rgba(65, 40, 53, 0.0);
-
-  /* Buttons */
-  --color-button-background: #202427;
-  --color-button-text: hsl(206, 10%, 80%);
-
-  /* Borders */
-  --color-border-light: #ddd;
-  --color-border-medium: #202427;
+  /* Accent colors */
+  --accent-dark: hsl(200, 10%, 14%);
+  --accent-dark-sat: hsl(200, 20%, 14%);
+  --accent-medium: hsl(200, 25%, 35%);
+  --accent-light: hsl(200, 22%, 45%);
 }
 
 body {
   font-family: Roboto, sans-serif;
   margin: 0;
-  padding: 0 0 7.5rem 0; /* 112px = 7rem */
-  background: var(--color-background);
-  color: var(--color-text-body);
+  padding: 0 0 7.5rem 0;
+  background: var(--background);
+  color: var(--text-enabled);
 }
 
-/* Apply to scrollable containers */
 .hide-scrollbar {
   overflow: auto;
-  -ms-overflow-style: none;  /* IE & Edge */
-  scrollbar-width: none;     /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-/* Chrome, Safari, and modern mobile browsers */
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -64,14 +45,14 @@ body {
 }
 
 .tab-button {
-  padding: 0.625rem 1.25rem; /* 10px 20px */
-  margin: 0 0.3125rem;       /* 0 5px */
+  padding: 0.625rem 1.25rem;
+  margin: 0 0.3125rem;
   border: none;
   cursor: pointer;
 }
 
 .tab-button.active {
-  color: var(--color-button-text);
+  color: var(--text-enabled);
 }
 
 .tab-content {
@@ -90,13 +71,13 @@ body {
 .perk-points-display {
   text-align: center;
   font-weight: bold;
-  margin: 0.625rem 0; /* 10px 0 */
+  margin: 0.625rem 0;
 }
 
 .perk-list {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem; /* 20px */
+  gap: 1.25rem;
 }
 
 .perk-section {
@@ -106,63 +87,63 @@ body {
 .perk-header {
   font-style: italic;
   text-transform: uppercase;
-  background: var(--color-header-background);
-  color: var(--color-header-text);
+  background: var(--accent-dark);
+  color: var(--text-highlight);
   font-size: 1.2rem;
-  padding: 0.625rem; /* 10px */
+  padding: 0.625rem;
 }
 
 .perk-entry {
   display: flex;
   align-items: center;
-  height: 60px; /* keep px for row height */
-  background: var(--color-row-even);
-  color: var(--color-text-body);
+  height: 60px;
+  background: var(--table-row-alt-1);
+  color: var(--text-enabled);
 }
 
 .perk-entry.alt {
-  background: var(--color-row-odd);
+  background: var(--table-row-alt-2);
 }
 
 .perk-icon {
-  width: 60px; /* keep px for icon size */
+  width: 60px;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-perk-inactive);
-  background: var(--color-perk-icon-background);
+  color: var(--text-disabled);
+  background: var(--accent-dark);
 }
 
 .perk-icon.active {
-  color: var(--color-perk-active);
+  color: var(--text-enabled);
 }
 
 .perk-label {
   flex: 1;
-  color: var(--color-perk-inactive);
-  padding-left: 0.625rem; /* 10px */
+  color: var(--text-disabled);
+  padding-left: 0.625rem;
 }
 
 .perk-label.active {
-  color: var(--color-perk-active);
+  color: var(--text-enabled);
 }
 
 .perk-dots {
   display: flex;
-  gap: 0.25rem; /* 4px */
-  padding-right: 1rem; /* 10px */
+  gap: 0.25rem;
+  padding-right: 1rem;
 }
 
 .perk-dot {
-  width: 10px; /* keep px for small dot */
+  width: 10px;
   height: 10px;
-  background: var(--color-perk-inactive);
+  background: var(--text-disabled);
   border-radius: 50%;
 }
 
 .perk-dot.active {
-  background: var(--color-perk-active);
+  background: var(--text-enabled);
 }
 
 .mission-list {
@@ -170,7 +151,7 @@ body {
   font-weight: normal;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem; /* 20px */
+  gap: 1.25rem;
 }
 
 .mission-section {
@@ -181,42 +162,42 @@ body {
 .mission-header {
   font-style: italic;
   text-transform: uppercase;
-  background: var(--color-header-background);
-  color: var(--color-header-text);
+  background: var(--accent-dark);
+  color: var(--text-highlight);
   font-size: 1.2rem;
-  padding: 0.625rem; /* 10px */
+  padding: 0.625rem;
 }
 
 .mission-entry {
   display: flex;
   align-items: center;
-  height: 60px; /* keep px */
-  background: var(--color-row-even);
-  color: var(--color-mission);
+  height: 60px;
+  background: var(--table-row-alt-1);
+  color: var(--text-enabled);
 }
 
 .mission-entry.alt {
-  background: var(--color-row-odd);
+  background: var(--table-row-alt-2);
 }
 
 .mission-toggle {
-  width: 60px; /* keep px */
+  width: 60px;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--color-mission-toggle-inactive);
+  background: var(--toggle-off);
   cursor: pointer;
 }
 
 .mission-toggle.active {
-  background: var(--color-mission-toggle-active);
-  color: var(--color-text-body);
+  background: var(--toggle-on);
+  color: var(--text-enabled);
 }
 
 .mission-label {
   flex: 1;
-  padding-left: 0.625rem; /* 10px */
+  padding-left: 0.625rem;
 }
 
 .mission-count {
@@ -225,20 +206,12 @@ body {
 }
 
 .count-button {
-  width: 60px; /* keep px */
+  width: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem; /* 20px */
+  font-size: 1rem;
   cursor: pointer;
-}
-
-.count-stage {
-  background: var(--color-stage);
-}
-
-.count-boss {
-  background: var(--color-boss);
 }
 
 .bottom-bar {
@@ -246,13 +219,13 @@ body {
   box-sizing: border-box;
   bottom: 4rem;
   width: 100%;
-  color: var(--color-text-nav);
-  background: var(--color-bottom-bar-background);
+  color: var(--accent-dark);
+  background: var(--accent-light);
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 0.75rem;
-  border-top: 1px solid var(--color-border-medium);
+  border-top: 1px solid var(--accent-dark);
   z-index: 2;
   gap: 0.5rem;
 }
@@ -263,8 +236,8 @@ body {
   padding: 0.5rem;
   font-size: 1rem;
   background-color: transparent;
-  color: var(--color-text-nav);
-  border: 1px solid var(--color-border-medium);
+  color: var(--accent-dark);
+  border: 1px solid var(--accent-dark);
 }
 
 .bottom-bar div {
@@ -278,8 +251,8 @@ body {
   padding: 0.5rem;
   font-size: 1rem;
   border: none;
-  background-color: var(--color-button-background);
-  color: var(--color-button-text);
+  background-color: var(--accent-dark);
+  color: var(--text-enabled);
   cursor: pointer;
 }
 
@@ -291,7 +264,7 @@ body {
   height: 4rem;
   display: flex;
   justify-content: space-around;
-  background: var(--color-nav-background);
+  background: var(--accent-medium);
 }
 
 .nav-button {
@@ -304,11 +277,10 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 1rem;
-  color: inherit;
   opacity: 0.5;
   cursor: pointer;
   height: 100%;
-  color: var(--color-text-nav);
+  color: var(--accent-dark-sat);
   padding-bottom: env(safe-area-inset-bottom, 8px);
   -webkit-tap-highlight-color: transparent;
 }
@@ -324,4 +296,3 @@ nav button:active {
 .nav-button.active {
   opacity: 1;
 }
-
