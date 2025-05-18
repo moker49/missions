@@ -310,6 +310,11 @@ body {
   height: 100%;
   color: var(--color-text-nav);
   padding-bottom: env(safe-area-inset-bottom, 8px);
+  -webkit-tap-highlight-color: transparent;
+}
+
+nav button:active {
+  background-color: transparent;
 }
 
 .nav-button .material-symbols-outlined {
