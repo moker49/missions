@@ -5,7 +5,7 @@ export const staticData = [
         perks: [
             { id: "perk-a1", label: "Momentum Lvl 1", icons: ["looks_one"], perkPoints: 0 },
             { id: "perk-a2", label: "HP +1", icons: ["heart_plus"], perkPoints: 1 },
-            { id: "perk-a3", label: "Focus Fire", icons: ["target"], perkPoints: 3 },
+            { id: "perk-a3", label: "Grant Focus Fire", icons: ["target"], perkPoints: 3 },
             { id: "perk-a4", label: "Momentum +1", icons: ["add_box"], perkPoints: 2 },
             { id: "perk-a5", label: "Re-roll enemy die", icons: ["cycle"], perkPoints: 3 }
         ],
