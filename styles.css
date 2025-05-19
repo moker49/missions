@@ -203,7 +203,7 @@ body {
   height: 4rem;
   display: flex;
   background: var(--accent-medium);
-  border-top: 1px solid var(--background)
+  border-top: 1px solid var(--background);
 }
 
 .nav-button {
@@ -222,6 +222,28 @@ body {
   color: var(--text-enabled);
   padding-bottom: env(safe-area-inset-bottom, 8px);
   -webkit-tap-highlight-color: transparent;
+}
+
+.edit-button {
+  position: relative;
+  top: -1.25rem; /* pulls it upward to "stick out" */
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--accent-light);
+  color: var(--text-highlight);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+
+.points-text {
+  font-size: 0.9rem;
+  font-family: Roboto, sans-serif;
+  color: var(--text-highlight);
 }
 
 nav button:active {

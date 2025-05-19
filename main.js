@@ -29,13 +29,43 @@ function getPerkPointsEarned() {
         }, 0);
 }
 
-// function updatePerkPointsDisplay() {
-//     const earned = getPerkPointsEarned();
-//     const spent = getPerkPointsSpent();
-//     document.getElementById(
-//         "perkPointsDisplay"
-//     ).textContent = `${spent} / ${earned}`;
-// }
+// EDITING
+const editButton = document.getElementById('editToggle');
+const icon = editButton.querySelector('.material-symbols-outlined');
+const pointsText = editButton.querySelector('.points-text');
+function updatePerkPointsDisplay() {
+    const spent = getPerkPointsSpent();
+    const available = getPerkPointsEarned();
+    if (spent !== available) {
+        icon.style.display = 'none';
+        pointsText.style.display = '';
+        pointsText.textContent = `${spent} / ${available}`;
+        editButton.disabled = true;
+    } else {
+        icon.style.display = '';
+        icon.textContent = 'save';
+        pointsText.style.display = 'none';
+        editButton.disabled = false;
+    }
+}
+function renderEditButton() {
+    const app = document.getElementById('app');
+    let isEditing = false;
+
+    editButton.addEventListener('click', () => {
+        if (!isEditing) {
+            isEditing = true;
+            app.classList.add('editing');
+            updatePerkPointsDisplay();
+        } else if (getPerkPointsSpent() === getPerkPointsEarned()) {
+            isEditing = false;
+            app.classList.remove('editing');
+            icon.style.display = '';
+            pointsText.style.display = 'none';
+            icon.textContent = 'edit';
+        }
+    });
+}
 
 // PERK GRID
 function renderPerkGrid() {
@@ -70,6 +100,7 @@ function renderPerkGrid() {
             }
 
             row.onclick = () => {
+                if (!document.getElementById('app').classList.contains('editing')) return;
                 const current = perkObj.currentPoints ?? 0;
                 const totalSpent = getPerkPointsSpent();
                 const totalEarned = getPerkPointsEarned();
@@ -81,7 +112,7 @@ function renderPerkGrid() {
                 }
 
                 renderPerkGrid();
-                // updatePerkPointsDisplay();
+                updatePerkPointsDisplay();
             };
 
             row.appendChild(icon);
@@ -112,9 +143,10 @@ function renderMissionGrid() {
             toggle.classList.toggle("active", mission.perfect ?? false);
             toggle.textContent = mission.perfect ? "trophy" : "▢";
             toggle.onclick = () => {
+                if (!document.getElementById('app').classList.contains('editing')) return;
                 mission.perfect = !mission.perfect;
                 renderMissionGrid();
-                // updatePerkPointsDisplay();
+                updatePerkPointsDisplay();
             };
 
             const label = createDiv("mission-label", mission.name);
@@ -123,16 +155,18 @@ function renderMissionGrid() {
 
             const stage = createDiv("count-button count-stage", mission.stage ?? 0);
             stage.onclick = () => {
+                if (!document.getElementById('app').classList.contains('editing')) return;
                 mission.stage = (mission.stage ?? 0) + 1;
                 renderMissionGrid();
-                // updatePerkPointsDisplay();
+                updatePerkPointsDisplay();
             };
 
             const boss = createDiv("count-button count-boss", mission.boss ?? 0);
             boss.onclick = () => {
+                if (!document.getElementById('app').classList.contains('editing')) return;
                 mission.boss = (mission.boss ?? 0) + 1;
                 renderMissionGrid();
-                // updatePerkPointsDisplay();
+                updatePerkPointsDisplay();
             };
 
             countContainer.appendChild(stage);
@@ -160,6 +194,7 @@ function showTab(id) {
 try {
     renderPerkGrid();
     renderMissionGrid();
+    renderEditButton();
 } catch (e) {
     console.error("Render error:", e);
 }

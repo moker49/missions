@@ -15,15 +15,17 @@
 		<link rel="stylesheet" href="styles.css" />
 	</head>
 	<body>
-		<div id="perkTab" class="tab-content active">
-			<div class="scroll-container">
-				<div class="perk-list" id="perkGrid"></div>
+		<div id="app">
+			<div id="perkTab" class="tab-content active">
+				<div class="scroll-container">
+					<div class="perk-list" id="perkGrid"></div>
+				</div>
 			</div>
-		</div>
 
-		<div id="missionTab" class="tab-content">
-			<div class="scroll-container">
-				<div class="mission-list" id="missionGrid"></div>
+			<div id="missionTab" class="tab-content">
+				<div class="scroll-container">
+					<div class="mission-list" id="missionGrid"></div>
+				</div>
 			</div>
 		</div>
 
@@ -37,6 +39,10 @@
 			>
 				<span class="material-symbols-outlined">toggle_on</span>
 				<span class="nav-label">Perks</span>
+			</button>
+			<button id="editToggle" class="edit-button">
+				<span class="material-symbols-outlined">edit</span>
+				<span class="points-text" style="display: none"></span>
 			</button>
 			<button
 				data-tab="missionTab"
