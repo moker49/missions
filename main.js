@@ -2,6 +2,7 @@ import { staticData } from "./staticData.js";
 
 const perkGrid = document.getElementById("perkGrid");
 const missionGrid = document.getElementById("missionGrid");
+let staticDataBackup = null;
 
 // DOM Creation
 function createDiv(className, textContent = "") {
@@ -29,6 +30,23 @@ function getPerkPointsEarned() {
         }, 0);
 }
 
+// UNDO BUTTON
+const undoButton = document.createElement('button');
+undoButton.className = 'undo-button material-symbols-outlined';
+undoButton.textContent = 'undo';
+undoButton.style.display = 'none';
+document.body.appendChild(undoButton);
+
+undoButton.addEventListener('click', () => {
+    if (staticDataBackup) {
+        Object.assign(staticData, JSON.parse(JSON.stringify(staticDataBackup)));
+        renderPerkGrid();
+        renderMissionGrid();
+        updatePerkPointsDisplay();
+    }
+    undoButton.style.display = 'none';
+});
+
 // EDITING
 const editButton = document.getElementById('editToggle');
 const icon = editButton.querySelector('.material-symbols-outlined');
@@ -41,6 +59,7 @@ function updatePerkPointsDisplay() {
         pointsText.style.display = '';
         pointsText.textContent = `${spent} / ${available}`;
         editButton.disabled = true;
+        undoButton.style.display = 'block';
     } else {
         icon.style.display = '';
         icon.textContent = 'save';
@@ -57,12 +76,14 @@ function renderEditButton() {
             isEditing = true;
             app.classList.add('editing');
             updatePerkPointsDisplay();
+            staticDataBackup = JSON.parse(JSON.stringify(staticData));
         } else if (getPerkPointsSpent() === getPerkPointsEarned()) {
             isEditing = false;
             app.classList.remove('editing');
             icon.style.display = '';
             pointsText.style.display = 'none';
             icon.textContent = 'edit';
+            undoButton.style.display = 'none';
         }
     });
 }
