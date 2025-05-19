@@ -29,13 +29,13 @@ function getPerkPointsEarned() {
         }, 0);
 }
 
-function updatePerkPointsDisplay() {
-    const earned = getPerkPointsEarned();
-    const spent = getPerkPointsSpent();
-    document.getElementById(
-        "perkPointsDisplay"
-    ).textContent = `${spent} / ${earned}`;
-}
+// function updatePerkPointsDisplay() {
+//     const earned = getPerkPointsEarned();
+//     const spent = getPerkPointsSpent();
+//     document.getElementById(
+//         "perkPointsDisplay"
+//     ).textContent = `${spent} / ${earned}`;
+// }
 
 // PERK GRID
 function renderPerkGrid() {
@@ -81,7 +81,7 @@ function renderPerkGrid() {
                 }
 
                 renderPerkGrid();
-                updatePerkPointsDisplay();
+                // updatePerkPointsDisplay();
             };
 
             row.appendChild(icon);
@@ -114,7 +114,7 @@ function renderMissionGrid() {
             toggle.onclick = () => {
                 mission.perfect = !mission.perfect;
                 renderMissionGrid();
-                updatePerkPointsDisplay();
+                // updatePerkPointsDisplay();
             };
 
             const label = createDiv("mission-label", mission.name);
@@ -125,14 +125,14 @@ function renderMissionGrid() {
             stage.onclick = () => {
                 mission.stage = (mission.stage ?? 0) + 1;
                 renderMissionGrid();
-                updatePerkPointsDisplay();
+                // updatePerkPointsDisplay();
             };
 
             const boss = createDiv("count-button count-boss", mission.boss ?? 0);
             boss.onclick = () => {
                 mission.boss = (mission.boss ?? 0) + 1;
                 renderMissionGrid();
-                updatePerkPointsDisplay();
+                // updatePerkPointsDisplay();
             };
 
             countContainer.appendChild(stage);

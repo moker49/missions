@@ -1,29 +1,27 @@
 :root {
   /* Base colors */
-  --background: black;
-  --text-disabled: hsl(200, 10%, 50%);
-  --text-enabled: hsl(200, 10%, 80%);
-  --text-highlight: hsl(200, 10%, 90%);
+  --background: hsl(220, 85%, 6%);
+  --text-disabled: hsl(220, 10%, 50%);
+  --text-enabled: hsl(220, 12%, 80%);
+  --text-highlight: hsl(220, 12%, 90%);
 
   /* Table row alternation */
-  --table-row-alt-1: hsl(200, 10%, 18%);
-  --table-row-alt-2: hsl(200, 10%, 14%);
+  --table-row-alt-1: hsl(220, 38%, 18%);
+  --table-row-alt-2: hsl(220, 45%, 12%);
 
   /* Toggles */
   --toggle-off: hsla(0, 100%, 20%, 0.5);
   --toggle-on: hsla(120, 100%, 20%, 0.5);
 
   /* Accent colors */
-  --accent-dark: hsl(200, 10%, 14%);
-  --accent-dark-sat: hsl(200, 20%, 14%);
-  --accent-medium: hsl(200, 25%, 35%);
-  --accent-light: hsl(200, 22%, 45%);
+  --accent-medium: hsl(220, 45%, 12%);
+  --accent-light: hsl(210, 85%, 55%);
 }
 
 body {
   font-family: Roboto, sans-serif;
   margin: 0;
-  padding: 0 0 7.5rem 0;
+  padding: 0 0 4rem 0;
   background: var(--background);
   color: var(--text-enabled);
 }
@@ -36,23 +34,6 @@ body {
 
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
-}
-
-.tabs {
-  display: flex;
-  justify-content: center;
-  margin: 1rem 0;
-}
-
-.tab-button {
-  padding: 0.625rem 1.25rem;
-  margin: 0 0.3125rem;
-  border: none;
-  cursor: pointer;
-}
-
-.tab-button.active {
-  color: var(--text-enabled);
 }
 
 .tab-content {
@@ -87,7 +68,7 @@ body {
 .perk-header {
   font-style: italic;
   text-transform: uppercase;
-  background: var(--accent-dark);
+  background: var(--table-row-alt-2);
   color: var(--text-highlight);
   font-size: 1.2rem;
   padding: 0.625rem;
@@ -112,7 +93,7 @@ body {
   align-items: center;
   justify-content: center;
   color: var(--text-disabled);
-  background: var(--accent-dark);
+  background: var(--table-row-alt-2);
 }
 
 .perk-icon.active {
@@ -162,7 +143,7 @@ body {
 .mission-header {
   font-style: italic;
   text-transform: uppercase;
-  background: var(--accent-dark);
+  background: var(--table-row-alt-2);
   color: var(--text-highlight);
   font-size: 1.2rem;
   padding: 0.625rem;
@@ -187,12 +168,12 @@ body {
   align-items: center;
   justify-content: center;
   background: var(--toggle-off);
+  color: var(--text-enabled);
   cursor: pointer;
 }
 
 .mission-toggle.active {
   background: var(--toggle-on);
-  color: var(--text-enabled);
 }
 
 .mission-label {
@@ -214,57 +195,15 @@ body {
   cursor: pointer;
 }
 
-.bottom-bar {
-  position: fixed;
-  box-sizing: border-box;
-  bottom: 4rem;
-  width: 100%;
-  color: var(--accent-dark);
-  background: var(--accent-light);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem 0.75rem;
-  border-top: 1px solid var(--accent-dark);
-  z-index: 2;
-  gap: 0.5rem;
-}
-
-.bottom-bar input {
-  font-family: Roboto, sans-serif;
-  flex: 1;
-  padding: 0.5rem;
-  font-size: 1rem;
-  background-color: transparent;
-  color: var(--accent-dark);
-  border: 1px solid var(--accent-dark);
-}
-
-.bottom-bar div {
-  min-width: 4rem;
-  text-align: center;
-}
-
-.bottom-bar button {
-  font-family: Roboto, sans-serif;
-  min-width: 4rem;
-  padding: 0.5rem;
-  font-size: 1rem;
-  border: none;
-  background-color: var(--accent-dark);
-  color: var(--text-enabled);
-  cursor: pointer;
-}
-
-.bottom-nav {
+.nav {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   height: 4rem;
   display: flex;
-  justify-content: space-around;
   background: var(--accent-medium);
+  border-top: 1px solid var(--background)
 }
 
 .nav-button {
@@ -277,10 +216,10 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 1rem;
-  opacity: 0.5;
   cursor: pointer;
   height: 100%;
-  color: var(--accent-dark-sat);
+  opacity: 0.3;
+  color: var(--text-enabled);
   padding-bottom: env(safe-area-inset-bottom, 8px);
   -webkit-tap-highlight-color: transparent;
 }
@@ -294,5 +233,5 @@ nav button:active {
 }
 
 .nav-button.active {
-  opacity: 1;
+  opacity: 0.9;
 }
