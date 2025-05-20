@@ -1,12 +1,12 @@
-import { staticData } from "./staticData.js";
+import { staticData } from './staticData.js';
 
-const perkGrid = document.getElementById("perkGrid");
-const missionGrid = document.getElementById("missionGrid");
+const perkGrid = document.getElementById('perkGrid');
+const missionGrid = document.getElementById('missionGrid');
 let staticDataBackup = null;
 
 // DOM Creation
-function createDiv(className, textContent = "", id = null) {
-    const el = document.createElement("div");
+function createDiv(className, textContent = '', id = null) {
+    const el = document.createElement('div');
     el.className = className;
     el.textContent = textContent;
     if (id !== null) el.id = id;
@@ -121,7 +121,7 @@ function updatePerkPointsDisplay() {
         pointsText.style.display = 'none';
         editButton.disabled = false;
     }
-    editButton.classList.toggle("button-secondary", spent !== available);
+    editButton.classList.toggle('button-secondary', spent !== available);
 }
 function renderEditButton() {
     const app = document.getElementById('app');
@@ -156,37 +156,37 @@ function renderEditButton() {
 
 // PERK GRID
 function renderPerkGrid() {
-    perkGrid.innerHTML = "";
+    perkGrid.innerHTML = '';
     staticData.forEach((difficultyObj) => {
-        const section = createDiv("perk-section");
-        const header = createDiv("perk-header", difficultyObj.name);
+        const section = createDiv('perk-section');
+        const header = createDiv('perk-header', difficultyObj.name);
         section.appendChild(header);
 
         difficultyObj.perks.forEach((perkObj, perkIndex) => {
-            const row = createDiv("perk-entry" + (perkIndex % 2 === 1 ? " alt" : ""), '', perkObj.id);
+            const row = createDiv('perk-entry' + (perkIndex % 2 === 1 ? ' alt' : ''), '', perkObj.id);
 
-            const icon = createDiv("perk-icon");
+            const icon = createDiv('perk-icon');
             perkObj.icons.forEach((iconName) => {
-                const i = createDiv("material-symbols-outlined", iconName);
+                const i = createDiv('material-symbols-outlined', iconName);
                 icon.appendChild(i);
             });
 
-            const label = createDiv("perk-label", perkObj.label);
+            const label = createDiv('perk-label', perkObj.label);
             if (perkObj.perkPoints === 0 || perkObj.perkPoints === perkObj.min) {
-                icon.classList.add("active");
-                label.classList.add("active");
+                icon.classList.add('active');
+                label.classList.add('active');
             } else if (perkObj.perkPoints === perkObj.currentPoints) {
-                icon.classList.add("new");
-                label.classList.add("new");
+                icon.classList.add('new');
+                label.classList.add('new');
             }
 
-            const dots = createDiv("perk-dots");
+            const dots = createDiv('perk-dots');
             for (let i = 0; i < perkObj.perkPoints; i++) {
-                const dot = createDiv("perk-dot");
+                const dot = createDiv('perk-dot');
                 if (i < (perkObj.min ?? 0)) {
-                    dot.classList.add("active");
+                    dot.classList.add('active');
                 } else if (i < (perkObj.currentPoints ?? 0)) {
-                    dot.classList.add("new");
+                    dot.classList.add('new');
                 }
                 dots.appendChild(dot);
             }
@@ -215,25 +215,26 @@ function renderPerkGrid() {
 
         perkGrid.appendChild(section);
     });
-    perkGrid.classList.add("hide-scrollbar");
+    perkGrid.classList.add('hide-scrollbar');
 }
 
 // MISSION GRID
 function renderMissionGrid() {
-    missionGrid.innerHTML = "";
+    missionGrid.innerHTML = '';
 
     staticData.forEach((difficultyObj) => {
-        const section = createDiv("mission-section");
-        const header = createDiv("mission-header", difficultyObj.name);
+        const section = createDiv('mission-section');
+        const header = createDiv('mission-header', difficultyObj.name);
         section.appendChild(header);
 
         difficultyObj.missions.forEach((missionObj, missionIndex) => {
-            const row = createDiv("mission-entry" + (missionIndex % 2 === 1 ? " alt" : ""), '', missionObj.id);
+            const row = createDiv('mission-entry' + (missionIndex % 2 === 1 ? ' alt' : ''), '', missionObj.id);
 
-            const toggle = createDiv("mission-toggle");
-            toggle.classList.toggle("material-symbols-outlined", missionObj.perfect ?? false);
-            toggle.classList.toggle("active", missionObj.perfect ?? false);
-            toggle.textContent = missionObj.perfect ? "trophy" : "▢";
+            const toggle = createDiv('mission-toggle');
+            toggle.classList.toggle('material-symbols-outlined', missionObj.perfect ?? false);
+            const toggleClass = missionObj.perfectLock ? 'active' : 'new';
+            toggle.classList.toggle(toggleClass, missionObj.perfect ?? false);
+            toggle.textContent = missionObj.perfect ? 'trophy' : '▢';
             toggle.addEventListener('click', () => {
                 if (!document.getElementById('app').classList.contains('editing')) return;
                 if (missionObj.perfectLock) return;
@@ -242,9 +243,9 @@ function renderMissionGrid() {
                 updatePerkPointsDisplay();
             });
 
-            const label = createDiv("mission-label", missionObj.name);
+            const label = createDiv('mission-label', missionObj.name);
 
-            const countContainer = createDiv("mission-count-wrapper");
+            const countContainer = createDiv('mission-count-wrapper');
 
             const stageClasses = 'mission-count' + (missionObj.newStage ? ' new' : '');
             const stage = createDiv(stageClasses, missionObj.stage ?? 0);
@@ -278,14 +279,14 @@ function renderMissionGrid() {
 
         missionGrid.appendChild(section);
     });
-    missionGrid.classList.add("hide-scrollbar");
+    missionGrid.classList.add('hide-scrollbar');
 }
 
 function showTab(id) {
-    document.querySelectorAll(".nav-button").forEach((btn) => btn.classList.remove("active"));
-    document.querySelectorAll(".tab-content").forEach((tab) => tab.classList.remove("active"));
-    document.getElementById(id).classList.add("active");
-    document.querySelector(`.nav-button[data-tab="${id}"]`)?.classList.add("active");
+    document.querySelectorAll('.nav-button').forEach((btn) => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach((tab) => tab.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelector(`.nav-button[data-tab='${id}']`)?.classList.add('active');
 }
 
 try {
@@ -293,7 +294,7 @@ try {
     renderMissionGrid();
     renderEditButton();
 } catch (e) {
-    console.error("Render error:", e);
+    console.error('Render error:', e);
 }
 
 window.showTab = showTab;

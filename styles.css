@@ -12,6 +12,7 @@
   /* Toggles */
   --toggle-off: hsla(0, 100%, 20%, 0.5);
   --toggle-on: hsla(120, 100%, 20%, 0.5);
+  --toggle-accent: hsla(210, 85%, 55%, 0.5);
 
   /* Accent colors */
   --accent-medium: hsl(220, 45%, 12%);
@@ -261,6 +262,10 @@ body {
 
 .mission-toggle.active {
   background: var(--toggle-on);
+}
+
+.mission-toggle.new {
+  background: var(--toggle-accent);
 }
 
 .mission-label {
