@@ -22,12 +22,16 @@ body {
   font-family: Roboto, sans-serif;
   margin: 0;
   padding: 0 0 4rem 0;
-  background: var(--background);
+  background: var(--accent-medium);
   color: var(--text-enabled);
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
   touch-action: manipulation;
+}
+
+.app{
+  background: var(--background);
 }
 
 .hide-scrollbar {
