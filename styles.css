@@ -44,6 +44,24 @@ body {
   display: none;
 }
 
+.button-accent{
+  background-color: var(--accent-light);
+  color: var(--text-highlight);
+  border: none;
+}
+
+.button-secondary{
+  background-color: var(--background);
+  color: var(--accent-light);
+  border: 1px solid var(--accent-light);
+}
+
+.button-negative{
+  background-color: var(--background);
+  color: red;
+  border: 1px solid red;
+}
+
 .tab-content {
   display: none;
 }
@@ -238,9 +256,6 @@ body {
   width: 3.5rem;
   height: 3.5rem;
   border-radius: 50%;
-  border: none;
-  background-color: var(--accent-light);
-  color: var(--text-highlight);
   padding: 0;
   display: flex;
   align-items: center;
@@ -254,16 +269,12 @@ body {
   right: 3.75rem;
   padding: 0.5rem;
   font-size: 0.85rem;
-  border: none;
   border-radius: 50%;
-  background-color: var(--toggle-off);
-  color: hsl(0, 50%, 40%);
   z-index: 10;
 }
 
 .undo-button[style*="display: block"] {
   opacity: 1;
-  transform: translateY(0);
 }
 
 .points-text {

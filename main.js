@@ -32,7 +32,7 @@ function getPerkPointsEarned() {
 
 // UNDO BUTTON
 const undoButton = document.createElement('button');
-undoButton.className = 'undo-button material-symbols-outlined';
+undoButton.className = 'undo-button button-negative material-symbols-outlined';
 undoButton.textContent = 'undo';
 undoButton.style.display = 'none';
 document.body.appendChild(undoButton);
