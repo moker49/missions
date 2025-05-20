@@ -5,10 +5,11 @@ const missionGrid = document.getElementById("missionGrid");
 let staticDataBackup = null;
 
 // DOM Creation
-function createDiv(className, textContent = "") {
+function createDiv(className, textContent = "", id = null) {
     const el = document.createElement("div");
     el.className = className;
     el.textContent = textContent;
+    el.id = id;
     return el;
 }
 
@@ -65,8 +66,31 @@ undoButton.addEventListener('click', () => {
 //     resetButton.style.display = 'none';
 // });
 
+// TOGGLE FILTER BUTTON
+const filterButton = document.getElementById('filter-toggle');
+let allPerksVisible = true;
+
+filterButton.addEventListener('click', () => {
+    allPerksVisible = !allPerksVisible;
+    filterButton.children[0].textContent = allPerksVisible ? 'filter_list' : 'filter_list_off';
+
+    staticData.forEach((difficultyObj) => {
+        // === TOGGLE PERKS ===
+        difficultyObj.perks.forEach((perkObj) => {
+            const perkEl = document.getElementById(perkObj.id);
+            const isUnlocked = perkObj.currentPoints ?? 0 === perkObj.perkPoints;
+            perkEl.classList.toggle('hidden', !allPerksVisible && !isUnlocked);
+        });
+        // === TOGGLE MISSIONS ===
+        difficultyObj.missions.forEach((missionObj) => {
+            const missionEl = document.getElementById(missionObj.id);
+            missionEl.classList.toggle('hidden', !allPerksVisible && (missionObj.perfect ?? false));
+        });
+    });
+});
+
 // EDITING
-const editButton = document.getElementById('editToggle');
+const editButton = document.getElementById('edit-toggle');
 const icon = editButton.querySelector('.material-symbols-outlined');
 const pointsText = editButton.querySelector('.points-text');
 function updatePerkPointsDisplay() {
@@ -96,6 +120,9 @@ function renderEditButton() {
             app.classList.add('editing');
             updatePerkPointsDisplay();
             staticDataBackup = JSON.parse(JSON.stringify(staticData));
+            if (!allPerksVisible) {
+                filterButton.click();
+            }
         } else if (getPerkPointsSpent() === getPerkPointsEarned()) {
             isEditing = false;
             app.classList.remove('editing');
@@ -104,6 +131,7 @@ function renderEditButton() {
             icon.textContent = 'edit';
             undoButton.style.display = 'none';
         }
+        filterButton.classList.toggle('hidden', isEditing);
         // resetButton.style.display = isEditing ? 'block' : 'none';
     });
 }
@@ -117,7 +145,7 @@ function renderPerkGrid() {
         section.appendChild(header);
 
         difficultyObj.perks.forEach((perkObj, perkIndex) => {
-            const row = createDiv("perk-entry" + (perkIndex % 2 === 1 ? " alt" : ""));
+            const row = createDiv("perk-entry" + (perkIndex % 2 === 1 ? " alt" : ""), '', perkObj.id);
 
             const icon = createDiv("perk-icon");
             perkObj.icons.forEach((iconName) => {
@@ -176,36 +204,36 @@ function renderMissionGrid() {
         const header = createDiv("mission-header", difficultyObj.name);
         section.appendChild(header);
 
-        difficultyObj.missions.forEach((mission, index) => {
-            const row = createDiv("mission-entry" + (index % 2 === 1 ? " alt" : ""));
+        difficultyObj.missions.forEach((missionObj, missionIndex) => {
+            const row = createDiv("mission-entry" + (missionIndex % 2 === 1 ? " alt" : ""), '', missionObj.id);
 
             const toggle = createDiv("mission-toggle");
-            toggle.classList.toggle("material-symbols-outlined", mission.perfect ?? false);
-            toggle.classList.toggle("active", mission.perfect ?? false);
-            toggle.textContent = mission.perfect ? "trophy" : "▢";
+            toggle.classList.toggle("material-symbols-outlined", missionObj.perfect ?? false);
+            toggle.classList.toggle("active", missionObj.perfect ?? false);
+            toggle.textContent = missionObj.perfect ? "trophy" : "▢";
             toggle.addEventListener('click', () => {
                 if (!document.getElementById('app').classList.contains('editing')) return;
-                mission.perfect = !mission.perfect;
+                missionObj.perfect = !missionObj.perfect;
                 renderMissionGrid();
                 updatePerkPointsDisplay();
             });
 
-            const label = createDiv("mission-label", mission.name);
+            const label = createDiv("mission-label", missionObj.name);
 
             const countContainer = createDiv("mission-count");
 
-            const stage = createDiv("count-button count-stage", mission.stage ?? 0);
+            const stage = createDiv("count-button count-stage", missionObj.stage ?? 0);
             stage.addEventListener('click', () => {
                 if (!document.getElementById('app').classList.contains('editing')) return;
-                mission.stage = (mission.stage ?? 0) + 1;
+                missionObj.stage = (missionObj.stage ?? 0) + 1;
                 renderMissionGrid();
                 updatePerkPointsDisplay();
             });
 
-            const boss = createDiv("count-button count-boss", mission.boss ?? 0);
+            const boss = createDiv("count-button count-boss", missionObj.boss ?? 0);
             boss.addEventListener('click', () => {
                 if (!document.getElementById('app').classList.contains('editing')) return;
-                mission.boss = (mission.boss ?? 0) + 1;
+                missionObj.boss = (missionObj.boss ?? 0) + 1;
                 renderMissionGrid();
                 updatePerkPointsDisplay();
             });

@@ -72,6 +72,7 @@ body {
 
 .app{
   background: var(--background);
+  min-height: calc(100vh - 7.5rem);
 }
 
 .tab-content {
@@ -95,6 +96,11 @@ body {
 
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* COMMON TEMPLATED */
+.hidden {
+  display: none !important;
 }
 
 /* BUTTON TEMPLATES */
