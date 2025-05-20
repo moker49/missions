@@ -31,20 +31,39 @@ function getPerkPointsEarned() {
 }
 
 // UNDO BUTTON
-const undoButton = document.createElement('button');
-undoButton.className = 'undo-button button-negative material-symbols-outlined';
-undoButton.textContent = 'undo';
-undoButton.style.display = 'none';
-document.body.appendChild(undoButton);
+const undoButton = document.getElementById('undo-button');
 undoButton.addEventListener('click', () => {
     if (staticDataBackup) {
         Object.assign(staticData, JSON.parse(JSON.stringify(staticDataBackup)));
         renderPerkGrid();
         renderMissionGrid();
         updatePerkPointsDisplay();
+        undoButton.style.display = 'none';
     }
-    undoButton.style.display = 'none';
 });
+
+// // RESET BUTTON
+// const resetButton = document.createElement('button');
+// resetButton.className = 'reset-button button-negative material-symbols-outlined';
+// resetButton.textContent = 'delete';
+// resetButton.style.display = 'none';
+// document.body.appendChild(resetButton);
+// resetButton.addEventListener('click', () => {
+//     staticData.forEach((difficultyObj) => {
+//         difficultyObj.perks.forEach((perk) => {
+//             perk.currentPoints = 0;
+//         });
+//         difficultyObj.missions.forEach((mission) => {
+//             mission.perfect = false;
+//             mission.stage = 0;
+//             mission.boss = 0;
+//         });
+//     });
+//     renderPerkGrid();
+//     renderMissionGrid();
+//     updatePerkPointsDisplay();
+//     resetButton.style.display = 'none';
+// });
 
 // EDITING
 const editButton = document.getElementById('editToggle');
@@ -65,6 +84,7 @@ function updatePerkPointsDisplay() {
         pointsText.style.display = 'none';
         editButton.disabled = false;
     }
+    editButton.classList.toggle("button-secondary", spent !== available);
 }
 function renderEditButton() {
     const app = document.getElementById('app');
@@ -84,6 +104,7 @@ function renderEditButton() {
             icon.textContent = 'edit';
             undoButton.style.display = 'none';
         }
+        // resetButton.style.display = isEditing ? 'block' : 'none';
     });
 }
 

@@ -17,6 +17,18 @@
 	</head>
 	<body>
 		<div id="app" class="app">
+			<header class="top-app-bar">
+				<button class="top-bar-button" id="menu-button">
+					<span class="material-symbols-outlined">menu</span>
+				</button>
+
+				<h1 class="top-bar-title">Dice Throne Missions</h1>
+
+				<button class="top-bar-button" id="undo-button" style="display: none">
+					<span class="material-symbols-outlined">undo</span>
+				</button>
+			</header>
+
 			<div id="perkTab" class="tab-content active">
 				<div class="scroll-container">
 					<div class="perk-list" id="perkGrid"></div>
@@ -28,31 +40,31 @@
 					<div class="mission-list" id="missionGrid"></div>
 				</div>
 			</div>
-		</div>
 
-		<script type="module" src="main.js"></script>
+			<script type="module" src="main.js"></script>
 
-		<div class="nav">
-			<button
-				data-tab="perkTab"
-				class="nav-button active"
-				onclick="showTab('perkTab')"
-			>
-				<span class="material-symbols-outlined">toggle_on</span>
-				<span class="nav-label">Perks</span>
-			</button>
-			<button id="editToggle" class="edit-button button-accent">
-				<span class="material-symbols-outlined">edit</span>
-				<span class="points-text" style="display: none"></span>
-			</button>
-			<button
-				data-tab="missionTab"
-				class="nav-button"
-				onclick="showTab('missionTab')"
-			>
-				<span class="material-symbols-outlined">trophy</span>
-				<span class="nav-label">Missions</span>
-			</button>
+			<div class="nav">
+				<button
+					data-tab="perkTab"
+					class="nav-button active"
+					onclick="showTab('perkTab')"
+				>
+					<span class="material-symbols-outlined">toggle_on</span>
+					<span class="nav-label">Perks</span>
+				</button>
+				<button id="editToggle" class="edit-button button-accent">
+					<span class="material-symbols-outlined">edit</span>
+					<span class="points-text" style="display: none"></span>
+				</button>
+				<button
+					data-tab="missionTab"
+					class="nav-button"
+					onclick="showTab('missionTab')"
+				>
+					<span class="material-symbols-outlined">trophy</span>
+					<span class="nav-label">Missions</span>
+				</button>
+			</div>
 		</div>
 	</body>
 </html>

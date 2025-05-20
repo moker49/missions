@@ -18,11 +18,50 @@
   --accent-light: hsl(210, 85%, 55%);
 }
 
+/* TOP BAR */
+.top-app-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3.5rem;
+  background: var(--accent-medium);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 0.75rem;
+  z-index: 1000;
+  border-bottom: 1px solid var(--background);
+}
+
+.top-bar-button {
+  background: none;
+  border: none;
+  color: var(--text-highlight);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.top-bar-title {
+  flex: 1;
+  text-align: left;
+  margin: 0;
+  padding: 0.5rem;
+  font-size: 1.25rem;
+  color: var(--text-highlight);
+  pointer-events: none;
+}
+
+
 /* BODY */
 body {
   font-family: Roboto, sans-serif;
   margin: 0;
-  padding: 0 0 4rem 0;
+  padding: 3.5rem 0 4rem 0;
   background: var(--accent-medium);
   color: var(--text-enabled);
   -webkit-user-select: none;
@@ -216,21 +255,6 @@ body {
   height: 100%;
 }
 
-/* SIDE BUTTONS */
-.undo-button {
-  position: fixed;
-  bottom: 5.5rem;
-  right: 3.75rem;
-  padding: 0.5rem;
-  font-size: 0.85rem;
-  border-radius: 50%;
-  z-index: 10;
-}
-
-.undo-button[style*="display: block"] {
-  opacity: 1;
-}
-
 /* NAV */
 .nav {
   position: fixed;
@@ -286,7 +310,6 @@ body {
 .points-text {
   font-size: 0.9rem;
   font-family: Roboto, sans-serif;
-  color: var(--text-highlight);
 }
 
 nav button:active {
