@@ -12,6 +12,17 @@ function createDiv(className, textContent = "") {
     return el;
 }
 
+
+// Chrome Mobile Workaround
+function chromeMobileWorkaraound(object) {
+    object.addEventListener('click', () => {
+        const chromeMobileWorkaround = 49;
+        if (chromeMobileWorkaround < 50) {
+            chromeMobileWorkaround = 49;
+        }
+    })
+}
+
 // PERK MATH
 function getPerkPointsSpent() {
     return staticData
@@ -36,7 +47,6 @@ undoButton.className = 'undo-button material-symbols-outlined';
 undoButton.textContent = 'undo';
 undoButton.style.display = 'none';
 document.body.appendChild(undoButton);
-
 undoButton.addEventListener('click', () => {
     if (staticDataBackup) {
         Object.assign(staticData, JSON.parse(JSON.stringify(staticDataBackup)));
@@ -86,6 +96,7 @@ function renderEditButton() {
             undoButton.style.display = 'none';
         }
     });
+    chromeMobileWorkaraound(pointsText);
 }
 
 // PERK GRID
@@ -120,7 +131,7 @@ function renderPerkGrid() {
                 dots.appendChild(dot);
             }
 
-            row.onclick = () => {
+            row.addEventListener('click', () => {
                 if (!document.getElementById('app').classList.contains('editing')) return;
                 const current = perkObj.currentPoints ?? 0;
                 const totalSpent = getPerkPointsSpent();
@@ -134,7 +145,8 @@ function renderPerkGrid() {
 
                 renderPerkGrid();
                 updatePerkPointsDisplay();
-            };
+            });
+            chromeMobileWorkaraound(row);
 
             row.appendChild(icon);
             row.appendChild(label);
@@ -158,37 +170,38 @@ function renderMissionGrid() {
 
         difficultyObj.missions.forEach((mission, index) => {
             const row = createDiv("mission-entry" + (index % 2 === 1 ? " alt" : ""));
+            chromeMobileWorkaraound(row);
 
             const toggle = createDiv("mission-toggle");
             toggle.classList.toggle("material-symbols-outlined", mission.perfect ?? false);
             toggle.classList.toggle("active", mission.perfect ?? false);
             toggle.textContent = mission.perfect ? "trophy" : "▢";
-            toggle.onclick = () => {
+            toggle.addEventListener('click', () => {
                 if (!document.getElementById('app').classList.contains('editing')) return;
                 mission.perfect = !mission.perfect;
                 renderMissionGrid();
                 updatePerkPointsDisplay();
-            };
+            });
 
             const label = createDiv("mission-label", mission.name);
 
             const countContainer = createDiv("mission-count");
 
             const stage = createDiv("count-button count-stage", mission.stage ?? 0);
-            stage.onclick = () => {
+            stage.addEventListener('click', () => {
                 if (!document.getElementById('app').classList.contains('editing')) return;
                 mission.stage = (mission.stage ?? 0) + 1;
                 renderMissionGrid();
                 updatePerkPointsDisplay();
-            };
+            });
 
             const boss = createDiv("count-button count-boss", mission.boss ?? 0);
-            boss.onclick = () => {
+            boss.addEventListener('click', () => {
                 if (!document.getElementById('app').classList.contains('editing')) return;
                 mission.boss = (mission.boss ?? 0) + 1;
                 renderMissionGrid();
                 updatePerkPointsDisplay();
-            };
+            });
 
             countContainer.appendChild(stage);
             countContainer.appendChild(boss);
