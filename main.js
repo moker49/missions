@@ -12,17 +12,6 @@ function createDiv(className, textContent = "") {
     return el;
 }
 
-
-// Chrome Mobile Workaround
-function chromeMobileWorkaraound(object) {
-    object.addEventListener('click', () => {
-        const chromeMobileWorkaround = 49;
-        if (chromeMobileWorkaround < 50) {
-            chromeMobileWorkaround = 49;
-        }
-    })
-}
-
 // PERK MATH
 function getPerkPointsSpent() {
     return staticData
@@ -96,7 +85,6 @@ function renderEditButton() {
             undoButton.style.display = 'none';
         }
     });
-    chromeMobileWorkaraound(pointsText);
 }
 
 // PERK GRID
@@ -146,7 +134,6 @@ function renderPerkGrid() {
                 renderPerkGrid();
                 updatePerkPointsDisplay();
             });
-            chromeMobileWorkaraound(row);
 
             row.appendChild(icon);
             row.appendChild(label);
@@ -170,7 +157,6 @@ function renderMissionGrid() {
 
         difficultyObj.missions.forEach((mission, index) => {
             const row = createDiv("mission-entry" + (index % 2 === 1 ? " alt" : ""));
-            chromeMobileWorkaraound(row);
 
             const toggle = createDiv("mission-toggle");
             toggle.classList.toggle("material-symbols-outlined", mission.perfect ?? false);
