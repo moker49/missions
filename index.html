@@ -1,4 +1,4 @@
-<!-- v0.8.002 -->
+<!-- v0.9 -->
 <!DOCTYPE html>
 <html lang="en">
 	<head>
@@ -17,6 +17,7 @@
 	</head>
 	<body>
 		<div id="app" class="app">
+			<!-- Top Bar -->
 			<header class="top-app-bar">
 				<button class="top-bar-button" id="menu-button">
 					<span class="material-symbols-outlined">menu</span>
@@ -31,7 +32,9 @@
 					<span class="material-symbols-outlined">filter_list</span>
 				</button>
 			</header>
+			<div id="menu-backdrop" class="menu-backdrop"></div>
 
+			<!-- Main Body -->
 			<div id="perkTab" class="tab-content active">
 				<div class="scroll-container">
 					<div class="perk-list" id="perkGrid"></div>
@@ -46,6 +49,7 @@
 
 			<script type="module" src="main.js"></script>
 
+			<!-- Nav -->
 			<div class="nav">
 				<button
 					data-tab="perkTab"
@@ -67,6 +71,32 @@
 					<span class="material-symbols-outlined">trophy</span>
 					<span class="nav-label">Missions</span>
 				</button>
+			</div>
+
+			<!-- Slide-out menu -->
+			<div id="menu-panel" class="menu-panel">
+				<div class="menu-profile"></div>
+
+				<div class="menu-items">
+					<div class="menu-item">
+						<!-- <span class="material-symbols-outlined">swords</span> -->
+						<span class="label">Dice Throne Missions</span>
+						<div class="divider"></div>
+						<span
+							class="material-symbols-outlined quick-action"
+							id="dice-throne-delete"
+							>delete</span
+						>
+					</div>
+				</div>
+			</div>
+
+			<!-- Confirmation Panel -->
+			<div id="confirm-panel-backdrop" class="confirm-backdrop hidden">
+				<div class="confirm-panel">
+					<div class="confirm-message"></div>
+					<div class="confirm-actions"></div>
+				</div>
 			</div>
 		</div>
 	</body>

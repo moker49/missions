@@ -1,5 +1,7 @@
 import { staticData } from './staticData.js';
 
+const app = document.getElementById('app');
+let isEditing = false;
 const perkGrid = document.getElementById('perkGrid');
 const missionGrid = document.getElementById('missionGrid');
 let staticDataBackup = null;
@@ -10,6 +12,13 @@ function createDiv(className, textContent = '', id = null) {
     el.className = className;
     el.textContent = textContent;
     if (id !== null) el.id = id;
+    return el;
+}
+
+function createButton(className, textContent = '') {
+    const el = document.createElement('span');
+    el.className = className;
+    el.textContent = textContent;
     return el;
 }
 
@@ -44,6 +53,75 @@ function saveDataState() {
     });
 }
 
+// HAMBURGER
+const hamburger = document.getElementById('menu-button');
+const menuPanel = document.getElementById('menu-panel');
+const menuBackdrop = document.getElementById('menu-backdrop');
+
+function toggleMenu(open = null) {
+    const isVisible = menuPanel.classList.contains('visible');
+    const shouldOpen = open === null ? !isVisible : open;
+
+    menuPanel.classList.toggle('visible', shouldOpen);
+    menuBackdrop.classList.toggle('visible', shouldOpen);
+}
+hamburger.addEventListener('click', () => toggleMenu());
+menuBackdrop.addEventListener('click', () => toggleMenu(false));
+
+// DICE THRONE DELETE
+const diceThroneDelete = document.getElementById('dice-throne-delete');
+diceThroneDelete.addEventListener('click', () => {
+    const cancelBtn = createButton('btn btn-conf-accent', 'cancel');
+    const respecBtn = createButton('btn btn-conf-secondary', 'respec');
+    const deleteBtn = createButton('btn btn-conf-secondary', 'delete');
+    const buttons = [cancelBtn, respecBtn, deleteBtn]
+    showConfirmation('Delete Everything?', buttons, (choice) => {
+        switch (choice) {
+            case 'respec': {
+                if (undoButton.style.display === 'block') {
+                    undoButton.click();
+                }
+                staticData.forEach((difficultyObj) => {
+                    difficultyObj.perks.forEach((perk) => {
+                        perk.currentPoints = 0;
+                        perk.min = 0;
+                    });
+                });
+                editButton.click();
+                updatePerkPointsDisplay();
+                undoButton.style.display = 'none';
+                renderPerkGrid();
+                renderMissionGrid();
+                toggleMenu(false);
+                return;
+            }
+            case 'delete': {
+                staticData.forEach((difficultyObj) => {
+                    difficultyObj.perks.forEach((perk) => {
+                        perk.currentPoints = 0;
+                        perk.min = 0;
+                    });
+                    difficultyObj.missions.forEach((mission) => {
+                        mission.perfect = false;
+                        mission.perfectLock = false;
+                        mission.stage = 0;
+                        mission.boss = 0;
+                        mission.newStage = false;
+                        mission.newBoss = false;
+                    });
+                });
+                updatePerkPointsDisplay();
+                undoButton.style.display = 'none';
+                renderPerkGrid();
+                renderMissionGrid();
+                toggleMenu(false);
+                return;
+            }
+            default: return;
+        }
+    });
+});
+
 // UNDO BUTTON
 const undoButton = document.getElementById('undo-button');
 undoButton.addEventListener('click', () => {
@@ -55,29 +133,6 @@ undoButton.addEventListener('click', () => {
         undoButton.style.display = 'none';
     }
 });
-
-// // RESET BUTTON
-// const resetButton = document.createElement('button');
-// resetButton.className = 'reset-button button-negative material-symbols-outlined';
-// resetButton.textContent = 'delete';
-// resetButton.style.display = 'none';
-// document.body.appendChild(resetButton);
-// resetButton.addEventListener('click', () => {
-//     staticData.forEach((difficultyObj) => {
-//         difficultyObj.perks.forEach((perk) => {
-//             perk.currentPoints = 0;
-//         });
-//         difficultyObj.missions.forEach((mission) => {
-//             mission.perfect = false;
-//             mission.stage = 0;
-//             mission.boss = 0;
-//         });
-//     });
-//     renderPerkGrid();
-//     renderMissionGrid();
-//     updatePerkPointsDisplay();
-//     resetButton.style.display = 'none';
-// });
 
 // TOGGLE FILTER BUTTON
 const filterButton = document.getElementById('filter-toggle');
@@ -115,7 +170,7 @@ function updatePerkPointsDisplay() {
         pointsText.textContent = `${spent} / ${available}`;
         editButton.disabled = true;
         undoButton.style.display = 'block';
-    } else {
+    } else if (isEditing) {
         icon.style.display = '';
         icon.textContent = 'save';
         pointsText.style.display = 'none';
@@ -124,9 +179,6 @@ function updatePerkPointsDisplay() {
     editButton.classList.toggle('button-secondary', spent !== available);
 }
 function renderEditButton() {
-    const app = document.getElementById('app');
-    let isEditing = false;
-
     editButton.addEventListener('click', () => {
         if (!isEditing) {
             // EDIT
@@ -150,7 +202,6 @@ function renderEditButton() {
             renderMissionGrid();
         }
         filterButton.classList.toggle('hidden', isEditing);
-        // resetButton.style.display = isEditing ? 'block' : 'none';
     });
 }
 
@@ -296,5 +347,30 @@ try {
 } catch (e) {
     console.error('Render error:', e);
 }
+
+
+// CONFIRMATION TEMPLATE
+function showConfirmation(message, buttons, callback) {
+    const backdrop = document.getElementById('confirm-panel-backdrop');
+    const clone = backdrop.cloneNode(true);
+    backdrop.replaceWith(clone);
+
+    const actions = clone.querySelector('.confirm-actions');
+    const messageBox = clone.querySelector('.confirm-message');
+    messageBox.textContent = message;
+
+    actions.innerHTML = '';
+
+    buttons.forEach((button) => {
+        actions.appendChild(button);
+        button.onclick = () => {
+            clone.classList.add('hidden');
+            callback(button.textContent);
+        };
+    });
+
+    clone.classList.remove('hidden');
+}
+
 
 window.showTab = showTab;
