@@ -45,6 +45,7 @@
   padding: 0.5rem;
   font-size: 1.5rem;
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .top-bar-title {
