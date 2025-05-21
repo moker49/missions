@@ -57,6 +57,8 @@ function saveDataState() {
             missionObj.perfectLock = missionObj.perfect
             missionObj.newStage = false;
             missionObj.newBoss = false;
+            missionObj.newStageSolo = false;
+            missionObj.newBossSolo = false;
         });
     });
 }
@@ -118,6 +120,8 @@ diceThroneDelete.addEventListener('click', () => {
                         mission.boss = 0;
                         mission.newStage = false;
                         mission.newBoss = false;
+                        mission.newStageSolo = false;
+                        mission.newBossSolo = false;
                     });
                 });
                 updatePerkPointsDisplay();
@@ -302,6 +306,10 @@ function renderMissionGrid() {
                 if (!document.getElementById('app').classList.contains('editing')) return;
                 if (missionObj.perfectLock) return;
                 missionObj.perfect = !missionObj.perfect;
+                missionObj.stage += missionObj.perfect ? 1 : -1;
+                missionObj.boss += missionObj.perfect ? 1 : -1;
+                missionObj.newStage = missionObj.newStageSolo ? missionObj.newStage : !missionObj.newStage;
+                missionObj.newBoss = missionObj.newBossSolo ? missionObj.newBoss : !missionObj.newBoss;
                 renderMissionGrid();
                 updatePerkPointsDisplay();
             });
@@ -316,6 +324,7 @@ function renderMissionGrid() {
                 if (!document.getElementById('app').classList.contains('editing')) return;
                 missionObj.stage = (missionObj.stage ?? 0) + 1;
                 missionObj.newStage = true;
+                missionObj.newStageSolo = true;
                 renderMissionGrid();
                 updatePerkPointsDisplay();
             });
@@ -326,6 +335,7 @@ function renderMissionGrid() {
                 if (!document.getElementById('app').classList.contains('editing')) return;
                 missionObj.boss = (missionObj.boss ?? 0) + 1;
                 missionObj.newBoss = true;
+                missionObj.newBossSolo = true;
                 renderMissionGrid();
                 updatePerkPointsDisplay();
             });
