@@ -96,6 +96,8 @@ diceThroneDelete.addEventListener('click', () => {
                     });
                 });
                 editButton.click();
+                isEditing = true;
+                app.classList.add('editing');
                 updatePerkPointsDisplay();
                 undoButton.style.display = 'none';
                 renderPerkGrid();
