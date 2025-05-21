@@ -1,4 +1,12 @@
 import { staticData } from './staticData.js';
+const loadedStaticData = localStorage.getItem('staticData');
+if (loadedStaticData) {
+    try {
+        Object.assign(staticData, JSON.parse(loadedStaticData));
+    } catch (e) {
+        console.error('Failed to parse saved staticData:', e);
+    }
+}
 
 const app = document.getElementById('app');
 let isEditing = false;
@@ -112,6 +120,7 @@ diceThroneDelete.addEventListener('click', () => {
                 });
                 updatePerkPointsDisplay();
                 undoButton.style.display = 'none';
+                localStorage.setItem('staticData', JSON.stringify(staticData));
                 renderPerkGrid();
                 renderMissionGrid();
                 toggleMenu(false);
@@ -193,6 +202,7 @@ function renderEditButton() {
             // SAVE
             isEditing = false;
             saveDataState();
+            localStorage.setItem('staticData', JSON.stringify(staticData));
             app.classList.remove('editing');
             icon.style.display = '';
             pointsText.style.display = 'none';
