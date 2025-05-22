@@ -31,7 +31,14 @@
 			href="https://fonts.googleapis.com/css2?family=Roboto:wght@600&display=swap"
 			rel="stylesheet"
 		/>
-		<link rel="stylesheet" href="styles.css" />
+		<link rel="stylesheet" href="style/main.css" />
+		<link rel="stylesheet" href="style/confirmationPanel.css" />
+		<link rel="stylesheet" href="style/menuPanel.css" />
+		<link rel="stylesheet" href="style/missions.css" />
+		<link rel="stylesheet" href="style/nav.css" />
+		<link rel="stylesheet" href="style/perks.css" />
+		<link rel="stylesheet" href="style/templates.css" />
+		<link rel="stylesheet" href="style/topBar.css" />
 	</head>
 	<body>
 		<div id="app" class="app">
@@ -51,6 +58,39 @@
 				</button>
 			</header>
 			<div id="menu-backdrop" class="menu-backdrop"></div>
+
+			<!-- Slide-out menu -->
+			<div id="menu-panel" class="menu-panel">
+				<div class="menu-profile"></div>
+
+				<div class="menu-items">
+					<div class="menu-item">
+						<!-- <span class="material-symbols-outlined">swords</span> -->
+						<span class="label">Dice Throne Missions</span>
+						<div>
+							<div class="divider"></div>
+						</div>
+						<span
+							class="material-symbols-outlined quick-action"
+							id="dice-throne-delete"
+							>delete</span
+						>
+					</div>
+				</div>
+
+				<div class="menu-settings">
+					<div class="menu-item full" id="boss-name-toggle">
+						<!-- <span class="material-symbols-outlined">swords</span> -->
+						<span class="label">Boss Names</span>
+						<!-- <div class="divider"></div> -->
+						<span
+							class="material-symbols-outlined quick-action"
+							id="boss-name-toggle-icon"
+							>check_box_outline_blank</span
+						>
+					</div>
+				</div>
+			</div>
 
 			<!-- Main Body -->
 			<div id="perkTab" class="tab-content active">
@@ -89,39 +129,6 @@
 					<span class="material-symbols-outlined">trophy</span>
 					<span class="nav-label">Missions</span>
 				</button>
-			</div>
-
-			<!-- Slide-out menu -->
-			<div id="menu-panel" class="menu-panel">
-				<div class="menu-profile"></div>
-
-				<div class="menu-items">
-					<div class="menu-item">
-						<!-- <span class="material-symbols-outlined">swords</span> -->
-						<span class="label">Dice Throne Missions</span>
-						<div>
-							<div class="divider"></div>
-						</div>
-						<span
-							class="material-symbols-outlined quick-action"
-							id="dice-throne-delete"
-							>delete</span
-						>
-					</div>
-				</div>
-
-				<div class="menu-settings">
-					<div class="menu-item full" id="boss-name-toggle">
-						<!-- <span class="material-symbols-outlined">swords</span> -->
-						<span class="label">Boss Names</span>
-						<!-- <div class="divider"></div> -->
-						<span
-							class="material-symbols-outlined quick-action"
-							id="boss-name-toggle-icon"
-							>check_box_outline_blank</span
-						>
-					</div>
-				</div>
 			</div>
 
 			<!-- Confirmation Panel -->
