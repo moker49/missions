@@ -44,8 +44,6 @@
   justify-content: center;
   padding: 0.5rem;
   font-size: 1.5rem;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
 }
 
 .top-bar-title {
@@ -58,6 +56,7 @@
   pointer-events: none;
 }
 
+/* MENU PANEL */
 .menu-panel {
   position: fixed;
   top: 0;
@@ -86,8 +85,16 @@
 }
 
 .menu-items {
-  padding: 1.5rem 0;
   flex-grow: 1;
+  padding-right: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.menu-settings {
+  height: 40vw;
+  padding-right: 0.5rem;
+  padding-top: 0.5rem;
+  background: var(--table-row-alt-1);
 }
 
 .menu-item {
@@ -95,13 +102,19 @@
   align-items: center;
 }
 
-.menu-item .material-symbols-outlined {
-  margin-right: 1rem;
+.menu-item > * {
+  min-height: 3rem;
+  display: flex;
+  align-items: center;
+}
+
+.menu-item.full {
+  cursor: pointer;
 }
 
 .menu-item .label {
+  padding: 0 1.5rem;
   flex-grow: 1;
-  padding: 1rem 1.5rem;
   cursor: pointer;
 }
 
@@ -112,11 +125,9 @@
 }
 
 .menu-item .quick-action {
+  padding: 0 1rem;
   background: none;
   border: none;
-  cursor: pointer;
-  padding: 1rem 1.5rem 1rem 0.5rem;
-  margin-right: 0;
 }
 
 .menu-backdrop {
@@ -333,7 +344,6 @@ body {
   justify-content: center;
   background: var(--toggle-off);
   color: var(--text-enabled);
-  cursor: pointer;
 }
 
 .mission-toggle.active {
@@ -389,12 +399,10 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 1rem;
-  cursor: pointer;
   height: 100%;
   opacity: 0.3;
   color: var(--text-enabled);
   padding-bottom: env(safe-area-inset-bottom, 8px);
-  -webkit-tap-highlight-color: transparent;
 }
 
 .edit-button {

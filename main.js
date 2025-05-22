@@ -1,33 +1,23 @@
+import { deepMerge } from './utils/deepMerge.js';
 import { staticData } from './staticData.js';
-const loadedStaticData = localStorage.getItem('staticData');
-if (loadedStaticData) {
-    try {
-        Object.assign(staticData, JSON.parse(loadedStaticData));
-    } catch (e) {
-        console.error('Failed to parse saved staticData:', e);
-    }
-}
 
 const app = document.getElementById('app');
 let isEditing = false;
+let bossNames = false;
 const perkGrid = document.getElementById('perkGrid');
 const missionGrid = document.getElementById('missionGrid');
 let staticDataBackup = null;
 
-// DOM Creation
-function createDiv(className, textContent = '', id = null) {
-    const el = document.createElement('div');
-    el.className = className;
-    el.textContent = textContent;
-    if (id !== null) el.id = id;
-    return el;
-}
-
-function createButton(className, textContent = '') {
-    const el = document.createElement('span');
-    el.className = className;
-    el.textContent = textContent;
-    return el;
+// LOAD
+const rawLoadedData = localStorage.getItem('staticData');
+if (rawLoadedData) {
+    try {
+        const loadedData = JSON.parse(rawLoadedData);
+        const mergedData = deepMerge(staticData, loadedData);
+        Object.assign(staticData, mergedData);
+    } catch (e) {
+        console.error('Failed to parse or merge saved staticData:', e);
+    }
 }
 
 // PERK MATH
@@ -47,6 +37,23 @@ function getPerkPointsEarned() {
             return total + stagePoints + bossPoints + perfectPoints;
         }, 0);
 }
+
+// DOM Creation
+function createDiv(className, textContent = '', id = null) {
+    const el = document.createElement('div');
+    el.className = className;
+    el.textContent = textContent;
+    if (id !== null) el.id = id;
+    return el;
+}
+
+function createButton(className, textContent = '') {
+    const el = document.createElement('span');
+    el.className = className;
+    el.textContent = textContent;
+    return el;
+}
+
 
 function saveDataState() {
     staticData.forEach((difficultyObj) => {
@@ -135,6 +142,15 @@ diceThroneDelete.addEventListener('click', () => {
             default: return;
         }
     });
+});
+
+// HAMBURGER SETTINGS
+const bossNameToggle = document.getElementById('boss-name-toggle');
+const bossNameToggleIcon = document.getElementById('boss-name-toggle-icon');
+bossNameToggle.addEventListener('click', () => {
+    bossNames = !bossNames
+    bossNameToggleIcon.textContent = 'check_box' + (bossNames ? '' : '_outline_blank');
+    renderMissionGrid();
 });
 
 // UNDO BUTTON
@@ -314,7 +330,7 @@ function renderMissionGrid() {
                 updatePerkPointsDisplay();
             });
 
-            const label = createDiv('mission-label', missionObj.name);
+            const label = createDiv('mission-label', bossNames ? missionObj.bossName : missionObj.name);
 
             const countContainer = createDiv('mission-count-wrapper');
 
