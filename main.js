@@ -1,9 +1,9 @@
 import { deepMerge } from './utils/deepMerge.js';
-import { staticData } from './staticData.js';
+import { staticData } from './modules/staticData.js';
+import { settings } from './modules/settings.js';
 
 const app = document.getElementById('app');
 let isEditing = false;
-let bossNames = false;
 const perkGrid = document.getElementById('perkGrid');
 const missionGrid = document.getElementById('missionGrid');
 let staticDataBackup = null;
@@ -17,6 +17,15 @@ if (rawLoadedData) {
         Object.assign(staticData, mergedData);
     } catch (e) {
         console.error('Failed to parse or merge saved staticData:', e);
+    }
+}
+const rawLoadedSettings = localStorage.getItem('settings');
+if (rawLoadedSettings) {
+    try {
+        const loadedSettings = JSON.parse(rawLoadedSettings);
+        Object.assign(settings, loadedSettings);
+    } catch (e) {
+        console.error('Failed to parse saved settings:', e);
     }
 }
 
@@ -148,9 +157,10 @@ diceThroneDelete.addEventListener('click', () => {
 const bossNameToggle = document.getElementById('boss-name-toggle');
 const bossNameToggleIcon = document.getElementById('boss-name-toggle-icon');
 bossNameToggle.addEventListener('click', () => {
-    bossNames = !bossNames
-    bossNameToggleIcon.textContent = 'check_box' + (bossNames ? '' : '_outline_blank');
+    settings.bossNames = !settings.bossNames
+    bossNameToggleIcon.textContent = 'check_box' + (settings.bossNames ? '' : '_outline_blank');
     renderMissionGrid();
+    localStorage.setItem('settings', JSON.stringify(settings));
 });
 
 // UNDO BUTTON
@@ -330,7 +340,7 @@ function renderMissionGrid() {
                 updatePerkPointsDisplay();
             });
 
-            const label = createDiv('mission-label', bossNames ? missionObj.bossName : missionObj.name);
+            const label = createDiv('mission-label', settings.bossNames ? missionObj.bossName : missionObj.name);
 
             const countContainer = createDiv('mission-count-wrapper');
 
