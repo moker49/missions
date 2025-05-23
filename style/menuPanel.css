@@ -2,9 +2,8 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 80vw;
-  max-width: 320px;
-  height: 100vh;
+  width: 70vw;
+  height: 100dvh;
   background-color: var(--accent-medium);
   transform: translateX(-100%);
   transition: transform 0.3s ease;
