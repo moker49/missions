@@ -22,7 +22,7 @@
 body {
   font-family: Roboto, sans-serif;
   margin: 0;
-  background: var(--background);
+  background: var(--accent-medium);
   color: var(--text-enabled);
   -webkit-user-select: none;
   user-select: none;
@@ -30,8 +30,13 @@ body {
   touch-action: manipulation;
 }
 
+.app {
+  background: var(--background);
+}
+
 .tab-content {
   padding-top: 3.5rem;
+  padding-bottom: calc(4rem + env(safe-area-inset-bottom, 0.5rem));
   display: none;
 }
 

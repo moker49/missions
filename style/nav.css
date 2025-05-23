@@ -1,6 +1,6 @@
 .nav {
   position: fixed;
-  bottom: -7rem;
+  bottom: calc(-7rem + env(safe-area-inset-bottom, 0.5rem));
   left: 0;
   right: 0;
   height: 4rem;
