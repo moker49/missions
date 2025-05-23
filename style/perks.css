@@ -1,8 +1,8 @@
-.perk-points-display {
+/* .perk-points-display {
   text-align: center;
   font-weight: bold;
   margin: 0.625rem 0;
-}
+} */
 
 .perk-list {
   display: flex;

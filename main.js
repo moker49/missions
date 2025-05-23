@@ -6,6 +6,7 @@ const app = document.getElementById('app');
 let isEditing = false;
 const perkGrid = document.getElementById('perkGrid');
 const missionGrid = document.getElementById('missionGrid');
+const statsGrid = document.getElementById('statsGrid');
 let staticDataBackup = null;
 
 // MARK: SETTINGS
@@ -411,6 +412,12 @@ function renderMissionGrid() {
         missionGrid.appendChild(section);
     });
     missionGrid.classList.add('hide-scrollbar');
+}
+
+// MARK: STATS GRID
+function renderStatsGrid() {
+    statsGrid.innerHTML = '';
+
 }
 
 function showTab(id) {
