@@ -42,22 +42,60 @@
 	</head>
 	<body>
 		<div id="app">
-			<!-- Top Bar -->
-			<header class="top-app-bar">
-				<button class="top-bar-button" id="menu-button">
-					<span class="material-symbols-outlined">menu</span>
-				</button>
+			<div class="always-visible">
+				<!-- Top Bar -->
+				<header class="top-app-bar">
+					<button class="top-bar-button" id="menu-button">
+						<span class="material-symbols-outlined">menu</span>
+					</button>
 
-				<h1 class="top-bar-title">Dice Throne Missions</h1>
+					<h1 class="top-bar-title">Dice Throne Missions</h1>
 
-				<button class="top-bar-button" id="undo-button" style="display: none">
-					<span class="material-symbols-outlined">undo</span>
-				</button>
-				<button class="top-bar-button" id="filter-toggle">
-					<span class="material-symbols-outlined">filter_list</span>
-				</button>
-			</header>
-			<div id="menu-backdrop" class="menu-backdrop"></div>
+					<button class="top-bar-button" id="undo-button" style="display: none">
+						<span class="material-symbols-outlined">undo</span>
+					</button>
+					<button class="top-bar-button" id="filter-toggle">
+						<span class="material-symbols-outlined">filter_list</span>
+					</button>
+				</header>
+
+				<!-- Main Body -->
+				<div id="perkTab" class="tab-content active">
+					<div class="scroll-container">
+						<div class="perk-list" id="perkGrid"></div>
+					</div>
+				</div>
+
+				<div id="missionTab" class="tab-content">
+					<div class="scroll-container">
+						<div class="mission-list" id="missionGrid"></div>
+					</div>
+				</div>
+
+				<!-- Nav -->
+				<div class="nav">
+					<button
+						data-tab="perkTab"
+						class="nav-button active"
+						onclick="showTab('perkTab')"
+					>
+						<span class="material-symbols-outlined">toggle_on</span>
+						<span class="nav-label">Perks</span>
+					</button>
+					<button id="edit-toggle" class="edit-button button-accent">
+						<span class="material-symbols-outlined">edit</span>
+						<span class="points-text" style="display: none"></span>
+					</button>
+					<button
+						data-tab="missionTab"
+						class="nav-button"
+						onclick="showTab('missionTab')"
+					>
+						<span class="material-symbols-outlined">trophy</span>
+						<span class="nav-label">Missions</span>
+					</button>
+				</div>
+			</div>
 
 			<!-- Slide-out menu -->
 			<div id="menu-panel" class="menu-panel">
@@ -91,45 +129,7 @@
 					</div>
 				</div>
 			</div>
-
-			<!-- Main Body -->
-			<div id="perkTab" class="tab-content active">
-				<div class="scroll-container">
-					<div class="perk-list" id="perkGrid"></div>
-				</div>
-			</div>
-
-			<div id="missionTab" class="tab-content">
-				<div class="scroll-container">
-					<div class="mission-list" id="missionGrid"></div>
-				</div>
-			</div>
-
-			<script type="module" src="main.js"></script>
-
-			<!-- Nav -->
-			<div class="nav">
-				<button
-					data-tab="perkTab"
-					class="nav-button active"
-					onclick="showTab('perkTab')"
-				>
-					<span class="material-symbols-outlined">toggle_on</span>
-					<span class="nav-label">Perks</span>
-				</button>
-				<button id="edit-toggle" class="edit-button button-accent">
-					<span class="material-symbols-outlined">edit</span>
-					<span class="points-text" style="display: none"></span>
-				</button>
-				<button
-					data-tab="missionTab"
-					class="nav-button"
-					onclick="showTab('missionTab')"
-				>
-					<span class="material-symbols-outlined">trophy</span>
-					<span class="nav-label">Missions</span>
-				</button>
-			</div>
+			<div id="menu-backdrop" class="menu-backdrop"></div>
 
 			<!-- Confirmation Panel -->
 			<div id="confirm-panel-backdrop" class="confirm-backdrop hidden">
@@ -139,5 +139,6 @@
 				</div>
 			</div>
 		</div>
+		<script type="module" src="main.js"></script>
 	</body>
 </html>

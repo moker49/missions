@@ -22,7 +22,6 @@
 body {
   font-family: Roboto, sans-serif;
   margin: 0;
-  padding: 3.5rem 0 4rem 0;
   background: var(--background);
   color: var(--text-enabled);
   -webkit-user-select: none;
@@ -32,6 +31,7 @@ body {
 }
 
 .tab-content {
+  padding-top: 3.5rem;
   display: none;
 }
 
@@ -40,7 +40,6 @@ body {
 }
 
 .scroll-container {
-  overflow-x: auto;
   padding: 1rem;
 }
 
