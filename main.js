@@ -418,6 +418,30 @@ function renderMissionGrid() {
 function renderStatsGrid() {
     statsGrid.innerHTML = '';
 
+    // generate stat map
+    myStats = [{ statType: "momentumLvl", icons: [], amount: 0 },]
+    myTokens = [{ token: "dmg3", icons: [], amount: 0, }]
+    myGameStart = [{ label: "", icons: [] }]
+    myActives = [{ label: "", icons: [] }]
+    staticData.forEach((difficultyObj) => {
+        difficultyObj.perks.forEach((perkObj, perkIndex) => {
+
+        });
+    });
+
+    // generate dom
+    const section = createDiv('stat-section');
+    const row = createDiv('stat-entry' + (perkIndex % 2 === 1 ? ' alt' : ''), '');
+    const icon = createDiv('stat-icon');
+    icons.forEach((iconName) => {
+        const i = createDiv('material-symbols-outlined', iconName);
+        icon.appendChild(i);
+    });
+    const label = createDiv('perk-label', perkObj.label);
+
+
+
+    perkGrid.classList.add('hide-scrollbar');
 }
 
 function showTab(id) {
