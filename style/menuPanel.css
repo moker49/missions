@@ -43,18 +43,22 @@
   align-items: center;
 }
 
-.menu-item > * {
-  min-height: 3rem;
-  display: flex;
-  align-items: center;
-}
-
 .menu-item.full {
   cursor: pointer;
 }
 
+.menu-item > * {
+  display: flex;
+  min-height: 3rem;
+  align-items: center;
+}
+
+.menu-item .material-symbols-outlined {
+  width: 3rem;
+  justify-content: center;
+}
+
 .menu-item .label {
-  padding: 0 1.5rem;
   flex-grow: 1;
   cursor: pointer;
 }
@@ -66,9 +70,9 @@
 }
 
 .menu-item .quick-action {
-  padding: 0 1rem;
   background: none;
   border: none;
+  justify-content: center;
 }
 
 .menu-backdrop {

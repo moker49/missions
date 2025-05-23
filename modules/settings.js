@@ -1,1 +1,4 @@
-export let settings = { bossNames: false };
+export let settings = {
+    bossNames: false,
+    loadEditing: false,
+};

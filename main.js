@@ -8,6 +8,23 @@ const perkGrid = document.getElementById('perkGrid');
 const missionGrid = document.getElementById('missionGrid');
 let staticDataBackup = null;
 
+// MARK: SETTINGS
+const bossNameToggle = document.getElementById('boss-name-toggle');
+const bossNameToggleIcon = document.getElementById('boss-name-toggle-icon');
+bossNameToggle.addEventListener('click', () => {
+    settings.bossNames = !settings.bossNames
+    bossNameToggleIcon.textContent = 'check_box' + (settings.bossNames ? '' : '_outline_blank');
+    renderMissionGrid();
+    localStorage.setItem('settings', JSON.stringify(settings));
+});
+const loadEditingToggle = document.getElementById('load-editing');
+const loadEditingToggleIcon = document.getElementById('load-editing-icon');
+loadEditingToggle.addEventListener('click', () => {
+    settings.loadEditing = !settings.loadEditing
+    loadEditingToggleIcon.textContent = 'check_box' + (settings.loadEditing ? '' : '_outline_blank');
+    localStorage.setItem('settings', JSON.stringify(settings));
+});
+
 // MARK: LOAD
 const rawLoadedData = localStorage.getItem('staticData');
 if (rawLoadedData) {
@@ -27,6 +44,14 @@ if (rawLoadedSettings) {
     } catch (e) {
         console.error('Failed to parse saved settings:', e);
     }
+}
+if (settings.bossNames) {
+    bossNameToggleIcon.textContent = 'check_box';
+}
+if (settings.loadEditing) {
+    isEditing = true;
+    app.classList.add('editing');
+    loadEditingToggleIcon.textContent = 'check_box';
 }
 
 // MARK: PERK MATH
@@ -153,15 +178,7 @@ diceThroneDelete.addEventListener('click', () => {
     });
 });
 
-// HAMBURGER SETTINGS
-const bossNameToggle = document.getElementById('boss-name-toggle');
-const bossNameToggleIcon = document.getElementById('boss-name-toggle-icon');
-bossNameToggle.addEventListener('click', () => {
-    settings.bossNames = !settings.bossNames
-    bossNameToggleIcon.textContent = 'check_box' + (settings.bossNames ? '' : '_outline_blank');
-    renderMissionGrid();
-    localStorage.setItem('settings', JSON.stringify(settings));
-});
+
 
 // MARK: TOP BAR
 // UNDO
