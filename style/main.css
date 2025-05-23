@@ -23,17 +23,12 @@ body {
   font-family: Roboto, sans-serif;
   margin: 0;
   padding: 3.5rem 0 4rem 0;
-  background: var(--accent-medium);
+  background: var(--background);
   color: var(--text-enabled);
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
   touch-action: manipulation;
-}
-
-.app{
-  background: var(--background);
-  min-height: calc(100vh - 7.5rem);
 }
 
 .tab-content {

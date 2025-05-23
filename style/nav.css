@@ -1,12 +1,13 @@
 .nav {
   position: fixed;
-  bottom: 0;
+  bottom: -7rem;
   left: 0;
   right: 0;
   height: 4rem;
   display: flex;
   background: var(--accent-medium);
   border-top: 1px solid var(--background);
+  padding-bottom: 7rem;
 }
 
 .nav-button {
@@ -22,7 +23,6 @@
   height: 100%;
   opacity: 0.3;
   color: var(--text-enabled);
-  padding-bottom: env(safe-area-inset-bottom, 8px);
 }
 
 .edit-button {

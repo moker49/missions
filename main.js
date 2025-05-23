@@ -8,7 +8,7 @@ const perkGrid = document.getElementById('perkGrid');
 const missionGrid = document.getElementById('missionGrid');
 let staticDataBackup = null;
 
-// LOAD
+// MARK: LOAD
 const rawLoadedData = localStorage.getItem('staticData');
 if (rawLoadedData) {
     try {
@@ -29,7 +29,7 @@ if (rawLoadedSettings) {
     }
 }
 
-// PERK MATH
+// MARK: PERK MATH
 function getPerkPointsSpent() {
     return staticData
         .flatMap(difficulty => difficulty.perks ?? [])
@@ -47,7 +47,7 @@ function getPerkPointsEarned() {
         }, 0);
 }
 
-// DOM Creation
+// MARK: DOM Creation
 function createDiv(className, textContent = '', id = null) {
     const el = document.createElement('div');
     el.className = className;
@@ -79,7 +79,7 @@ function saveDataState() {
     });
 }
 
-// HAMBURGER
+// MARK: HAMBURGER
 const hamburger = document.getElementById('menu-button');
 const menuPanel = document.getElementById('menu-panel');
 const menuBackdrop = document.getElementById('menu-backdrop');
@@ -163,7 +163,8 @@ bossNameToggle.addEventListener('click', () => {
     localStorage.setItem('settings', JSON.stringify(settings));
 });
 
-// UNDO BUTTON
+// MARK: TOP BAR
+// UNDO
 const undoButton = document.getElementById('undo-button');
 undoButton.addEventListener('click', () => {
     if (staticDataBackup) {
@@ -175,7 +176,7 @@ undoButton.addEventListener('click', () => {
     }
 });
 
-// TOGGLE FILTER BUTTON
+// TOGGLE FILTER
 const filterButton = document.getElementById('filter-toggle');
 let allPerksVisible = true;
 
@@ -198,7 +199,7 @@ filterButton.addEventListener('click', () => {
     });
 });
 
-// EDITING
+// MARK: EDITING
 const editButton = document.getElementById('edit-toggle');
 const icon = editButton.querySelector('.material-symbols-outlined');
 const pointsText = editButton.querySelector('.points-text');
@@ -247,7 +248,7 @@ function renderEditButton() {
     });
 }
 
-// PERK GRID
+// MARK: PERK GRID
 function renderPerkGrid() {
     perkGrid.innerHTML = '';
     staticData.forEach((difficultyObj) => {
@@ -311,7 +312,7 @@ function renderPerkGrid() {
     perkGrid.classList.add('hide-scrollbar');
 }
 
-// MISSION GRID
+// MARK: MISSION GRID
 function renderMissionGrid() {
     missionGrid.innerHTML = '';
 
@@ -397,7 +398,7 @@ try {
 }
 
 
-// CONFIRMATION TEMPLATE
+// MARK: CONFIRMATION
 function showConfirmation(message, buttons, callback) {
     const backdrop = document.getElementById('confirm-panel-backdrop');
     const clone = backdrop.cloneNode(true);
