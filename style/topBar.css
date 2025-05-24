@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   right: 0;
-  height: 3.5rem;
+  height: var(--top-bar-height);
   background: var(--accent-medium);
   display: flex;
   align-items: center;

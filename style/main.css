@@ -17,6 +17,10 @@
   /* Accent colors */
   --accent-medium: hsl(220, 45%, 12%);
   --accent-light: hsl(210, 85%, 55%);
+
+  /* NAV */
+  --top-bar-height: 3.5rem;
+  --nav-height: calc(4rem + env(safe-area-inset-bottom, 0.5rem));
 }
 
 body {
@@ -35,8 +39,9 @@ body {
 }
 
 .tab-content {
-  padding-top: 3.5rem;
-  padding-bottom: calc(4rem + env(safe-area-inset-bottom, 0.5rem));
+  padding-top: var(--top-bar-height);
+  padding-bottom: var(--nav-height);
+  min-height: calc(100vh - var(--top-bar-height) - var(--nav-height));
   display: none;
 }
 
