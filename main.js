@@ -210,25 +210,13 @@ undoButton.addEventListener('click', () => {
 
 // TOGGLE FILTER
 const filterButton = document.getElementById('filter-toggle');
-let allPerksVisible = true;
+let showAllPerksAndMissions = true;
 
 filterButton.addEventListener('click', () => {
-    allPerksVisible = !allPerksVisible;
-    filterButton.children[0].textContent = allPerksVisible ? 'filter_list' : 'filter_list_off';
-
-    staticData.forEach((difficultyObj) => {
-        // === TOGGLE PERKS ===
-        difficultyObj.perks.forEach((perkObj) => {
-            const perkEl = document.getElementById(perkObj.id);
-            const isUnlocked = perkObj.currentPoints ?? 0 === perkObj.perkPoints;
-            perkEl.classList.toggle('hidden', !allPerksVisible && !isUnlocked);
-        });
-        // === TOGGLE MISSIONS ===
-        difficultyObj.missions.forEach((missionObj) => {
-            const missionEl = document.getElementById(missionObj.id);
-            missionEl.classList.toggle('hidden', !allPerksVisible && (missionObj.perfect ?? false));
-        });
-    });
+    showAllPerksAndMissions = !showAllPerksAndMissions;
+    filterButton.children[0].textContent = showAllPerksAndMissions ? 'filter_list' : 'filter_list_off';
+    renderPerkGrid();
+    renderMissionGrid();
 });
 
 // MARK: EDITING
@@ -260,7 +248,7 @@ function renderEditButton() {
             app.classList.add('editing');
             updatePerkPointsDisplay();
             staticDataBackup = JSON.parse(JSON.stringify(staticData));
-            if (!allPerksVisible) {
+            if (!showAllPerksAndMissions) {
                 filterButton.click();
             }
         } else if (getPerkPointsSpent() === getPerkPointsEarned()) {
@@ -288,8 +276,13 @@ function renderPerkGrid() {
         const header = createDiv('perk-header', difficultyObj.name);
         section.appendChild(header);
 
-        difficultyObj.perks.forEach((perkObj, perkIndex) => {
-            const row = createDiv('perk-entry' + (perkIndex % 2 === 1 ? ' alt' : ''), '', perkObj.id);
+        let rowAlternate = false;
+        difficultyObj.perks.forEach((perkObj) => {
+            const isUnlocked = perkObj.currentPoints ?? 0 === perkObj.perkPoints;
+            const showPerk = showAllPerksAndMissions || isUnlocked;
+            if (!showPerk) return;
+            const row = createDiv('perk-entry' + (rowAlternate ? ' alt' : ''), '', perkObj.id);
+            rowAlternate = !rowAlternate;
 
             const icon = createDiv('perk-icon');
             perkObj.icons.forEach((iconName) => {
@@ -353,8 +346,12 @@ function renderMissionGrid() {
         const header = createDiv('mission-header', difficultyObj.name);
         section.appendChild(header);
 
-        difficultyObj.missions.forEach((missionObj, missionIndex) => {
-            const row = createDiv('mission-entry' + (missionIndex % 2 === 1 ? ' alt' : ''), '', missionObj.id);
+        let rowAlternate = false;
+        difficultyObj.missions.forEach((missionObj) => {
+            const showMission = showAllPerksAndMissions || (!(missionObj.perfect ?? false));
+            if (!showMission) return;
+            const row = createDiv('mission-entry' + (rowAlternate ? ' alt' : ''), '', missionObj.id);
+            rowAlternate = !rowAlternate;
 
             const toggle = createDiv('mission-toggle');
             toggle.classList.toggle('material-symbols-outlined', missionObj.perfect ?? false);
@@ -365,8 +362,8 @@ function renderMissionGrid() {
                 if (!document.getElementById('app').classList.contains('editing')) return;
                 if (missionObj.perfectLock) return;
                 missionObj.perfect = !missionObj.perfect;
-                missionObj.stage += missionObj.perfect ? 1 : -1;
-                missionObj.boss += missionObj.perfect ? 1 : -1;
+                missionObj.stage = (missionObj.stage ?? 0) + (missionObj.perfect ? 1 : -1);
+                missionObj.boss = (missionObj.boss ?? 0) + (missionObj.perfect ? 1 : -1);
                 missionObj.newStage = missionObj.newStageSolo ? missionObj.newStage : !missionObj.newStage;
                 missionObj.newBoss = missionObj.newBossSolo ? missionObj.newBoss : !missionObj.newBoss;
                 renderMissionGrid();
