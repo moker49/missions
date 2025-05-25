@@ -417,16 +417,16 @@ function renderStatsGrid() {
 
     myStats = { momentumLvl: 0, };
     myTokens = { dmg3: 0, };
-    myGameStart = [];
-    myActives = [];
+    myGameStart = {};
+    myActives = {};
 
     staticData.forEach((difficultyObj) => {
         difficultyObj.perks.forEach((perkObj) => {
             perkObj.effects.forEach((effect) => {
                 if (effect.statType) myStats[effect.statType] = myStats[effect.statType] ?? 0 + effect.amount;
                 else if (effect.token) myTokens[effect.token] = myTokens[effect.token] ?? 0 + effect.amount;
-                else if (effect.proc == "gameStart") myGameStart.add(perk.label);
-                else if (effect.proc == "active") myActives.add(perk.label);
+                else if (effect.proc == "gameStart") myGameStart[perkObj.id] = perkObj.label
+                else if (effect.proc == "active") myActives[perkObj.id] = perkObj.label
             });
         });
     });

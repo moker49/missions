@@ -1,10 +1,16 @@
 export const icons = {
+    // momemtum
+    momentum1: 'looks_one',
+    momentum2: 'looks_two',
+    momentum3: 'looks_3',
+    momentum4: 'looks_4',
+    momentum5: 'looks_5',
+
     // statType-based (shared across perks)
-    momentumLvl: ['looks_one'],
-    hp: ['heart_plus'],
-    momentum: ['add_box'],
-    cp: ['new_label'],
-    draw: ['library_add'],
+    hp: 'heart_plus',
+    momentum: 'add_box',
+    cp: 'new_label',
+    draw: 'library_add',
 
     // token-based (perk-specific)
     perk_a3: ['target'],
