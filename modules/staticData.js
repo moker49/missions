@@ -57,7 +57,7 @@ export const staticData = [
             { id: "perk-d1", label: "Momentum Lvl 4", icons: ["looks_4"], perkPoints: 4, effects: [{ statType: "momentumLvl", amount: 1 }] },
             { id: "perk-d2", label: "HP +4", icons: ["heart_plus"], perkPoints: 3, effects: [{ statType: "hp", amount: 4 }] },
             { id: "perk-d3", label: "Free recruit", icons: ["person_add"], perkPoints: 3, effects: [{ proc: "gameStart" }] },
-            { id: "perk-d4", label: "Draw", icons: ["library_add"], perkPoints: 2, effects: [{ proc: "gameStart" }] },
+            { id: "perk-d4", label: "Draw", icons: ["library_add"], perkPoints: 2, effects: [{ statType: "draw", amount: 1 }] },
             { id: "perk-d5", label: "Reduce crisis clock advancement", icons: ["timer_arrow_down"], perkPoints: 3, effects: [{ proc: "active" }] }
         ],
         missions: [
@@ -74,7 +74,7 @@ export const staticData = [
             { id: "perk-e1", label: "Momentum Lvl 5", icons: ["looks_5"], perkPoints: 4, effects: [{ statType: "momentumLvl", amount: 1 }] },
             { id: "perk-e2", label: "Grant 2 Flight", icons: ["travel", "travel"], perkPoints: 3, effects: [{ token: "flight", amount: 2 }] },
             { id: "perk-e3", label: "Grant 2 Shield", icons: ["health_and_safety", "health_and_safety"], perkPoints: 4, effects: [{ token: "shield", amount: 2 }] },
-            { id: "perk-e4", label: "CP +1, Draw", icons: ["new_label", "library_add"], perkPoints: 3, effects: [{ statType: "cp", amount: 1 }, { proc: "gameStart", label: "Draw" }] },
+            { id: "perk-e4", label: "CP +1, Draw", icons: ["new_label", "library_add"], perkPoints: 3, effects: [{ statType: "cp", amount: 1 }, { statType: "draw", amount: 1 }] },
             { id: "perk-e5", label: "Exhaust without discarding", icons: ["replay"], perkPoints: 4, effects: [{ proc: "active" }] }
         ],
         missions: [
