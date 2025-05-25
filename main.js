@@ -433,13 +433,19 @@ function renderStatsGrid() {
 
     // generate dom
     const section = createDiv('stat-section');
-    const row = createDiv('stat-entry' + (perkIndex % 2 === 1 ? ' alt' : ''), '');
-    const icon = createDiv('stat-icon');
-    icons.forEach((iconName) => {
-        const i = createDiv('material-symbols-outlined', iconName);
-        icon.appendChild(i);
+
+    const header = createDiv('stat-header', 'Stats');
+    section.appendChild(header);
+
+    myStats.forEach((key) => {
+        const row = createDiv('stat-entry' + (perkIndex % 2 === 1 ? ' alt' : ''), '');
+        const icons = createDiv('stat-icon');
+        icons.forEach((iconName) => {
+            const i = createDiv('material-symbols-outlined', iconName);
+            icon.appendChild(i);
+        });
+        const label = createDiv('perk-label', perkObj.label);
     });
-    const label = createDiv('perk-label', perkObj.label);
 
 
 
