@@ -438,13 +438,18 @@ function renderStatsGrid() {
     section.appendChild(header);
 
     myStats.forEach((key) => {
-        const row = createDiv('stat-entry' + (perkIndex % 2 === 1 ? ' alt' : ''), '');
-        const icons = createDiv('stat-icon');
-        icons.forEach((iconName) => {
-            const i = createDiv('material-symbols-outlined', iconName);
-            icon.appendChild(i);
-        });
+        const row = createDiv('stat-entry' + (false ? ' alt' : ''), '');
+
+        const iconArray = createDiv('stat-icon');
+        const iconKey = key + (key == "momentumLvl" ? myStats[key].amount : '');
+        const icon = createDiv('material-symbols-outlined', icons[iconKey]);
+        iconArray.appendChild(icon);
+        row.appendChild(iconArray);
+
         const label = createDiv('perk-label', perkObj.label);
+        row.appendChild(label);
+
+        section.appendChild(row);
     });
 
 

@@ -1,10 +1,10 @@
 export const icons = {
     // momemtum
-    momentum1: 'looks_one',
-    momentum2: 'looks_two',
-    momentum3: 'looks_3',
-    momentum4: 'looks_4',
-    momentum5: 'looks_5',
+    momentumLvl1: 'looks_one',
+    momentumLvl2: 'looks_two',
+    momentumLvl: 'looks_3',
+    momentumLvl4: 'looks_4',
+    momentumLvl5: 'looks_5',
 
     // statType-based (shared across perks)
     hp: 'heart_plus',
