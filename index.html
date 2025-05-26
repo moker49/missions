@@ -39,6 +39,7 @@
 		<link rel="stylesheet" href="style/perks.css" />
 		<link rel="stylesheet" href="style/templates.css" />
 		<link rel="stylesheet" href="style/topBar.css" />
+		<link rel="stylesheet" href="style/stats.css" />
 	</head>
 	<body>
 		<div id="app" class="app">
@@ -62,8 +63,10 @@
 				<!-- Main Body -->
 				<div id="statsTab" class="tab-content">
 					<div class="scroll-container">
+						<div class="stats-list" id="statsGrid"></div>
 					</div>
 				</div>
+
 				<div id="perkTab" class="tab-content active">
 					<div class="scroll-container">
 						<div class="perk-list" id="perkGrid"></div>
@@ -97,6 +100,14 @@
 					>
 						<span class="material-symbols-outlined">trophy</span>
 						<span class="nav-label">Missions</span>
+					</button>
+					<button
+						data-tab="statsTab"
+						class="nav-button"
+						onclick="showTab('statsTab')"
+					>
+						<span class="material-symbols-outlined">leaderboard</span>
+						<span class="nav-label">Stats</span>
 					</button>
 				</div>
 			</div>

@@ -1,6 +1,7 @@
 import { deepMerge } from './utils/deepMerge.js';
 import { staticData } from './modules/staticData.js';
 import { settings } from './modules/settings.js';
+import { perkData } from './modules/perkData.js';
 
 const app = document.getElementById('app');
 let isEditing = false;
@@ -263,6 +264,7 @@ function renderEditButton() {
             undoButton.style.display = 'none';
             renderPerkGrid();
             renderMissionGrid();
+            renderStatGrid();
         }
         filterButton.classList.toggle('hidden', isEditing);
     });
@@ -412,21 +414,25 @@ function renderMissionGrid() {
 }
 
 // MARK: STATS GRID
-function renderStatsGrid() {
+function renderStatGrid() {
     statsGrid.innerHTML = '';
 
-    myStats = { momentumLvl: 0, };
-    myTokens = { dmg3: 0, };
-    myGameStart = {};
-    myActives = {};
+    const myStats = { momentumLvl: { label: '', amount: 0 }, };
+    const myTokens = { dmg3: 0, };
+    const myGameStart = {};
+    const myActives = {};
 
     staticData.forEach((difficultyObj) => {
         difficultyObj.perks.forEach((perkObj) => {
             perkObj.effects.forEach((effect) => {
-                if (effect.statType) myStats[effect.statType] = myStats[effect.statType] ?? 0 + effect.amount;
-                else if (effect.token) myTokens[effect.token] = myTokens[effect.token] ?? 0 + effect.amount;
-                else if (effect.proc == "gameStart") myGameStart[perkObj.id] = perkObj.label
-                else if (effect.proc == "active") myActives[perkObj.id] = perkObj.label
+                if ((perkObj.currentPoints ?? 0) < perkObj.perkPoints) return;
+                if (effect.statType) {
+                    if (myStats[effect.statType]) myStats[effect.statType].amount += effect.amount;
+                    else myStats[effect.statType] = { label: perkData[effect.statType].statLabel, amount: effect.amount }
+                }
+                // else if (effect.token) myTokens[effect.token] = myTokens[effect.token] ?? 0 + effect.amount;
+                // else if (effect.proc == "gameStart") myGameStart[perkObj.id] = perkObj.label
+                // else if (effect.proc == "active") myActives[perkObj.id] = perkObj.label
             });
         });
     });
@@ -437,24 +443,26 @@ function renderStatsGrid() {
     const header = createDiv('stat-header', 'Stats');
     section.appendChild(header);
 
-    myStats.forEach((key) => {
-        const row = createDiv('stat-entry' + (false ? ' alt' : ''), '');
+    let rowAlternate = false;
+    Object.keys(myStats).forEach((myStatsKey) => {
+        const row = createDiv('stat-entry' + (rowAlternate ? ' alt' : ''), '');
+        rowAlternate = !rowAlternate;
 
-        const iconArray = createDiv('stat-icon');
-        const iconKey = key + (key == "momentumLvl" ? myStats[key].amount : '');
-        const icon = createDiv('material-symbols-outlined', icons[iconKey]);
-        iconArray.appendChild(icon);
-        row.appendChild(iconArray);
+        const iconList = createDiv('stat-icon');
+        const iconKey = myStatsKey + (myStatsKey == "momentumLvl" ? myStats[myStatsKey].amount : '');
+        const icon = createDiv('material-symbols-outlined', perkData[iconKey].icon);
+        iconList.appendChild(icon);
+        row.appendChild(iconList);
 
-        const label = createDiv('perk-label', perkObj.label);
+        const label = createDiv('stat-label', perkData[iconKey].statLabel + myStats[myStatsKey].amount);
         row.appendChild(label);
 
         section.appendChild(row);
     });
 
 
-
-    perkGrid.classList.add('hide-scrollbar');
+    statsGrid.appendChild(section);
+    statsGrid.classList.add('hide-scrollbar');
 }
 
 function showTab(id) {
@@ -467,6 +475,7 @@ function showTab(id) {
 try {
     renderPerkGrid();
     renderMissionGrid();
+    renderStatGrid();
     renderEditButton();
 } catch (e) {
     console.error('Render error:', e);
