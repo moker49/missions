@@ -440,7 +440,7 @@ function renderStatGrid() {
         });
     });
 
-    // generate dom
+    // stats section
     const statSection = createDiv('stat-section');
     const statHeader = createDiv('stat-header', 'Stats');
     statSection.appendChild(statHeader);
@@ -461,6 +461,7 @@ function renderStatGrid() {
         statSection.appendChild(row);
     });
 
+    // tokens section
     const tokenSection = createDiv('stat-section');
     const tokenHeader = createDiv('stat-header', 'Tokens');
     tokenSection.appendChild(tokenHeader);
@@ -470,21 +471,65 @@ function renderStatGrid() {
         rowAlternate = !rowAlternate;
 
         const iconList = createDiv('stat-icon');
-        perkData[myTokenKey].icons.forEach((iconName) => {
-            const icon = createDiv('material-symbols-outlined', iconName);
-            iconList.appendChild(icon);
-        });
+        const icon = createDiv('material-symbols-outlined', perkData[myTokenKey].icons[0]);
+        iconList.appendChild(icon);
         row.appendChild(iconList);
 
-        const label = createDiv('stat-label', myTokens[myTokenKey].label + myTokens[myTokenKey].amount);
+        const multiple = myTokens[myTokenKey].amount > 1;
+        const label = createDiv('stat-label', myTokens[myTokenKey].label + (multiple ? ` x${myTokens[myTokenKey].amount}` : ''));
         row.appendChild(label);
 
         tokenSection.appendChild(row);
     });
 
+    // gameStart section
+    const gameStartSection = createDiv('stat-section');
+    const gameStartHeader = createDiv('stat-header', 'Game Start');
+    gameStartSection.appendChild(gameStartHeader);
+    rowAlternate = false;
+    Object.keys(myGameStart).forEach((myGameStartKey) => {
+        const row = createDiv('stat-entry' + (rowAlternate ? ' alt' : ''), '');
+        rowAlternate = !rowAlternate;
+
+        const iconList = createDiv('stat-icon');
+        perkData[myGameStartKey].icons.forEach((iconName) => {
+            const icon = createDiv('material-symbols-outlined', iconName);
+            iconList.appendChild(icon);
+        });
+        row.appendChild(iconList);
+
+        const label = createDiv('stat-label', myGameStart[myGameStartKey]);
+        row.appendChild(label);
+
+        gameStartSection.appendChild(row);
+    });
+
+    // actives section
+    const activesSection = createDiv('stat-section');
+    const activesHeader = createDiv('stat-header', 'Actives');
+    activesSection.appendChild(activesHeader);
+    rowAlternate = false;
+    Object.keys(myActives).forEach((myActivesKey) => {
+        const row = createDiv('stat-entry' + (rowAlternate ? ' alt' : ''), '');
+        rowAlternate = !rowAlternate;
+
+        const iconList = createDiv('stat-icon');
+        perkData[myActivesKey].icons.forEach((iconName) => {
+            const icon = createDiv('material-symbols-outlined', iconName);
+            iconList.appendChild(icon);
+        });
+        row.appendChild(iconList);
+
+        const label = createDiv('stat-label', myActives[myActivesKey]);
+        row.appendChild(label);
+
+        activesSection.appendChild(row);
+    });
 
     statsGrid.appendChild(statSection);
     statsGrid.appendChild(tokenSection);
+    statsGrid.appendChild(gameStartSection);
+    statsGrid.appendChild(activesSection);
     statsGrid.classList.add('hide-scrollbar');
 }
 
