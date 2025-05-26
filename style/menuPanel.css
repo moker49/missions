@@ -5,7 +5,7 @@
   width: 70vw;
   height: 100dvh;
   background-color: var(--accent-medium);
-  transform: translateX(-100%);
+  transform: translateX(-105%);
   transition: transform 0.3s ease;
   display: flex;
   flex-direction: column;

@@ -1,30 +1,30 @@
 export const perkData = {
     // momemtum
-    momentumLvl: { icon: 'looks_one', statLabel: 'Momentum Lvl ' },
-    momentumLvl1: { icon: 'looks_one', statLabel: 'Momentum Lvl ' },
-    momentumLvl2: { icon: 'looks_two', statLabel: 'Momentum Lvl ' },
-    momentumLvl3: { icon: 'looks_3', statLabel: 'Momentum Lvl ' },
-    momentumLvl4: { icon: 'looks_4', statLabel: 'Momentum Lvl ' },
-    momentumLvl5: { icon: 'looks_5', statLabel: 'Momentum Lvl ' },
+    momentumLvl: { icon: 'looks_one', label: 'Momentum Lvl ' },
+    momentumLvl1: { icon: 'looks_one', label: 'Momentum Lvl ' },
+    momentumLvl2: { icon: 'looks_two', label: 'Momentum Lvl ' },
+    momentumLvl3: { icon: 'looks_3', label: 'Momentum Lvl ' },
+    momentumLvl4: { icon: 'looks_4', label: 'Momentum Lvl ' },
+    momentumLvl5: { icon: 'looks_5', label: 'Momentum Lvl ' },
 
-    // statType-based (shared across perks)
-    hp: { icon: 'heart_plus', statLabel: 'HP +' },
-    momentum: { icon: 'add_box', statLabel: 'Momentum +' },
-    cp: { icon: 'new_label', statLabel: 'CP +' },
-    draw: { icon: 'library_add', statLabel: 'Draw +' },
+    // stats
+    hp: { icon: 'heart_plus', label: 'HP +' },
+    momentum: { icon: 'add_box', label: 'Momentum +' },
+    cp: { icon: 'new_label', label: 'CP +' },
+    draw: { icon: 'library_add', label: 'Draw +' },
 
-    // token-based (perk-specific)
-    perk_a3: ['target'],
-    perk_b3: ['swords'],
-    perk_e2: ['travel', 'travel'],
-    perk_e3: ['health_and_safety', 'health_and_safety'],
+    // token
+    perk_a3: { icons: ['target'], label: 'TEST' },
+    perk_b3: { icons: ['swords'], label: '' },
+    perk_e2: { icons: ['travel', 'travel'], label: '' },
+    perk_e3: { icons: ['health_and_safety', 'health_and_safety'], label: '' },
 
-    // proc-based (perk-specific)
-    perk_a5: ['cycle'],
-    perk_b5: ['ifl', 'swords'],
-    perk_c3: ['currency_exchange', 'library_add'],
-    perk_c5: ['remove_moderator'],
-    perk_d3: ['person_add'],
-    perk_d5: ['timer_arrow_down'],
-    perk_e5: ['replay']
+    // proc
+    perk_a5: { icons: ['cycle'], label: '' },
+    perk_b5: { icons: ['ifl', 'swords'], label: '' },
+    perk_c3: { icons: ['currency_exchange', 'library_add'], label: '' },
+    perk_c5: { icons: ['remove_moderator'], label: '' },
+    perk_d3: { icons: ['person_add'], label: '' },
+    perk_d5: { icons: ['timer_arrow_down'], label: '' },
+    perk_e5: { icons: ['replay'], label: '' }
 };

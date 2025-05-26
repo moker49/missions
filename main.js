@@ -3,12 +3,17 @@ import { staticData } from './modules/staticData.js';
 import { settings } from './modules/settings.js';
 import { perkData } from './modules/perkData.js';
 
+// Dom Elements
 const app = document.getElementById('app');
-let isEditing = false;
 const perkGrid = document.getElementById('perkGrid');
 const missionGrid = document.getElementById('missionGrid');
 const statsGrid = document.getElementById('statsGrid');
+
+// Global Variables
+let myStaticData = null;
 let staticDataBackup = null;
+const staticDataString = JSON.stringify(staticData);
+let isEditing = false;
 
 // MARK: SETTINGS
 const bossNameToggle = document.getElementById('boss-name-toggle');
@@ -33,11 +38,15 @@ if (rawLoadedData) {
     try {
         const loadedData = JSON.parse(rawLoadedData);
         const mergedData = deepMerge(staticData, loadedData);
-        Object.assign(staticData, mergedData);
+        myStaticData = mergedData;
     } catch (e) {
-        console.error('Failed to parse or merge saved staticData:', e);
+        console.error('Failed to parse or merge saved staticData, loading default...', e);
+        myStaticData = JSON.parse(staticDataString);
     }
+} else {
+    myStaticData = JSON.parse(staticDataString);
 }
+
 const rawLoadedSettings = localStorage.getItem('settings');
 if (rawLoadedSettings) {
     try {
@@ -58,13 +67,13 @@ if (settings.loadEditing) {
 
 // MARK: PERK MATH
 function getPerkPointsSpent() {
-    return staticData
+    return myStaticData
         .flatMap(difficulty => difficulty.perks ?? [])
         .reduce((total, perk) => total + (perk.currentPoints ?? 0), 0);
 }
 
 function getPerkPointsEarned() {
-    return staticData
+    return myStaticData
         .flatMap(difficulty => difficulty.missions ?? [])
         .reduce((total, mission) => {
             const stagePoints = mission.stage ?? 0;
@@ -92,7 +101,7 @@ function createButton(className, textContent = '') {
 
 
 function saveDataState() {
-    staticData.forEach((difficultyObj) => {
+    myStaticData.forEach((difficultyObj) => {
         difficultyObj.perks.forEach((perkObj) => {
             perkObj.min = perkObj.currentPoints
         });
@@ -150,7 +159,7 @@ diceThroneDelete.addEventListener('click', () => {
                 if (undoButton.style.display === 'block') {
                     undoButton.click();
                 }
-                staticData.forEach((difficultyObj) => {
+                myStaticData.forEach((difficultyObj) => {
                     difficultyObj.perks.forEach((perk) => {
                         perk.currentPoints = 0;
                         perk.min = 0;
@@ -167,25 +176,10 @@ diceThroneDelete.addEventListener('click', () => {
                 return;
             }
             case 'delete': {
-                staticData.forEach((difficultyObj) => {
-                    difficultyObj.perks.forEach((perk) => {
-                        perk.currentPoints = 0;
-                        perk.min = 0;
-                    });
-                    difficultyObj.missions.forEach((mission) => {
-                        mission.perfect = false;
-                        mission.perfectLock = false;
-                        mission.stage = 0;
-                        mission.boss = 0;
-                        mission.newStage = false;
-                        mission.newBoss = false;
-                        mission.newStageSolo = false;
-                        mission.newBossSolo = false;
-                    });
-                });
+                myStaticData = JSON.parse(staticDataString);
                 updatePerkPointsDisplay();
                 undoButton.style.display = 'none';
-                localStorage.setItem('staticData', JSON.stringify(staticData));
+                localStorage.setItem('staticData', staticDataString);
                 renderPerkGrid();
                 renderMissionGrid();
                 toggleMenu(false);
@@ -201,7 +195,7 @@ diceThroneDelete.addEventListener('click', () => {
 const undoButton = document.getElementById('undo-button');
 undoButton.addEventListener('click', () => {
     if (staticDataBackup) {
-        Object.assign(staticData, JSON.parse(JSON.stringify(staticDataBackup)));
+        Object.assign(myStaticData, JSON.parse(JSON.stringify(staticDataBackup)));
         renderPerkGrid();
         renderMissionGrid();
         updatePerkPointsDisplay();
@@ -248,7 +242,7 @@ function renderEditButton() {
             isEditing = true;
             app.classList.add('editing');
             updatePerkPointsDisplay();
-            staticDataBackup = JSON.parse(JSON.stringify(staticData));
+            staticDataBackup = JSON.parse(JSON.stringify(myStaticData));
             if (!showAllPerksAndMissions) {
                 filterButton.click();
             }
@@ -256,7 +250,7 @@ function renderEditButton() {
             // SAVE
             isEditing = false;
             saveDataState();
-            localStorage.setItem('staticData', JSON.stringify(staticData));
+            localStorage.setItem('staticData', JSON.stringify(myStaticData));
             app.classList.remove('editing');
             icon.style.display = '';
             pointsText.style.display = 'none';
@@ -273,7 +267,7 @@ function renderEditButton() {
 // MARK: PERK GRID
 function renderPerkGrid() {
     perkGrid.innerHTML = '';
-    staticData.forEach((difficultyObj) => {
+    myStaticData.forEach((difficultyObj) => {
         const section = createDiv('perk-section');
         const header = createDiv('perk-header', difficultyObj.name);
         section.appendChild(header);
@@ -343,7 +337,7 @@ function renderPerkGrid() {
 function renderMissionGrid() {
     missionGrid.innerHTML = '';
 
-    staticData.forEach((difficultyObj) => {
+    myStaticData.forEach((difficultyObj) => {
         const section = createDiv('mission-section');
         const header = createDiv('mission-header', difficultyObj.name);
         section.appendChild(header);
@@ -417,51 +411,80 @@ function renderMissionGrid() {
 function renderStatGrid() {
     statsGrid.innerHTML = '';
 
-    const myStats = { momentumLvl: { label: '', amount: 0 }, };
-    const myTokens = { dmg3: 0, };
+    const myStats = {};
+    const myTokens = {};
     const myGameStart = {};
     const myActives = {};
 
-    staticData.forEach((difficultyObj) => {
+    myStaticData.forEach((difficultyObj) => {
         difficultyObj.perks.forEach((perkObj) => {
             perkObj.effects.forEach((effect) => {
                 if ((perkObj.currentPoints ?? 0) < perkObj.perkPoints) return;
                 if (effect.statType) {
                     if (myStats[effect.statType]) myStats[effect.statType].amount += effect.amount;
-                    else myStats[effect.statType] = { label: perkData[effect.statType].statLabel, amount: effect.amount }
+                    else myStats[effect.statType] = { label: perkData[effect.statType].label, amount: effect.amount }
                 }
-                // else if (effect.token) myTokens[effect.token] = myTokens[effect.token] ?? 0 + effect.amount;
-                // else if (effect.proc == "gameStart") myGameStart[perkObj.id] = perkObj.label
-                // else if (effect.proc == "active") myActives[perkObj.id] = perkObj.label
+                else if (effect.token) {
+                    if (myTokens[perkObj.id]) myTokens[perkObj.id].amount += effect.amount;
+                    else {
+                        myTokens[perkObj.id] = { label: perkData[perkObj.id].label, amount: effect.amount }
+                    }
+                }
+                else if (effect.proc == "gameStart") {
+                    myGameStart[perkObj.id] = perkData[perkObj.id].label;
+                }
+                else if (effect.proc == "active") {
+                    myActives[perkObj.id] = perkData[perkObj.id].label;
+                }
             });
         });
     });
 
     // generate dom
-    const section = createDiv('stat-section');
-
-    const header = createDiv('stat-header', 'Stats');
-    section.appendChild(header);
-
+    const statSection = createDiv('stat-section');
+    const statHeader = createDiv('stat-header', 'Stats');
+    statSection.appendChild(statHeader);
     let rowAlternate = false;
     Object.keys(myStats).forEach((myStatsKey) => {
         const row = createDiv('stat-entry' + (rowAlternate ? ' alt' : ''), '');
         rowAlternate = !rowAlternate;
 
         const iconList = createDiv('stat-icon');
-        const iconKey = myStatsKey + (myStatsKey == "momentumLvl" ? myStats[myStatsKey].amount : '');
-        const icon = createDiv('material-symbols-outlined', perkData[iconKey].icon);
+        const perkDataKey = myStatsKey + (myStatsKey == "momentumLvl" ? myStats[myStatsKey].amount : '');
+        const icon = createDiv('material-symbols-outlined', perkData[perkDataKey].icon);
         iconList.appendChild(icon);
         row.appendChild(iconList);
 
-        const label = createDiv('stat-label', perkData[iconKey].statLabel + myStats[myStatsKey].amount);
+        const label = createDiv('stat-label', perkData[perkDataKey].label + myStats[myStatsKey].amount);
         row.appendChild(label);
 
-        section.appendChild(row);
+        statSection.appendChild(row);
+    });
+
+    const tokenSection = createDiv('stat-section');
+    const tokenHeader = createDiv('stat-header', 'Tokens');
+    tokenSection.appendChild(tokenHeader);
+    rowAlternate = false;
+    Object.keys(myTokens).forEach((myTokenKey) => {
+        const row = createDiv('stat-entry' + (rowAlternate ? ' alt' : ''), '');
+        rowAlternate = !rowAlternate;
+
+        const iconList = createDiv('stat-icon');
+        perkData[myTokenKey].icons.forEach((iconName) => {
+            const icon = createDiv('material-symbols-outlined', iconName);
+            iconList.appendChild(icon);
+        });
+        row.appendChild(iconList);
+
+        const label = createDiv('stat-label', myTokens[myTokenKey].label + myTokens[myTokenKey].amount);
+        row.appendChild(label);
+
+        tokenSection.appendChild(row);
     });
 
 
-    statsGrid.appendChild(section);
+    statsGrid.appendChild(statSection);
+    statsGrid.appendChild(tokenSection);
     statsGrid.classList.add('hide-scrollbar');
 }
 
