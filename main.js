@@ -12,6 +12,7 @@ const statsGrid = document.getElementById('statsGrid');
 // Global Variables
 let myStaticData = null;
 let undoStateData = null;
+let respecTriggered = false; // <-- add this line
 const staticDataString = JSON.stringify(staticData);
 
 // MARK: SETTINGS
@@ -53,8 +54,8 @@ if (settings.bossNames) {
 }
 
 // MARK: PERK MATH
-function getPerkPointsSpent() {
-    return myStaticData
+function getPerkPointsSpent(data = myStaticData) {
+    return data
         .flatMap(difficulty => difficulty.perks ?? [])
         .reduce((total, perk) => total + (perk.currentPoints ?? 0), 0);
 }
@@ -130,15 +131,15 @@ diceThroneDelete.addEventListener('click', () => {
                 if (undoButton.style.display === 'block') {
                     undoButton.click();
                 }
+                createUndoState(true);
                 myStaticData.forEach((difficultyObj) => {
                     difficultyObj.perks.forEach((perk) => {
                         perk.currentPoints = 0;
                         perk.min = 0;
                     });
                 });
-                createUndoState(true);
+                respecTriggered = true; // <-- set flag
                 updateActionButtonsDisplay();
-                undoButton.style.display = 'none';
                 renderPerkGrid();
                 renderMissionGrid();
                 toggleMenu(false);
@@ -170,6 +171,7 @@ undoButton.addEventListener('click', () => {
         undoButton.style.display = 'none';
         saveButton.style.display = 'none';
         undoStateData = null;
+        respecTriggered = false; // <-- reset flag
     }
 });
 
@@ -185,20 +187,27 @@ function updateActionButtonsDisplay() {
         saveButton.style.display = 'none';
         return;
     }
-    const spent = getPerkPointsSpent();
-    const availableCurrent = getPerkPointsEarned(myStaticData);
-    const availableUndo = getPerkPointsEarned(undoStateData);
 
-    if (availableCurrent !== availableUndo) {
+    if (respecTriggered) {
         undoButton.style.display = 'block';
         saveButton.style.display = 'block';
     } else {
-        undoButton.style.display = 'none';
-        saveButton.style.display = 'none';
+        const availableCurrent = getPerkPointsEarned(myStaticData);
+        const availableUndo = getPerkPointsEarned(undoStateData);
+
+        if (availableCurrent !== availableUndo) {
+            undoButton.style.display = 'block';
+            saveButton.style.display = 'block';
+        } else {
+            undoButton.style.display = 'none';
+            saveButton.style.display = 'none';
+        }
     }
 
+    const spentCurrent = getPerkPointsSpent(myStaticData);
+    const availableCurrent = getPerkPointsEarned(myStaticData);
     const icon = saveButton.querySelector('.material-symbols-outlined');
-    if (spent === availableCurrent) {
+    if (spentCurrent === availableCurrent) {
         icon.textContent = 'save';
         saveButton.disabled = false;
     } else {
@@ -218,6 +227,7 @@ saveButton.addEventListener('click', () => {
         undoButton.style.display = 'none';
         saveButton.style.display = 'none';
         undoStateData = null;
+        respecTriggered = false; // <-- reset flag
         renderPerkGrid();
         renderMissionGrid();
         renderStatGrid();
