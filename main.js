@@ -203,17 +203,6 @@ undoButton.addEventListener('click', () => {
     }
 });
 
-// TOGGLE FILTER
-const filterButton = document.getElementById('filter-toggle');
-let showAllPerksAndMissions = true;
-
-filterButton.addEventListener('click', () => {
-    showAllPerksAndMissions = !showAllPerksAndMissions;
-    filterButton.children[0].textContent = showAllPerksAndMissions ? 'filter_list' : 'filter_list_off';
-    renderPerkGrid();
-    renderMissionGrid();
-});
-
 // MARK: EDITING
 const editButton = document.getElementById('edit-toggle');
 const icon = editButton.querySelector('.material-symbols-outlined');
@@ -243,9 +232,9 @@ function renderEditButton() {
             app.classList.add('editing');
             updatePerkPointsDisplay();
             staticDataBackup = JSON.parse(JSON.stringify(myStaticData));
-            if (!showAllPerksAndMissions) {
-                filterButton.click();
-            }
+            // if (!showAllPerksAndMissions) {
+            //     filterButton.click();
+            // }
         } else if (getPerkPointsSpent() === getPerkPointsEarned()) {
             // SAVE
             isEditing = false;
@@ -260,7 +249,7 @@ function renderEditButton() {
             renderMissionGrid();
             renderStatGrid();
         }
-        filterButton.classList.toggle('hidden', isEditing);
+        // filterButton.classList.toggle('hidden', isEditing);
     });
 }
 
@@ -274,9 +263,10 @@ function renderPerkGrid() {
 
         let rowAlternate = false;
         difficultyObj.perks.forEach((perkObj) => {
-            const isUnlocked = perkObj.currentPoints ?? 0 === perkObj.perkPoints;
-            const showPerk = showAllPerksAndMissions || isUnlocked;
-            if (!showPerk) return;
+            // const isUnlocked = perkObj.currentPoints ?? 0 === perkObj.perkPoints;
+            // const showPerk = showAllPerksAndMissions || isUnlocked;
+            // if (!showPerk) return;
+            // Always show all perks:
             const row = createDiv('perk-entry' + (rowAlternate ? ' alt' : ''), '', perkObj.id);
             rowAlternate = !rowAlternate;
 
@@ -344,8 +334,9 @@ function renderMissionGrid() {
 
         let rowAlternate = false;
         difficultyObj.missions.forEach((missionObj) => {
-            const showMission = showAllPerksAndMissions || (!(missionObj.perfect ?? false));
-            if (!showMission) return;
+            // const showMission = showAllPerksAndMissions || (!(missionObj.perfect ?? false));
+            // if (!showMission) return;
+            // Always show all missions:
             const row = createDiv('mission-entry' + (rowAlternate ? ' alt' : ''), '', missionObj.id);
             rowAlternate = !rowAlternate;
 
