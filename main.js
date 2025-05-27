@@ -11,9 +11,8 @@ const statsGrid = document.getElementById('statsGrid');
 
 // Global Variables
 let myStaticData = null;
-let staticDataBackup = null;
+let undoStateData = null;
 const staticDataString = JSON.stringify(staticData);
-let isEditing = false;
 
 // MARK: SETTINGS
 const bossNameToggle = document.getElementById('boss-name-toggle');
@@ -22,13 +21,6 @@ bossNameToggle.addEventListener('click', () => {
     settings.bossNames = !settings.bossNames
     bossNameToggleIcon.textContent = 'check_box' + (settings.bossNames ? '' : '_outline_blank');
     renderMissionGrid();
-    localStorage.setItem('settings', JSON.stringify(settings));
-});
-const loadEditingToggle = document.getElementById('load-editing');
-const loadEditingToggleIcon = document.getElementById('load-editing-icon');
-loadEditingToggle.addEventListener('click', () => {
-    settings.loadEditing = !settings.loadEditing
-    loadEditingToggleIcon.textContent = 'check_box' + (settings.loadEditing ? '' : '_outline_blank');
     localStorage.setItem('settings', JSON.stringify(settings));
 });
 
@@ -59,11 +51,6 @@ if (rawLoadedSettings) {
 if (settings.bossNames) {
     bossNameToggleIcon.textContent = 'check_box';
 }
-if (settings.loadEditing) {
-    isEditing = true;
-    app.classList.add('editing');
-    loadEditingToggleIcon.textContent = 'check_box';
-}
 
 // MARK: PERK MATH
 function getPerkPointsSpent() {
@@ -72,8 +59,8 @@ function getPerkPointsSpent() {
         .reduce((total, perk) => total + (perk.currentPoints ?? 0), 0);
 }
 
-function getPerkPointsEarned() {
-    return myStaticData
+function getPerkPointsEarned(data = myStaticData) {
+    return data
         .flatMap(difficulty => difficulty.missions ?? [])
         .reduce((total, mission) => {
             const stagePoints = mission.stage ?? 0;
@@ -97,22 +84,6 @@ function createButton(className, textContent = '') {
     el.className = className;
     el.textContent = textContent;
     return el;
-}
-
-
-function saveDataState() {
-    myStaticData.forEach((difficultyObj) => {
-        difficultyObj.perks.forEach((perkObj) => {
-            perkObj.min = perkObj.currentPoints
-        });
-        difficultyObj.missions.forEach((missionObj) => {
-            missionObj.perfectLock = missionObj.perfect
-            missionObj.newStage = false;
-            missionObj.newBoss = false;
-            missionObj.newStageSolo = false;
-            missionObj.newBossSolo = false;
-        });
-    });
 }
 
 // MARK: HAMBURGER
@@ -165,10 +136,8 @@ diceThroneDelete.addEventListener('click', () => {
                         perk.min = 0;
                     });
                 });
-                editButton.click();
-                isEditing = true;
-                app.classList.add('editing');
-                updatePerkPointsDisplay();
+                createUndoState(true);
+                updateActionButtonsDisplay();
                 undoButton.style.display = 'none';
                 renderPerkGrid();
                 renderMissionGrid();
@@ -177,7 +146,7 @@ diceThroneDelete.addEventListener('click', () => {
             }
             case 'delete': {
                 myStaticData = JSON.parse(staticDataString);
-                updatePerkPointsDisplay();
+                // updatePerkPointsDisplay();
                 undoButton.style.display = 'none';
                 localStorage.setItem('staticData', staticDataString);
                 renderPerkGrid();
@@ -194,62 +163,79 @@ diceThroneDelete.addEventListener('click', () => {
 // UNDO
 const undoButton = document.getElementById('undo-button');
 undoButton.addEventListener('click', () => {
-    if (staticDataBackup) {
-        Object.assign(myStaticData, JSON.parse(JSON.stringify(staticDataBackup)));
+    if (undoStateData) {
+        Object.assign(myStaticData, JSON.parse(JSON.stringify(undoStateData)));
         renderPerkGrid();
         renderMissionGrid();
-        updatePerkPointsDisplay();
         undoButton.style.display = 'none';
+        saveButton.style.display = 'none';
+        undoStateData = null;
     }
 });
 
-// MARK: EDITING
-const editButton = document.getElementById('edit-toggle');
-const icon = editButton.querySelector('.material-symbols-outlined');
-const pointsText = editButton.querySelector('.points-text');
-function updatePerkPointsDisplay() {
+function createUndoState(force = false) {
+    if (undoStateData === null || force) {
+        undoStateData = JSON.parse(JSON.stringify(myStaticData));
+    }
+}
+
+function updateActionButtonsDisplay() {
+    if (!undoStateData) {
+        undoButton.style.display = 'none';
+        saveButton.style.display = 'none';
+        return;
+    }
+    const spent = getPerkPointsSpent();
+    const availableCurrent = getPerkPointsEarned(myStaticData);
+    const availableUndo = getPerkPointsEarned(undoStateData);
+
+    if (availableCurrent !== availableUndo) {
+        undoButton.style.display = 'block';
+        saveButton.style.display = 'block';
+    } else {
+        undoButton.style.display = 'none';
+        saveButton.style.display = 'none';
+    }
+
+    const icon = saveButton.querySelector('.material-symbols-outlined');
+    if (spent === availableCurrent) {
+        icon.textContent = 'save';
+        saveButton.disabled = false;
+    } else {
+        icon.textContent = 'pending';
+        saveButton.disabled = true;
+    }
+}
+
+// SAVE BUTTON
+const saveButton = document.getElementById('save-button');
+saveButton.addEventListener('click', () => {
     const spent = getPerkPointsSpent();
     const available = getPerkPointsEarned();
-    if (spent !== available) {
-        icon.style.display = 'none';
-        pointsText.style.display = '';
-        pointsText.textContent = `${spent} / ${available}`;
-        editButton.disabled = true;
-        undoButton.style.display = 'block';
-    } else if (isEditing) {
-        icon.style.display = '';
-        icon.textContent = 'save';
-        pointsText.style.display = 'none';
-        editButton.disabled = false;
+    if (spent === available) {
+        saveDataState();
+        localStorage.setItem('staticData', JSON.stringify(myStaticData));
+        undoButton.style.display = 'none';
+        saveButton.style.display = 'none';
+        undoStateData = null;
+        renderPerkGrid();
+        renderMissionGrid();
+        renderStatGrid();
     }
-    editButton.classList.toggle('button-secondary', spent !== available);
-}
-function renderEditButton() {
-    editButton.addEventListener('click', () => {
-        if (!isEditing) {
-            // EDIT
-            isEditing = true;
-            app.classList.add('editing');
-            updatePerkPointsDisplay();
-            staticDataBackup = JSON.parse(JSON.stringify(myStaticData));
-            // if (!showAllPerksAndMissions) {
-            //     filterButton.click();
-            // }
-        } else if (getPerkPointsSpent() === getPerkPointsEarned()) {
-            // SAVE
-            isEditing = false;
-            saveDataState();
-            localStorage.setItem('staticData', JSON.stringify(myStaticData));
-            app.classList.remove('editing');
-            icon.style.display = '';
-            pointsText.style.display = 'none';
-            icon.textContent = 'edit';
-            undoButton.style.display = 'none';
-            renderPerkGrid();
-            renderMissionGrid();
-            renderStatGrid();
-        }
-        // filterButton.classList.toggle('hidden', isEditing);
+});
+
+function saveDataState() {
+    myStaticData.forEach((difficultyObj) => {
+        difficultyObj.perks.forEach((perkObj) => {
+            perkObj.min = perkObj.currentPoints
+        });
+        difficultyObj.missions.forEach((missionObj) => {
+            missionObj.perfectLock = missionObj.perfect
+            missionObj.newStage = false;
+            missionObj.newBoss = false;
+            missionObj.newStageSolo = false;
+            missionObj.newBossSolo = false;
+        });
     });
 }
 
@@ -263,10 +249,6 @@ function renderPerkGrid() {
 
         let rowAlternate = false;
         difficultyObj.perks.forEach((perkObj) => {
-            // const isUnlocked = perkObj.currentPoints ?? 0 === perkObj.perkPoints;
-            // const showPerk = showAllPerksAndMissions || isUnlocked;
-            // if (!showPerk) return;
-            // Always show all perks:
             const row = createDiv('perk-entry' + (rowAlternate ? ' alt' : ''), '', perkObj.id);
             rowAlternate = !rowAlternate;
 
@@ -297,7 +279,7 @@ function renderPerkGrid() {
             }
 
             row.addEventListener('click', () => {
-                if (!document.getElementById('app').classList.contains('editing')) return;
+                // Always editing
                 const current = perkObj.currentPoints ?? 0;
                 const totalSpent = getPerkPointsSpent();
                 const totalEarned = getPerkPointsEarned();
@@ -309,7 +291,7 @@ function renderPerkGrid() {
                 }
 
                 renderPerkGrid();
-                updatePerkPointsDisplay();
+                updateActionButtonsDisplay();
             });
 
             row.appendChild(icon);
@@ -334,9 +316,6 @@ function renderMissionGrid() {
 
         let rowAlternate = false;
         difficultyObj.missions.forEach((missionObj) => {
-            // const showMission = showAllPerksAndMissions || (!(missionObj.perfect ?? false));
-            // if (!showMission) return;
-            // Always show all missions:
             const row = createDiv('mission-entry' + (rowAlternate ? ' alt' : ''), '', missionObj.id);
             rowAlternate = !rowAlternate;
 
@@ -346,15 +325,15 @@ function renderMissionGrid() {
             toggle.classList.toggle(toggleClass, missionObj.perfect ?? false);
             toggle.textContent = missionObj.perfect ? 'trophy' : '▢';
             toggle.addEventListener('click', () => {
-                if (!document.getElementById('app').classList.contains('editing')) return;
                 if (missionObj.perfectLock) return;
+                createUndoState();
                 missionObj.perfect = !missionObj.perfect;
                 missionObj.stage = (missionObj.stage ?? 0) + (missionObj.perfect ? 1 : -1);
                 missionObj.boss = (missionObj.boss ?? 0) + (missionObj.perfect ? 1 : -1);
                 missionObj.newStage = missionObj.newStageSolo ? missionObj.newStage : !missionObj.newStage;
                 missionObj.newBoss = missionObj.newBossSolo ? missionObj.newBoss : !missionObj.newBoss;
                 renderMissionGrid();
-                updatePerkPointsDisplay();
+                updateActionButtonsDisplay();
             });
 
             const label = createDiv('mission-label', settings.bossNames ? missionObj.bossName : missionObj.name);
@@ -364,23 +343,23 @@ function renderMissionGrid() {
             const stageClasses = 'mission-count' + (missionObj.newStage ? ' new' : '');
             const stage = createDiv(stageClasses, missionObj.stage ?? 0);
             stage.addEventListener('click', () => {
-                if (!document.getElementById('app').classList.contains('editing')) return;
+                createUndoState();
                 missionObj.stage = (missionObj.stage ?? 0) + 1;
                 missionObj.newStage = true;
                 missionObj.newStageSolo = true;
                 renderMissionGrid();
-                updatePerkPointsDisplay();
+                updateActionButtonsDisplay();
             });
 
             const bossClasses = 'mission-count' + (missionObj.newBoss ? ' new' : '');
             const boss = createDiv(bossClasses, missionObj.boss ?? 0);
             boss.addEventListener('click', () => {
-                if (!document.getElementById('app').classList.contains('editing')) return;
+                createUndoState();
                 missionObj.boss = (missionObj.boss ?? 0) + 1;
                 missionObj.newBoss = true;
                 missionObj.newBossSolo = true;
                 renderMissionGrid();
-                updatePerkPointsDisplay();
+                updateActionButtonsDisplay();
             });
 
             countContainer.appendChild(stage);
@@ -535,7 +514,6 @@ try {
     renderPerkGrid();
     renderMissionGrid();
     renderStatGrid();
-    renderEditButton();
 } catch (e) {
     console.error('Render error:', e);
 }

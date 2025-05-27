@@ -42,7 +42,7 @@
 		<link rel="stylesheet" href="style/stats.css" />
 	</head>
 	<body>
-		<div id="app" class="app">
+		<div id="app" class="app editing">
 			<div class="always-visible">
 				<!-- Top Bar -->
 				<header class="top-app-bar">
@@ -54,6 +54,9 @@
 
 					<button class="top-bar-button" id="undo-button" style="display: none">
 						<span class="material-symbols-outlined">undo</span>
+					</button>
+					<button class="top-bar-button" id="save-button" style="display: none">
+						<span class="material-symbols-outlined">save</span>
 					</button>
 				</header>
 
@@ -85,10 +88,6 @@
 					>
 						<span class="material-symbols-outlined">toggle_on</span>
 						<span class="nav-label">Perks</span>
-					</button>
-					<button id="edit-toggle" class="edit-button button-accent">
-						<span class="material-symbols-outlined">edit</span>
-						<span class="points-text" style="display: none"></span>
 					</button>
 					<button
 						data-tab="missionTab"
@@ -136,16 +135,6 @@
 						<span
 							class="material-symbols-outlined quick-action"
 							id="boss-name-toggle-icon"
-							>check_box_outline_blank</span
-						>
-					</div>
-					<div class="menu-item full" id="load-editing">
-						<span class="material-symbols-outlined">edit</span>
-						<span class="label">Editing By Default</span>
-						<!-- <div class="divider"></div> -->
-						<span
-							class="material-symbols-outlined quick-action"
-							id="load-editing-icon"
 							>check_box_outline_blank</span
 						>
 					</div>
