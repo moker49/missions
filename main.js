@@ -1,5 +1,5 @@
 import { deepMerge } from './utils/deepMerge.js';
-import { staticData } from './modules/staticData.js';
+import { staticData, version as staticDataVersion } from './modules/staticData.js'; // <-- import version
 import { settings } from './modules/settings.js';
 import { perkData } from './modules/perkData.js';
 
@@ -27,17 +27,27 @@ bossNameToggle.addEventListener('click', () => {
 
 // MARK: LOAD
 const rawLoadedData = localStorage.getItem('staticData');
+let loadedVersion = null;
+let loadedData = null;
+
 if (rawLoadedData) {
     try {
-        const loadedData = JSON.parse(rawLoadedData);
-        const mergedData = deepMerge(staticData, loadedData);
-        myStaticData = mergedData;
+        const parsed = JSON.parse(rawLoadedData);
+        loadedVersion = parsed.version ?? 0;
+        loadedData = parsed.data ?? parsed; // fallback for old format
+        if (loadedVersion < staticDataVersion) {
+            localStorage.removeItem('staticData');
+            myStaticData = JSON.parse(JSON.stringify(staticData));
+        } else {
+            const mergedData = deepMerge(staticData, loadedData);
+            myStaticData = mergedData;
+        }
     } catch (e) {
         console.error('Failed to parse or merge saved staticData, loading default...', e);
-        myStaticData = JSON.parse(staticDataString);
+        myStaticData = JSON.parse(JSON.stringify(staticData));
     }
 } else {
-    myStaticData = JSON.parse(staticDataString);
+    myStaticData = JSON.parse(JSON.stringify(staticData));
 }
 
 const rawLoadedSettings = localStorage.getItem('settings');
@@ -223,7 +233,10 @@ saveButton.addEventListener('click', () => {
     const available = getPerkPointsEarned();
     if (spent === available) {
         saveDataState();
-        localStorage.setItem('staticData', JSON.stringify(myStaticData));
+        localStorage.setItem('staticData', JSON.stringify({
+            version: staticDataVersion,
+            data: myStaticData
+        }));
         undoButton.style.display = 'none';
         saveButton.style.display = 'none';
         undoStateData = null;

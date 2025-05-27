@@ -1,4 +1,5 @@
 import { perkData } from './perkData.js';
+export const version = 2;
 export const staticData = [
     {
         difficulty: 1,
