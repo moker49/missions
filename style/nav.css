@@ -54,3 +54,20 @@ nav button:active {
 .nav-button.active {
   opacity: 0.9;
 }
+
+.perk-dot-notification {
+  display: inline-block;
+  min-width: 18px;
+  height: 18px;
+  background: #e53935;
+  color: #fff;
+  border-radius: 9px;
+  font-size: 12px;
+  line-height: 18px;
+  text-align: center;
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  z-index: 2;
+  pointer-events: none;
+}

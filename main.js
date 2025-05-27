@@ -313,6 +313,7 @@ function renderPerkGrid() {
         perkGrid.appendChild(section);
     });
     perkGrid.classList.add('hide-scrollbar');
+    updatePerkTabNotification();
 }
 
 // MARK: MISSION GRID
@@ -385,6 +386,7 @@ function renderMissionGrid() {
         missionGrid.appendChild(section);
     });
     missionGrid.classList.add('hide-scrollbar');
+    updatePerkTabNotification();
 }
 
 // MARK: STATS GRID
@@ -524,6 +526,7 @@ try {
     renderPerkGrid();
     renderMissionGrid();
     renderStatGrid();
+    updatePerkTabNotification();
 } catch (e) {
     console.error('Render error:', e);
 }
@@ -552,5 +555,27 @@ function showConfirmation(message, buttons, callback) {
     clone.classList.remove('hidden');
 }
 
+// Utility to update the perk tab notification dot
+function updatePerkTabNotification() {
+    const perkNavBtn = document.querySelector(".nav-button[data-tab='perkTab']");
+    if (!perkNavBtn) return;
+
+    let dot = perkNavBtn.querySelector('.perk-dot-notification');
+    const unspent = getPerkPointsEarned(myStaticData) - getPerkPointsSpent(myStaticData);
+
+    if (!dot) {
+        dot = document.createElement('span');
+        dot.className = 'perk-dot-notification';
+        perkNavBtn.style.position = 'relative';
+        perkNavBtn.appendChild(dot);
+    }
+
+    if (unspent > 0) {
+        dot.textContent = unspent;
+        dot.style.display = 'inline-block';
+    } else {
+        dot.style.display = 'none';
+    }
+}
 
 window.showTab = showTab;
