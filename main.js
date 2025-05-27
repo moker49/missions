@@ -12,7 +12,7 @@ const statsGrid = document.getElementById('statsGrid');
 // Global Variables
 let myStaticData = null;
 let undoStateData = null;
-let respecTriggered = false; // <-- add this line
+let respecTriggered = false;
 const staticDataString = JSON.stringify(staticData);
 
 // MARK: SETTINGS
@@ -138,7 +138,7 @@ diceThroneDelete.addEventListener('click', () => {
                         perk.min = 0;
                     });
                 });
-                respecTriggered = true; // <-- set flag
+                respecTriggered = true;
                 updateActionButtonsDisplay();
                 renderPerkGrid();
                 renderMissionGrid();
@@ -146,10 +146,10 @@ diceThroneDelete.addEventListener('click', () => {
                 return;
             }
             case 'delete': {
+                createUndoState(true);
                 myStaticData = JSON.parse(staticDataString);
-                // updatePerkPointsDisplay();
-                undoButton.style.display = 'none';
-                localStorage.setItem('staticData', staticDataString);
+                updateActionButtonsDisplay();
+                respecTriggered = true;
                 renderPerkGrid();
                 renderMissionGrid();
                 toggleMenu(false);
@@ -171,7 +171,7 @@ undoButton.addEventListener('click', () => {
         undoButton.style.display = 'none';
         saveButton.style.display = 'none';
         undoStateData = null;
-        respecTriggered = false; // <-- reset flag
+        respecTriggered = false;
     }
 });
 
@@ -227,7 +227,7 @@ saveButton.addEventListener('click', () => {
         undoButton.style.display = 'none';
         saveButton.style.display = 'none';
         undoStateData = null;
-        respecTriggered = false; // <-- reset flag
+        respecTriggered = false;
         renderPerkGrid();
         renderMissionGrid();
         renderStatGrid();
