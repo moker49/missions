@@ -1,0 +1,48 @@
+.rank-list {
+  text-transform: capitalize;
+  font-weight: normal;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.rank-section {
+  background: none;
+  padding: 0;
+}
+
+.rank-header {
+  font-style: italic;
+  text-transform: uppercase;
+  background: var(--table-row-alt-2);
+  color: var(--text-highlight);
+  font-size: 1.2rem;
+  padding: 0.625rem;
+}
+
+.rank-entry {
+  display: flex;
+  align-items: center;
+  height: 60px;
+  background: var(--table-row-alt-1);
+  color: var(--text-disabled);
+}
+
+.rank-entry.alt {
+  background: var(--table-row-alt-2);
+}
+
+.rank-icon {
+  width: 60px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-disabled);
+  background: var(--table-row-alt-2);
+}
+
+.rank-label {
+  flex: 1;
+  padding-left: 0.625rem;
+}

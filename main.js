@@ -1,10 +1,10 @@
 import { deepMerge } from './utils/deepMerge.js';
-import { staticData, version as staticDataVersion } from './modules/staticData.js';
-import { settings } from './modules/settings.js';
-import { perkData } from './modules/perkData.js';
+import { staticData, version as staticDataVersion } from './data/staticData.js';
+import { settings } from './data/settings.js';
+import { perkData } from './data/perkData.js';
 import { createHamburgerButton } from './modules/hamburger.js';
 import { createSpan, createDiv } from './utils/dom.js';
-import { showConfirmation } from './utils/confirmation.js';
+import { showConfirmation } from './utils/dialogue.js';
 
 // Dom Elements
 const perkGrid = document.getElementById('perkGrid');
