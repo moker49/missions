@@ -1,19 +1,8 @@
-function createButton(className, textContent = '') {
-    const el = document.createElement('button');
-    el.className = className;
-    el.textContent = textContent;
-    return el;
-}
-function createSpan(className, textContent = '') {
-    const el = document.createElement('span');
-    el.className = className;
-    el.textContent = textContent;
-    return el;
-}
+import { createSpan } from '../utils/dom.js';
 
 // Export a function to create a hamburger button and wire up menu logic
 export function createHamburgerButton() {
-    const hamburger = createButton('top-bar-button');
+    const hamburger = createSpan('top-bar-button');
     const hamburgerIcon = createSpan('material-symbols-outlined', 'menu');
     hamburger.appendChild(hamburgerIcon);
 

@@ -1,11 +1,12 @@
 import { deepMerge } from './utils/deepMerge.js';
-import { staticData, version as staticDataVersion } from './modules/staticData.js'; // <-- import version
+import { staticData, version as staticDataVersion } from './modules/staticData.js';
 import { settings } from './modules/settings.js';
 import { perkData } from './modules/perkData.js';
-import { createHamburgerButton } from './hamburger.js';
+import { createHamburgerButton } from './modules/hamburger.js';
+import { createSpan, createDiv } from './utils/dom.js';
+import { showConfirmation } from './utils/confirmation.js';
 
 // Dom Elements
-const app = document.getElementById('app');
 const perkGrid = document.getElementById('perkGrid');
 const missionGrid = document.getElementById('missionGrid');
 const statsGrid = document.getElementById('statsGrid');
@@ -82,22 +83,6 @@ function getPerkPointsEarned(data = myStaticData) {
         }, 0);
 }
 
-// MARK: DOM Creation
-function createDiv(className, textContent = '', id = null) {
-    const el = document.createElement('div');
-    el.className = className;
-    el.textContent = textContent;
-    if (id !== null) el.id = id;
-    return el;
-}
-
-function createButton(className, textContent = '') {
-    const el = document.createElement('span');
-    el.className = className;
-    el.textContent = textContent;
-    return el;
-}
-
 // MARK: HAMBURGER
 const topBar = document.getElementById('top-bar-dice-throne-missions');
 const topBarTitle = topBar.childNodes[0];
@@ -107,9 +92,9 @@ topBar.insertBefore(hamburger, topBarTitle);
 // DICE THRONE DELETE
 const diceThroneDelete = document.getElementById('dice-throne-delete');
 diceThroneDelete.addEventListener('click', () => {
-    const cancelBtn = createButton('btn btn-conf-accent', 'cancel');
-    const respecBtn = createButton('btn btn-conf-secondary', 'respec');
-    const deleteBtn = createButton('btn btn-conf-secondary', 'delete');
+    const cancelBtn = createSpan('btn btn-conf-accent', 'cancel');
+    const respecBtn = createSpan('btn btn-conf-secondary', 'respec');
+    const deleteBtn = createSpan('btn btn-conf-secondary', 'delete');
     const buttons = [cancelBtn, respecBtn, deleteBtn]
     showConfirmation('Delete Everything?', buttons, (choice) => {
         switch (choice) {
@@ -511,30 +496,6 @@ try {
     updatePerkTabNotification();
 } catch (e) {
     console.error('Render error:', e);
-}
-
-
-// MARK: CONFIRMATION
-function showConfirmation(message, buttons, callback) {
-    const backdrop = document.getElementById('confirm-panel-backdrop');
-    const clone = backdrop.cloneNode(true);
-    backdrop.replaceWith(clone);
-
-    const actions = clone.querySelector('.confirm-actions');
-    const messageBox = clone.querySelector('.confirm-message');
-    messageBox.textContent = message;
-
-    actions.innerHTML = '';
-
-    buttons.forEach((button) => {
-        actions.appendChild(button);
-        button.onclick = () => {
-            clone.classList.add('hidden');
-            callback(button.textContent);
-        };
-    });
-
-    clone.classList.remove('hidden');
 }
 
 // Utility to update the perk tab notification dot

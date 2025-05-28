@@ -1,4 +1,4 @@
-import { createHamburgerButton } from "./hamburger.js";
+import { createHamburgerButton } from "./modules/hamburger.js";
 
 // MARK: HAMBURGER
 const topBar = document.getElementById('top-bar-hero-ranking');
