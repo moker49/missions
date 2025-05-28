@@ -1,192 +1,147 @@
 <!-- v1.0 -->
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Dice Throne Tracker</title>
-		<link
-			rel="apple-touch-icon"
-			sizes="180x180"
-			href="/favicon/apple-touch-icon.png"
-		/>
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="32x32"
-			href="/favicon/favicon-32x32.png"
-		/>
-		<link
-			rel="icon"
-			type="image/png"
-			sizes="16x16"
-			href="/favicon/favicon-16x16.png"
-		/>
-		<link rel="manifest" href="/favicon/site.webmanifest" />
-		<link
-			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@1"
-			rel="stylesheet"
-		/>
-		<link
-			href="https://fonts.googleapis.com/css2?family=Roboto:wght@600&display=swap"
-			rel="stylesheet"
-		/>
-		<link rel="stylesheet" href="style/main.css" />
-		<link rel="stylesheet" href="style/confirmationPanel.css" />
-		<link rel="stylesheet" href="style/menuPanel.css" />
-		<link rel="stylesheet" href="style/missions.css" />
-		<link rel="stylesheet" href="style/nav.css" />
-		<link rel="stylesheet" href="style/perks.css" />
-		<link rel="stylesheet" href="style/templates.css" />
-		<link rel="stylesheet" href="style/topBar.css" />
-		<link rel="stylesheet" href="style/stats.css" />
-	</head>
-	<body>
-		<div id="app" class="app editing">
-			<!-- Top Bar: Dice Throne Missions -->
-			<header class="top-bar" id="top-bar-dice-throne-missions">
-				<h1 class="top-bar-title">Dice Throne Missions</h1>
-				<button class="top-bar-button" id="undo-button" style="display: none">
-					<span class="material-symbols-outlined">undo</span>
-				</button>
-				<button class="top-bar-button" id="save-button" style="display: none">
-					<span class="material-symbols-outlined">save</span>
-				</button>
-			</header>
-			<!-- Top Bar: Hero Ranking -->
-			<header class="top-bar" id="top-bar-hero-ranking" style="display: none;">
-				<h1 class="top-bar-title">Hero Ranking</h1>
-				<!-- Add more buttons here as needed for hero ranking -->
-			</header>
 
-			<div class="always-visible">
-				<!-- Dice Throne Missions Tabs -->
-				<div id="dtm-tabs" class="tab-group">
-					<div id="statsTab" class="tab-content">
-						<div class="scroll-container">
-							<div class="stat-list" id="statsGrid"></div>
-						</div>
-					</div>
-					<div id="perkTab" class="tab-content active">
-						<div class="scroll-container">
-							<div class="perk-list" id="perkGrid"></div>
-						</div>
-					</div>
-					<div id="missionTab" class="tab-content">
-						<div class="scroll-container">
-							<div class="mission-list" id="missionGrid"></div>
-						</div>
-					</div>
-					<!-- Nav for Dice Throne Missions -->
-					<div class="nav" id="nav-dice-throne-missions">
-						<button
-							data-tab="perkTab"
-							class="nav-button active"
-							onclick="showTab('perkTab')"
-						>
-							<span class="material-symbols-outlined">toggle_on</span>
-							<span class="nav-label">Perks</span>
-						</button>
-						<button
-							data-tab="missionTab"
-							class="nav-button"
-							onclick="showTab('missionTab')"
-						>
-							<span class="material-symbols-outlined">trophy</span>
-							<span class="nav-label">Missions</span>
-						</button>
-						<button
-							data-tab="statsTab"
-							class="nav-button"
-							onclick="showTab('statsTab')"
-						>
-							<span class="material-symbols-outlined">leaderboard</span>
-							<span class="nav-label">Stats</span>
-						</button>
-					</div>
-				</div>
-				<!-- Hero Ranking Tabs -->
-				<div id="hr-tabs" class="tab-group" style="display: none;">
-					<div id="hr-overviewTab" class="tab-content active">
-						<div class="scroll-container">
-							<div class="hr-overview-list" id="hrOverviewGrid"></div>
-						</div>
-					</div>
-					<div id="hr-detailsTab" class="tab-content">
-						<div class="scroll-container">
-							<div class="hr-details-list" id="hrDetailsGrid"></div>
-						</div>
-					</div>
-					<!-- Nav for Hero Ranking -->
-					<div class="nav" id="nav-hero-ranking">
-						<button
-							data-tab="hr-overviewTab"
-							class="nav-button active"
-							onclick="showTab('hr-overviewTab', 'hr-tabs')"
-						>
-							<span class="material-symbols-outlined">star</span>
-							<span class="nav-label">Overview</span>
-						</button>
-						<button
-							data-tab="hr-detailsTab"
-							class="nav-button"
-							onclick="showTab('hr-detailsTab', 'hr-tabs')"
-						>
-							<span class="material-symbols-outlined">info</span>
-							<span class="nav-label">Details</span>
-						</button>
-					</div>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Dice Throne Tracker</title>
+	<link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png" />
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png" />
+	<link rel="manifest" href="/favicon/site.webmanifest" />
+	<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@1" rel="stylesheet" />
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@600&display=swap" rel="stylesheet" />
+	<link rel="stylesheet" href="style/main.css" />
+	<link rel="stylesheet" href="style/confirmationPanel.css" />
+	<link rel="stylesheet" href="style/menuPanel.css" />
+	<link rel="stylesheet" href="style/missions.css" />
+	<link rel="stylesheet" href="style/nav.css" />
+	<link rel="stylesheet" href="style/perks.css" />
+	<link rel="stylesheet" href="style/templates.css" />
+	<link rel="stylesheet" href="style/topBar.css" />
+	<link rel="stylesheet" href="style/stats.css" />
+</head>
+
+<body>
+	<div id="app" class="app">
+		<!-- Top Bar: Hero Ranking -->
+		<header class="top-bar" id="top-bar-hero-ranking" style="display: none;">
+			<h1 class="top-bar-title">Hero Ranking</h1>
+		</header>
+
+		<!-- Top Bar: Dice Throne Missions -->
+		<header class="top-bar" id="top-bar-dice-throne-missions">
+			<h1 class="top-bar-title">Dice Throne Missions</h1>
+			<button class="top-bar-button" id="undo-button" style="display: none">
+				<span class="material-symbols-outlined">undo</span>
+			</button>
+			<button class="top-bar-button" id="save-button" style="display: none">
+				<span class="material-symbols-outlined">save</span>
+			</button>
+		</header>
+
+		<!-- Tabs: Hero Ranking -->
+		<div id="hr-tabs" class="tab-group" style="display: none;">
+			<div id="hr-overviewTab" class="tab-content active">
+				<div class="scroll-container">
+					<div class="hr-overview-list" id="hrOverviewGrid"></div>
 				</div>
 			</div>
-
-			<!-- Slide-out menu -->
-			<div id="menu-panel" class="menu-panel">
-				<div class="menu-profile"></div>
-				<div class="menu-items">
-					<div class="menu-item" id="dice-throne-missions">
-						<span class="material-symbols-outlined">swords</span>
-						<span class="label">Dice Throne Missions</span>
-						<div>
-							<div class="divider"></div>
-						</div>
-						<span
-							class="material-symbols-outlined quick-action"
-							id="dice-throne-delete"
-							>delete</span
-						>
-					</div>
-					<div class="menu-item" id="hero-ranking">
-						<span class="material-symbols-outlined">military_tech</span>
-						<span class="label">Hero Ranking</span>
-						<!-- Add quick actions if needed -->
-					</div>
-				</div>
-				<div class="menu-settings">
-					<div class="menu-item full" id="boss-name-toggle">
-						<span class="material-symbols-outlined">id_card</span>
-						<span class="label">Boss Names</span>
-						<!-- <div class="divider"></div> -->
-						<span
-							class="material-symbols-outlined quick-action"
-							id="boss-name-toggle-icon"
-							>check_box_outline_blank</span
-						>
-					</div>
+			<div id="hr-detailsTab" class="tab-content">
+				<div class="scroll-container">
+					<div class="hr-details-list" id="hrDetailsGrid"></div>
 				</div>
 			</div>
-			<div id="menu-backdrop" class="menu-backdrop"></div>
+			<!-- Nav: Hero Ranking -->
+			<div class="nav" id="nav-hero-ranking">
+				<button data-tab="hr-overviewTab" class="nav-button active"
+					onclick="showTab('hr-overviewTab', 'hr-tabs')">
+					<span class="material-symbols-outlined">star</span>
+					<span class="nav-label">Overview</span>
+				</button>
+				<button data-tab="hr-detailsTab" class="nav-button" onclick="showTab('hr-detailsTab', 'hr-tabs')">
+					<span class="material-symbols-outlined">info</span>
+					<span class="nav-label">Details</span>
+				</button>
+			</div>
+		</div>
 
-			<!-- Confirmation Panel -->
-			<div id="confirm-panel-backdrop" class="confirm-backdrop hidden">
-				<div class="confirm-panel">
-					<div class="confirm-message"></div>
-					<div class="confirm-actions"></div>
+		<!-- Tabs: Dice Throne Missions -->
+		<div id="dtm-tabs" class="tab-group">
+			<div id="statsTab" class="tab-content">
+				<div class="scroll-container">
+					<div class="stat-list" id="statsGrid"></div>
+				</div>
+			</div>
+			<div id="perkTab" class="tab-content active">
+				<div class="scroll-container">
+					<div class="perk-list" id="perkGrid"></div>
+				</div>
+			</div>
+			<div id="missionTab" class="tab-content">
+				<div class="scroll-container">
+					<div class="mission-list" id="missionGrid"></div>
+				</div>
+			</div>
+			<!-- Nav: Dice Throne Missions -->
+			<div class="nav" id="nav-dice-throne-missions">
+				<button data-tab="perkTab" class="nav-button active" onclick="showTab('perkTab')">
+					<span class="material-symbols-outlined">toggle_on</span>
+					<span class="nav-label">Perks</span>
+				</button>
+				<button data-tab="missionTab" class="nav-button" onclick="showTab('missionTab')">
+					<span class="material-symbols-outlined">trophy</span>
+					<span class="nav-label">Missions</span>
+				</button>
+				<button data-tab="statsTab" class="nav-button" onclick="showTab('statsTab')">
+					<span class="material-symbols-outlined">leaderboard</span>
+					<span class="nav-label">Stats</span>
+				</button>
+			</div>
+		</div>
+
+		<!-- Slide-out menu -->
+		<div id="menu-panel" class="menu-panel">
+			<div class="menu-profile"></div>
+			<div class="menu-items">
+				<div class="menu-item" id="dice-throne-missions">
+					<span class="material-symbols-outlined">swords</span>
+					<span class="label">Dice Throne Missions</span>
+					<div>
+						<div class="divider"></div>
+					</div>
+					<span class="material-symbols-outlined quick-action" id="dice-throne-delete">delete</span>
+				</div>
+				<div class="menu-item" id="hero-ranking">
+					<span class="material-symbols-outlined">military_tech</span>
+					<span class="label">Hero Ranking</span>
+					<!-- Add quick actions if needed -->
+				</div>
+			</div>
+			<div class="menu-settings">
+				<div class="menu-item full" id="boss-name-toggle">
+					<span class="material-symbols-outlined">id_card</span>
+					<span class="label">Boss Names</span>
+					<!-- <div class="divider"></div> -->
+					<span class="material-symbols-outlined quick-action"
+						id="boss-name-toggle-icon">check_box_outline_blank</span>
 				</div>
 			</div>
 		</div>
-		<script type="module" src="main.js"></script>
-		<script type="module" src="rank.js"></script>
-		<script>
+		<div id="menu-backdrop" class="menu-backdrop"></div>
+
+		<!-- Confirmation Panel -->
+		<div id="confirm-panel-backdrop" class="confirm-backdrop hidden">
+			<div class="confirm-panel">
+				<div class="confirm-message"></div>
+				<div class="confirm-actions"></div>
+			</div>
+		</div>
+	</div>
+	<script type="module" src="main.js"></script>
+	<script type="module" src="rank.js"></script>
+	<script>
 		// --- Menu switching logic ---
 		const menuItems = document.querySelectorAll('.menu-item');
 		const tabGroups = {
@@ -216,7 +171,7 @@
 			});
 		});
 		// --- Tab switching logic update ---
-		window.showTab = function(tabId, tabGroupId) {
+		window.showTab = function (tabId, tabGroupId) {
 			const groupId = tabGroupId || (currentMenu === 'hero-ranking' ? 'hr-tabs' : 'dtm-tabs');
 			const group = document.getElementById(groupId);
 			if (!group) return;
@@ -228,5 +183,6 @@
 			if (navBtn) navBtn.classList.add('active');
 		};
 	</script>
-	</body>
+</body>
+
 </html>
