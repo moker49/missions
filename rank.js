@@ -38,6 +38,7 @@ function renderRankGrid() {
             e.preventDefault();
             lockScroll();
             dragRow(row, e.touches[0], true); // true = touch
+            insertGhostRow(row, section);
         });
         const rankHandleIcon = createDiv('material-symbols-outlined', 'drag_handle');
         rankHandleWrapper.appendChild(rankHandleIcon);
@@ -47,6 +48,12 @@ function renderRankGrid() {
     });
     rankGrid.appendChild(section);
     rankGrid.classList.add('hide-scrollbar');
+}
+
+function insertGhostRow(originalRow, section) {
+    const ghostRow = originalRow.cloneNode(true);
+    ghostRow.id = originalRow.id + '-ghost';
+    section.insertBefore(ghostRow, originalRow);
 }
 
 function lockScroll() {
@@ -110,6 +117,12 @@ function dragRow(row, e, isTouch) {
         row.style.width = '';
         row.style.zIndex = '';
         unlockScroll();
+
+        // kill ghost row if it exists
+        const ghostRow = document.getElementById(row.id + '-ghost');
+        if (ghostRow) {
+            ghostRow.remove();
+        }
     }
 
     if (isTouch) {
