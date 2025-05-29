@@ -1,6 +1,25 @@
 import { createHamburgerButton } from "./modules/hamburger.js";
 import { createDiv } from "./utils/dom.js";
 import { heros, getHeroById } from "./data/heros.js";
+import { deepMerge } from './utils/deepMerge.js';
+
+// Global variables
+let myHeros = null;
+
+// LOAD
+const rawLoadedData = localStorage.getItem('myHeros');
+if (rawLoadedData) {
+    try {
+        const parsed = JSON.parse(rawLoadedData);
+        const mergedData = deepMerge(heros, parsed);
+        myHeros = mergedData;
+    } catch (e) {
+        console.error('Failed to parse or merge saved staticData, loading default...', e);
+        myHeros = JSON.parse(JSON.stringify(heros));
+    }
+} else {
+    myHeros = JSON.parse(JSON.stringify(heros));
+}
 
 // HAMBURGER
 const topBar = document.getElementById('top-bar-hero-ranking');
@@ -8,16 +27,21 @@ const topBarTitle = topBar.childNodes[0];
 const hamburger = createHamburgerButton();
 topBar.insertBefore(hamburger, topBarTitle);
 
-// MARK: Render
+// MARK: RENDER
 const rankGrid = document.getElementById('rankGrid');
-let currentOrder = Object.values(heros).flat(); // Keep track of current order
+const defaultOrderHeros = Object.values(myHeros).flat();
+const sortedHeros = defaultOrderHeros.sort((a, b) => {
+    const aSort = a.mySort ?? a.defaultSort;
+    const bSort = b.mySort ?? b.defaultSort;
+    return aSort - bSort;
+});
 
 function renderRankGrid() {
     rankGrid.innerHTML = '';
     const section = createDiv('rank-section');
     let rowAlternate = true;
 
-    currentOrder.forEach((heroObj, idx) => {
+    sortedHeros.forEach((heroObj, idx) => {
         const row = createDiv('rank-entry' + (rowAlternate ? ' alt' : ''), '', 'rank_' + heroObj.id);
         rowAlternate = !rowAlternate;
         row.draggable = false; // We'll handle drag manually
@@ -52,7 +76,7 @@ function renderRankGrid() {
     rankGrid.classList.add('hide-scrollbar');
 }
 
-// MARK: Drag and Drop
+// MARK: DRAG AND DROP
 function startDragRow(row, idx, section, e) {
     let draggingIdx = idx;
     let lastTargetIdx = idx;
@@ -100,7 +124,8 @@ function startDragRow(row, idx, section, e) {
         document.removeEventListener('touchend', onUp);
 
         row.classList.remove('ghost-row');
-        getHeroById(row.id.replace('rank_', '')).updated = true; // Mark as updated
+        const myHero = getHeroById(row.id.replace('rank_', ''), myHeros);
+        myHero.updated = true;
         unlockScroll();
 
         // Find the new index of the row
@@ -108,10 +133,20 @@ function startDragRow(row, idx, section, e) {
 
         // Update order and re-render
         if (newIdx !== draggingIdx && newIdx !== -1) {
-            const moved = currentOrder.splice(draggingIdx, 1)[0];
-            currentOrder.splice(newIdx, 0, moved);
+            const moved = sortedHeros.splice(draggingIdx, 1)[0];
+            sortedHeros.splice(newIdx, 0, moved);
         }
+
+        // Update mySort for all hero objects in myHeros
+        const newOrder = Array.from(section.children).map(r => r.id.replace('rank_', ''));
+        let sortValue = 1;
+        for (const id of newOrder) {
+            const hero = getHeroById(id, myHeros);
+            if (hero) hero.mySort = sortValue++;
+        }
+
         renderRankGrid();
+        localStorage.setItem('myHeros', JSON.stringify(myHeros));
     }
 
     document.addEventListener('mousemove', onMove);

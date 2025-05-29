@@ -42,8 +42,8 @@ export const heros = {
     ],
 }
 
-export function getHeroById(id) {
-    for (const group of Object.values(heros)) {
+export function getHeroById(id, myHeros) {
+    for (const group of Object.values(myHeros)) {
         const hero = group.find(h => h.id === id);
         if (hero) return hero;
     }
