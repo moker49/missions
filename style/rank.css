@@ -23,26 +23,23 @@
 .rank-entry {
   display: flex;
   align-items: center;
-  height: 60px;
+  height: 3.5rem;
   background: var(--table-row-alt-1);
   color: var(--text-disabled);
+  border: 2px solid transparent;
 }
 
 .rank-entry.alt {
   background: var(--table-row-alt-2);
 }
 
-.rank-entry.selected {
-  color: var(--accent-light);
-}
-
 .rank-icon {
-  width: 60px;
+  width: 3.5rem;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--table-row-alt-2);
+  /* background: var(--table-row-alt-2); */
 }
 
 .rank-label {
@@ -51,10 +48,16 @@
 }
 
 .rank-handle {
-  width: 60px;
+  width: 5rem;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+.ghost-row {
+  color: var(--accent-light);
+    background: none !important;
+    border: 2px dashed var(--accent-light);
+    opacity: 0.7;
+}

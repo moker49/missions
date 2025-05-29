@@ -26,7 +26,7 @@
 .perk-entry {
   display: flex;
   align-items: center;
-  height: 60px;
+  height: 3.5rem;
   background: var(--table-row-alt-1);
   color: var(--text-enabled);
 }
@@ -36,7 +36,7 @@
 }
 
 .perk-icon {
-  width: 60px;
+  width: 3.5rem;
   height: 100%;
   display: flex;
   align-items: center;

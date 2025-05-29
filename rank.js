@@ -10,15 +10,18 @@ topBar.insertBefore(hamburger, topBarTitle);
 
 // RANK GRID
 const rankGrid = document.getElementById('rankGrid');
+let currentOrder = Object.values(heros).flat(); // Keep track of current order
+
 function renderRankGrid() {
     rankGrid.innerHTML = '';
-
     const section = createDiv('rank-section');
-
     let rowAlternate = true;
-    Object.values(heros).flat().forEach((heroObj) => {
+
+    currentOrder.forEach((heroObj, idx) => {
         const row = createDiv('rank-entry' + (rowAlternate ? ' alt' : ''), '', 'rank_' + heroObj.id);
         rowAlternate = !rowAlternate;
+        row.draggable = false; // We'll handle drag manually
+        row.dataset.idx = idx;
 
         const rankIconWrapper = createDiv('rank-icon');
         const rankIcon = createDiv('material-symbols-outlined', 'fiber_manual_record');
@@ -32,16 +35,11 @@ function renderRankGrid() {
         rankHandleWrapper.addEventListener('mousedown', (e) => {
             e.preventDefault();
             lockScroll();
-            const rect = row.getBoundingClientRect();
-            // insertGhostRow(row, section);
-            dragRow(row, e, false, rect); // false = not touch
+            startDragRow(row, idx, section, e);
         });
         rankHandleWrapper.addEventListener('touchstart', (e) => {
-            // e.preventDefault();
             lockScroll();
-            const rect = row.getBoundingClientRect();
-            row.classList.add('selected');
-            dragRow(row, e.touches[0], true, rect); // true = touch
+            startDragRow(row, idx, section, e.touches[0]);
         });
         const rankHandleIcon = createDiv('material-symbols-outlined', 'drag_handle');
         rankHandleWrapper.appendChild(rankHandleIcon);
@@ -51,6 +49,74 @@ function renderRankGrid() {
     });
     rankGrid.appendChild(section);
     rankGrid.classList.add('hide-scrollbar');
+}
+
+function startDragRow(row, idx, section, e) {
+    let draggingIdx = idx;
+    let lastTargetIdx = idx;
+
+    row.classList.add('ghost-row');
+    lockScroll();
+
+    function moveAt(clientY) {
+        // Always get the current rows to reflect DOM changes
+        const rows = Array.from(section.children);
+
+        // Snap as soon as we cross a row's top border
+        let targetIdx = rows.findIndex(r => {
+            const rect = r.getBoundingClientRect();
+            return clientY < rect.top;
+
+        });
+        if (targetIdx === -1) targetIdx = rows.length;
+
+        let insertIdx = targetIdx;
+
+        if (insertIdx !== lastTargetIdx) {
+            if (insertIdx < lastTargetIdx) {
+                insertIdx--;
+            }
+            // Move the row to the new position
+            if (insertIdx < section.children.length) {
+                section.insertBefore(row, section.children[insertIdx]);
+            } else {
+                section.appendChild(row);
+            }
+            lastTargetIdx = insertIdx;
+        }
+    }
+
+    function onMove(ev) {
+        const clientY = ev.touches ? ev.touches[0].clientY : ev.clientY;
+        moveAt(clientY);
+    }
+
+    function onUp(ev) {
+        document.removeEventListener('mousemove', onMove);
+        document.removeEventListener('mouseup', onUp);
+        document.removeEventListener('touchmove', onMove);
+        document.removeEventListener('touchend', onUp);
+
+        row.classList.remove('ghost-row');
+        unlockScroll();
+
+        // Find the new index of the row
+        const newIdx = Array.from(section.children).indexOf(row);
+
+        // Update order and re-render
+        if (newIdx !== draggingIdx && newIdx !== -1) {
+            const moved = currentOrder.splice(draggingIdx, 1)[0];
+            currentOrder.splice(newIdx, 0, moved);
+        }
+        renderRankGrid();
+    }
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+    document.addEventListener('touchmove', onMove, { passive: false });
+    document.addEventListener('touchend', onUp, { passive: false });
+
+    moveAt(e.clientY);
 }
 
 function lockScroll() {
@@ -76,52 +142,4 @@ function preventScroll(e) {
     e.preventDefault();
 }
 
-function dragRow(row, e, isTouch, rect) {
-    // Set fixed positioning for dragging (relative to viewport)
-    row.style.position = 'fixed';
-    row.style.width = rect.width + 'px';
-    row.style.left = rect.left + 'px';
-    row.style.top = rect.top + 'px';
-    row.style.zIndex = 1000;
-
-    // Calculate offset between pointer and row top
-    const pointerY = e.clientY;
-    const offsetWithinRow = pointerY - rect.top;
-
-    function moveHandler(moveEvent) {
-        const clientY = isTouch
-            ? (moveEvent.touches ? moveEvent.touches[0].clientY : moveEvent.clientY)
-            : moveEvent.clientY;
-        // Move row so the pointer stays at the same offset within the row
-        row.style.top = (clientY - offsetWithinRow) + 'px';
-    }
-
-    function upHandler() {
-        if (isTouch) {
-            document.removeEventListener('touchmove', moveHandler);
-            document.removeEventListener('touchend', upHandler);
-        } else {
-            document.removeEventListener('mousemove', moveHandler);
-            document.removeEventListener('mouseup', upHandler);
-        }
-
-        row.classList.remove('selected');
-
-        // Restore styles
-        row.style.position = '';
-        row.style.top = '';
-        row.style.left = '';
-        row.style.width = '';
-        row.style.zIndex = '';
-        unlockScroll();
-    }
-
-    if (isTouch) {
-        document.addEventListener('touchmove', moveHandler, { passive: false });
-        document.addEventListener('touchend', upHandler, { passive: false });
-    } else {
-        document.addEventListener('mousemove', moveHandler);
-        document.addEventListener('mouseup', upHandler);
-    }
-}
 renderRankGrid();

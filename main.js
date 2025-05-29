@@ -1,8 +1,8 @@
+import { createHamburgerButton } from './modules/hamburger.js';
 import { deepMerge } from './utils/deepMerge.js';
 import { staticData, version as staticDataVersion } from './data/staticData.js';
 import { settings } from './data/settings.js';
 import { perkData } from './data/perkData.js';
-import { createHamburgerButton } from './modules/hamburger.js';
 import { createSpan, createDiv } from './utils/dom.js';
 import { showConfirmation } from './utils/dialogue.js';
 
@@ -84,9 +84,9 @@ function getPerkPointsEarned(data = myStaticData) {
 }
 
 // MARK: HAMBURGER
+const hamburger = createHamburgerButton();
 const topBar = document.getElementById('top-bar-dice-throne-missions');
 const topBarTitle = topBar.childNodes[0];
-const hamburger = createHamburgerButton();
 topBar.insertBefore(hamburger, topBarTitle);
 
 // DICE THRONE DELETE
