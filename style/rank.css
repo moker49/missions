@@ -32,13 +32,16 @@
   background: var(--table-row-alt-2);
 }
 
+.rank-entry.selected {
+  color: var(--accent-light);
+}
+
 .rank-icon {
   width: 60px;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-disabled);
   background: var(--table-row-alt-2);
 }
 
@@ -53,5 +56,5 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-disabled);
 }
+
