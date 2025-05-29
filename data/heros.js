@@ -41,3 +41,11 @@ export const heros = {
         { id: 'wolverine', name: 'Wolverine', defaultSort: 33 },
     ],
 }
+
+export function getHeroById(id) {
+    for (const group of Object.values(heros)) {
+        const hero = group.find(h => h.id === id);
+        if (hero) return hero;
+    }
+    return undefined;
+}

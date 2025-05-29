@@ -1,6 +1,6 @@
 import { createHamburgerButton } from "./modules/hamburger.js";
 import { createDiv } from "./utils/dom.js";
-import { heros } from "./data/heros.js";
+import { heros, getHeroById } from "./data/heros.js";
 
 // HAMBURGER
 const topBar = document.getElementById('top-bar-hero-ranking');
@@ -8,7 +8,7 @@ const topBarTitle = topBar.childNodes[0];
 const hamburger = createHamburgerButton();
 topBar.insertBefore(hamburger, topBarTitle);
 
-// RANK GRID
+// MARK: Render
 const rankGrid = document.getElementById('rankGrid');
 let currentOrder = Object.values(heros).flat(); // Keep track of current order
 
@@ -22,6 +22,7 @@ function renderRankGrid() {
         rowAlternate = !rowAlternate;
         row.draggable = false; // We'll handle drag manually
         row.dataset.idx = idx;
+        row.classList.toggle('rank-updated', heroObj.updated ?? false);
 
         const rankIconWrapper = createDiv('rank-icon');
         const rankIcon = createDiv('material-symbols-outlined', 'fiber_manual_record');
@@ -51,6 +52,7 @@ function renderRankGrid() {
     rankGrid.classList.add('hide-scrollbar');
 }
 
+// MARK: Drag and Drop
 function startDragRow(row, idx, section, e) {
     let draggingIdx = idx;
     let lastTargetIdx = idx;
@@ -98,6 +100,7 @@ function startDragRow(row, idx, section, e) {
         document.removeEventListener('touchend', onUp);
 
         row.classList.remove('ghost-row');
+        getHeroById(row.id.replace('rank_', '')).updated = true; // Mark as updated
         unlockScroll();
 
         // Find the new index of the row

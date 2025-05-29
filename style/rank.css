@@ -33,13 +33,16 @@
   background: var(--table-row-alt-2);
 }
 
+.rank-updated {
+  color: var(--text-enabled);
+}
+
 .rank-icon {
   width: 3.5rem;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* background: var(--table-row-alt-2); */
 }
 
 .rank-label {
@@ -57,7 +60,7 @@
 
 .ghost-row {
   color: var(--accent-light);
-    background: none !important;
-    border: 2px dashed var(--accent-light);
-    opacity: 0.7;
+  background: none !important;
+  border: 2px dashed var(--accent-light);
+  opacity: 0.7;
 }
