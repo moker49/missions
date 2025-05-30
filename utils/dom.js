@@ -16,12 +16,13 @@ export function createSpan(className, textContent = '') {
 }
 
 // MARK: CHECKBOX
-export function createCheckbox(className, parent, checked = false) {
-    const checkbox = document.createElement('div');
-    checkbox.type = 'checkbox';
-    checkbox.className = className;
-    checkbox.checked = checked;
-    parent.appendChild(checkbox);
-    return checkbox;
+export function createCheckbox(labelText, parent, checked = false) {
+    const container = createDiv('side-item');
+    const label = createDiv('label', labelText);
+    const checkbox = createDiv(' material-symbols-outlined', checked ? 'check_box' : 'check_box_outline_blank');
+    container.appendChild(label);
+    container.appendChild(checkbox);
+    parent.appendChild(container);
+    return container;
 }
 

@@ -1,11 +1,14 @@
 import { createHamburgerButton } from "./modules/hamburger.js";
-import { createDiv } from "./utils/dom.js";
+import { createCheckbox, createDiv } from "./utils/dom.js";
 import { heros, getHeroById } from "./data/heros.js";
 import { deepMerge } from './utils/deepMerge.js';
 
 // Global variables
 let myHeros = null;
-
+let seasonOneCheckbox = null;
+let seasonTwoCheckbox = null;
+let marvelCheckbox = null;
+let xmenCheckbox = null;
 
 // LOAD
 const rawLoadedData = localStorage.getItem('myHeros');
@@ -29,22 +32,10 @@ const sideBackdrop = document.getElementById('side-backdrop');
 filterButton.addEventListener('click', () => {
     const filterItems = document.getElementById('side-items');
     filterItems.innerHTML = '';
-    const seasonOne = createDiv('side-item');
-    const seasonOneLabel = createDiv('side-item label', 'Season One');
-    seasonOne.appendChild(seasonOneLabel);
-    const seasonTwo = createDiv('side-item');
-    const seasonTwoLabel = createDiv('side-item label', 'Season Two');
-    seasonTwo.appendChild(seasonTwoLabel);
-    const marvel = createDiv('side-item');
-    const marvelLabel = createDiv('side-item label', 'Marvel');
-    marvel.appendChild(marvelLabel);
-    const xmen = createDiv('side-item');
-    const xmenLabel = createDiv('side-item label', 'X-Men');
-    xmen.appendChild(xmenLabel);
-    filterItems.appendChild(seasonOne);
-    filterItems.appendChild(seasonTwo);
-    filterItems.appendChild(marvel);
-    filterItems.appendChild(xmen);
+    seasonOneCheckbox = createCheckbox('Season 1', filterItems, true);
+    seasonTwoCheckbox = createCheckbox('Season 2', filterItems, true);
+    marvelCheckbox = createCheckbox('Marvel', filterItems, true);
+    xmenCheckbox = createCheckbox('X-Men', filterItems, true);
     filterMenu.classList.toggle('visible');
     sideBackdrop.classList.toggle('visible');
 });
