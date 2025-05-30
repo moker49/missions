@@ -1,7 +1,7 @@
 import { createSpan } from '../utils/dom.js';
 
 // Export a function to create a hamburger button and wire up menu logic
-export function createHamburgerButton() {
+export function createHamburgerButton(objectsToClick = []) {
     const hamburger = createSpan('top-bar-button');
     const hamburgerIcon = createSpan('material-symbols-outlined', 'menu');
     hamburger.appendChild(hamburgerIcon);
@@ -16,7 +16,12 @@ export function createHamburgerButton() {
         menuPanel.classList.toggle('visible', shouldOpen);
         menuBackdrop.classList.toggle('visible', shouldOpen);
     }
-    hamburger.addEventListener('click', () => toggleMenu());
+    hamburger.addEventListener('click', () => {
+        toggleMenu();
+        objectsToClick.forEach(obj => {
+            obj.click();
+        });
+    });
     menuBackdrop.addEventListener('click', () => toggleMenu(false));
     function toggleScroll(enable) {
         if (enable) {

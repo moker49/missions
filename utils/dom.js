@@ -15,3 +15,13 @@ export function createSpan(className, textContent = '') {
     return el;
 }
 
+// MARK: CHECKBOX
+export function createCheckbox(className, parent, checked = false) {
+    const checkbox = document.createElement('div');
+    checkbox.type = 'checkbox';
+    checkbox.className = className;
+    checkbox.checked = checked;
+    parent.appendChild(checkbox);
+    return checkbox;
+}
+

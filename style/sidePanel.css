@@ -1,0 +1,59 @@
+.side-panel {
+  position: fixed;
+  top: var(--top-bar-height);
+  right: 0;
+  width: 40vw;
+  background-color: var(--accent-medium);
+  transform: translateX(105%);
+  transition: transform 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  z-index: 200;
+}
+
+.side-panel.visible {
+  transform: translateX(0);
+}
+
+.side-items {
+  flex-grow: 1;
+  padding: 1rem;
+}
+
+.side-item {
+  cursor: pointer;
+}
+
+.side-item > * {
+  display: flex;
+  min-height: 3rem;
+  align-items: center;
+}
+
+.side-item .material-symbols-outlined {
+  width: 3.5rem;
+  justify-content: center;
+}
+
+.side-item .label {
+  flex-grow: 1;
+  cursor: pointer;
+}
+
+.side-backdrop {
+  position: fixed;
+  top: var(--top-bar-height);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.25);
+  z-index: 150;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.side-backdrop.visible {
+  opacity: 1;
+  pointer-events: auto;
+}

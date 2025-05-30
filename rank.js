@@ -6,6 +6,7 @@ import { deepMerge } from './utils/deepMerge.js';
 // Global variables
 let myHeros = null;
 
+
 // LOAD
 const rawLoadedData = localStorage.getItem('myHeros');
 if (rawLoadedData) {
@@ -21,10 +22,41 @@ if (rawLoadedData) {
     myHeros = JSON.parse(JSON.stringify(heros));
 }
 
+// FILTER
+const filterButton = document.getElementById('filter-button');
+const filterMenu = document.getElementById('side-panel');
+const sideBackdrop = document.getElementById('side-backdrop');
+filterButton.addEventListener('click', () => {
+    const filterItems = document.getElementById('side-items');
+    filterItems.innerHTML = '';
+    const seasonOne = createDiv('side-item');
+    const seasonOneLabel = createDiv('side-item label', 'Season One');
+    seasonOne.appendChild(seasonOneLabel);
+    const seasonTwo = createDiv('side-item');
+    const seasonTwoLabel = createDiv('side-item label', 'Season Two');
+    seasonTwo.appendChild(seasonTwoLabel);
+    const marvel = createDiv('side-item');
+    const marvelLabel = createDiv('side-item label', 'Marvel');
+    marvel.appendChild(marvelLabel);
+    const xmen = createDiv('side-item');
+    const xmenLabel = createDiv('side-item label', 'X-Men');
+    xmen.appendChild(xmenLabel);
+    filterItems.appendChild(seasonOne);
+    filterItems.appendChild(seasonTwo);
+    filterItems.appendChild(marvel);
+    filterItems.appendChild(xmen);
+    filterMenu.classList.toggle('visible');
+    sideBackdrop.classList.toggle('visible');
+});
+sideBackdrop.addEventListener('click', () => {
+    filterMenu.classList.remove('visible');
+    sideBackdrop.classList.remove('visible');
+});
+
 // HAMBURGER
 const topBar = document.getElementById('top-bar-hero-ranking');
 const topBarTitle = topBar.childNodes[0];
-const hamburger = createHamburgerButton();
+const hamburger = createHamburgerButton([sideBackdrop]);
 topBar.insertBefore(hamburger, topBarTitle);
 
 // MARK: RENDER

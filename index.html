@@ -22,6 +22,7 @@
 	<link rel="stylesheet" href="style/topBar.css" />
 	<link rel="stylesheet" href="style/stats.css" />
 	<link rel="stylesheet" href="style/rank.css" />
+	<link rel="stylesheet" href="style/sidePanel.css" />
 </head>
 
 <body>
@@ -29,6 +30,20 @@
 		<!-- Top Bar: Hero Ranking -->
 		<header class="top-bar" id="top-bar-hero-ranking" style="display: none;">
 			<h1 class="top-bar-title">Hero Ranking</h1>
+			<button class="top-bar-button" id="filter-button">
+				<span class="material-symbols-outlined">filter_list</span>
+			</button>
+		</header>
+
+		<!-- Top Bar: Dice Throne Missions -->
+		<header class="top-bar" id="top-bar-dice-throne-missions">
+			<h1 class="top-bar-title">Dice Throne Missions</h1>
+			<button class="top-bar-button" id="undo-button" style="display: none">
+				<span class="material-symbols-outlined">undo</span>
+			</button>
+			<button class="top-bar-button" id="save-button" style="display: none">
+				<span class="material-symbols-outlined">save</span>
+			</button>
 		</header>
 
 		<!-- Tabs: Hero Ranking -->
@@ -46,17 +61,6 @@
 				</button>
 			</div>
 		</div>
-
-		<!-- Top Bar: Dice Throne Missions -->
-		<header class="top-bar" id="top-bar-dice-throne-missions">
-			<h1 class="top-bar-title">Dice Throne Missions</h1>
-			<button class="top-bar-button" id="undo-button" style="display: none">
-				<span class="material-symbols-outlined">undo</span>
-			</button>
-			<button class="top-bar-button" id="save-button" style="display: none">
-				<span class="material-symbols-outlined">save</span>
-			</button>
-		</header>
 
 		<!-- Tabs: Dice Throne Missions -->
 		<div id="dtm-tabs" class="tab-group">
@@ -92,7 +96,7 @@
 			</div>
 		</div>
 
-		<!-- Slide-out menu -->
+		<!--  Menu Panel -->
 		<div id="menu-panel" class="menu-panel">
 			<div class="menu-profile"></div>
 			<div class="menu-items">
@@ -123,6 +127,12 @@
 			</div>
 		</div>
 		<div id="menu-backdrop" class="menu-backdrop"></div>
+
+		<!-- Side Panel -->
+		<div id="side-panel" class="side-panel">
+			<div class="side-items" id="side-items"></div>
+		</div>
+		<div id="side-backdrop" class="side-backdrop"></div>
 
 		<!-- Confirmation Panel -->
 		<div id="confirm-panel-backdrop" class="confirm-backdrop hidden">
