@@ -1,3 +1,7 @@
+.tab-content.active.rank {
+  padding-bottom: 0;
+}
+
 .rank-list {
   text-transform: capitalize;
   font-weight: normal;
@@ -51,11 +55,12 @@
 }
 
 .rank-handle {
-  width: 5rem;
+  width: 4rem;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-right: 0.5rem;
 }
 
 .ghost-row {
