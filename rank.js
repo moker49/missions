@@ -11,11 +11,19 @@ let marvelCheckbox = null;
 let xmenCheckbox = null;
 let sortedHeros = null;
 
+// FILTER STATE
+let filterState = {
+    seasonOne: true,
+    seasonTwo: true,
+    marvel: true,
+    xmen: true
+};
+
 // LOAD
-const rawLoadedData = localStorage.getItem('myHeros');
-if (rawLoadedData) {
+const rawLoadedHeros = localStorage.getItem('myHeros');
+if (rawLoadedHeros) {
     try {
-        const parsed = JSON.parse(rawLoadedData);
+        const parsed = JSON.parse(rawLoadedHeros);
         const mergedData = deepMerge(heros, parsed);
         myHeros = mergedData;
     } catch (e) {
@@ -25,14 +33,15 @@ if (rawLoadedData) {
 } else {
     myHeros = JSON.parse(JSON.stringify(heros));
 }
-
-// FILTER STATE
-let filterState = {
-    seasonOne: true,
-    seasonTwo: true,
-    marvel: true,
-    xmen: true
-};
+const rawLoadedHerosFilter = localStorage.getItem('myHerosFilter');
+if (rawLoadedHerosFilter) {
+    try {
+        const parsedFilter = JSON.parse(rawLoadedHerosFilter);
+        filterState = deepMerge(filterState, parsedFilter);
+    } catch (e) {
+        console.error('Failed to parse or merge saved filter state, using defaults...', e);
+    }
+}
 
 // FILTER
 const filterButton = document.getElementById('filter-button');
@@ -52,21 +61,25 @@ filterButton.addEventListener('click', () => {
             filterState.seasonOne = !filterState.seasonOne;
             renderCheckboxes();
             renderRankGrid();
+            localStorage.setItem('myHerosFilter', JSON.stringify(filterState));
         });
         seasonTwoCheckbox.addEventListener('click', () => {
             filterState.seasonTwo = !filterState.seasonTwo;
             renderCheckboxes();
             renderRankGrid();
+            localStorage.setItem('myHerosFilter', JSON.stringify(filterState));
         });
         marvelCheckbox.addEventListener('click', () => {
             filterState.marvel = !filterState.marvel;
             renderCheckboxes();
             renderRankGrid();
+            localStorage.setItem('myHerosFilter', JSON.stringify(filterState));
         });
         xmenCheckbox.addEventListener('click', () => {
             filterState.xmen = !filterState.xmen;
             renderCheckboxes();
             renderRankGrid();
+            localStorage.setItem('myHerosFilter', JSON.stringify(filterState));
         });
     };
     renderCheckboxes();
