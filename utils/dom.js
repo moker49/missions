@@ -16,8 +16,8 @@ export function createSpan(className, textContent = '') {
 }
 
 // MARK: CHECKBOX
-export function createCheckbox(labelText, parent, checked = false) {
-    const container = createDiv('side-item');
+export function createCheckbox(topLevelClass, labelText, parent, checked = false) {
+    const container = createDiv(topLevelClass);
     const label = createDiv('label', labelText);
     const checkbox = createDiv(' material-symbols-outlined', checked ? 'check_box' : 'check_box_outline_blank');
     container.appendChild(label);

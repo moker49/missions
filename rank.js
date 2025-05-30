@@ -9,6 +9,7 @@ let seasonOneCheckbox = null;
 let seasonTwoCheckbox = null;
 let marvelCheckbox = null;
 let xmenCheckbox = null;
+let sortedHeros = null;
 
 // LOAD
 const rawLoadedData = localStorage.getItem('myHeros');
@@ -25,17 +26,51 @@ if (rawLoadedData) {
     myHeros = JSON.parse(JSON.stringify(heros));
 }
 
+// FILTER STATE
+let filterState = {
+    seasonOne: true,
+    seasonTwo: true,
+    marvel: true,
+    xmen: true
+};
+
 // FILTER
 const filterButton = document.getElementById('filter-button');
 const filterMenu = document.getElementById('side-panel');
 const sideBackdrop = document.getElementById('side-backdrop');
 filterButton.addEventListener('click', () => {
     const filterItems = document.getElementById('side-items');
-    filterItems.innerHTML = '';
-    seasonOneCheckbox = createCheckbox('Season 1', filterItems, true);
-    seasonTwoCheckbox = createCheckbox('Season 2', filterItems, true);
-    marvelCheckbox = createCheckbox('Marvel', filterItems, true);
-    xmenCheckbox = createCheckbox('X-Men', filterItems, true);
+    function renderCheckboxes() {
+        filterItems.innerHTML = '';
+        seasonOneCheckbox = createCheckbox('side-item', 'Season 1', filterItems, filterState.seasonOne);
+        seasonTwoCheckbox = createCheckbox('side-item', 'Season 2', filterItems, filterState.seasonTwo);
+        marvelCheckbox = createCheckbox('side-item', 'Marvel', filterItems, filterState.marvel);
+        xmenCheckbox = createCheckbox('side-item', 'X-Men', filterItems, filterState.xmen);
+
+        // Add change listeners to update filter state and re-render
+        seasonOneCheckbox.addEventListener('click', () => {
+            filterState.seasonOne = !filterState.seasonOne;
+            renderCheckboxes();
+            renderRankGrid();
+        });
+        seasonTwoCheckbox.addEventListener('click', () => {
+            filterState.seasonTwo = !filterState.seasonTwo;
+            renderCheckboxes();
+            renderRankGrid();
+        });
+        marvelCheckbox.addEventListener('click', () => {
+            filterState.marvel = !filterState.marvel;
+            renderCheckboxes();
+            renderRankGrid();
+        });
+        xmenCheckbox.addEventListener('click', () => {
+            filterState.xmen = !filterState.xmen;
+            renderCheckboxes();
+            renderRankGrid();
+        });
+    };
+    renderCheckboxes();
+
     filterMenu.classList.toggle('visible');
     sideBackdrop.classList.toggle('visible');
 });
@@ -50,19 +85,34 @@ const topBarTitle = topBar.childNodes[0];
 const hamburger = createHamburgerButton([sideBackdrop]);
 topBar.insertBefore(hamburger, topBarTitle);
 
+function getFilteredHeros() {
+    return Object.entries(myHeros).flatMap(([group, arr]) => {
+        if (group === 'season_one' && filterState.seasonOne) return arr;
+        if (group === 'season_two' && filterState.seasonTwo) return arr;
+        if (group === 'marvel' && filterState.marvel) return arr;
+        if (group === 'x_men' && filterState.xmen) return arr;
+        return [];
+    });
+}
+
 // MARK: RENDER
 const rankGrid = document.getElementById('rankGrid');
-const defaultOrderHeros = Object.values(myHeros).flat();
-const sortedHeros = defaultOrderHeros.sort((a, b) => {
-    const aSort = a.mySort ?? a.defaultSort;
-    const bSort = b.mySort ?? b.defaultSort;
-    return aSort - bSort;
-});
+
+function getSortedHeros() {
+    // Only sort filtered heroes
+    return getFilteredHeros().sort((a, b) => {
+        const aSort = a.mySort ?? a.defaultSort;
+        const bSort = b.mySort ?? b.defaultSort;
+        return aSort - bSort;
+    });
+}
 
 function renderRankGrid() {
     rankGrid.innerHTML = '';
     const section = createDiv('rank-section');
     let rowAlternate = true;
+
+    sortedHeros = getSortedHeros();
 
     sortedHeros.forEach((heroObj, idx) => {
         const row = createDiv('rank-entry' + (rowAlternate ? ' alt' : ''), '', 'rank_' + heroObj.id);
