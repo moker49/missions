@@ -1,3 +1,7 @@
+.tab-content.active.rank {
+  padding-bottom: 0;
+}
+
 .rank-list {
   text-transform: capitalize;
   font-weight: normal;
