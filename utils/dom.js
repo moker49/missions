@@ -26,3 +26,20 @@ export function createCheckbox(topLevelClass, labelText, parent, checked = false
     return container;
 }
 
+export function createDropdown(parent, options, selectedIndex = 0) {
+    // Use a standard <select> element
+    const select = document.createElement('div');
+    select.className = 'dropdown-options';
+    options.forEach((option, index) => {
+        const opt = document.createElement('span');
+        opt.classList.add('dropdown-option');
+        opt.value = option.value;
+        opt.textContent = option.label;
+        if (index === selectedIndex) {
+            opt.selected = true;
+        }
+        select.appendChild(opt);
+    });
+    parent.appendChild(select);
+    return select;
+}

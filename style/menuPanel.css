@@ -31,9 +31,7 @@
 }
 
 .menu-settings {
-  height: 30vw;
-  padding-right: 0.5rem;
-  padding-top: 0.5rem;
+  padding: 0.5rem 0.5rem 1rem 0;
   background: var(--table-row-alt-1);
 }
 

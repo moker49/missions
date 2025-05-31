@@ -62,3 +62,12 @@ body {
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+.dropdown-options.landing {
+  display: flex;
+  flex-direction: column;
+  left: 0;
+  bottom: -3rem;
+  background-color: var(--background);
+  z-index: 1000;
+}

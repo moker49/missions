@@ -19,3 +19,18 @@
   color: red;
   border: 1px solid red;
 }
+
+.dropdown-options {
+  display: none;
+  position: relative;
+  background-color: var(--table-row-alt-1);
+  z-index: 1000;
+  padding: 0.5rem;
+}
+
+.option {
+  display: flex;
+  height: 3rem;
+  cursor: pointer;
+  color: var(--text-enabled);
+}
