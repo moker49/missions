@@ -127,17 +127,17 @@ if (settings.defaultTabId) {
 
 const landingPage = document.getElementById('landing-page');
 const landingPageIcon = document.getElementById('landing-page-icon');
-export const allTabsDropdown = createDropdown(landingPage, tabs);
+export const allTabsDropdown = createDropdown('landing-options', landingPage, tabs);
 landingPage.addEventListener('click', () => {
-    allTabsDropdown.classList.toggle('landing');
-    landingPageIcon.textContent = allTabsDropdown.classList.contains('landing') ? 'keyboard_arrow_up' : 'keyboard_arrow_down';
+    allTabsDropdown.classList.toggle('visible');
+    landingPageIcon.textContent = allTabsDropdown.classList.contains('visible') ? 'keyboard_arrow_up' : 'keyboard_arrow_down';
 });
 allTabsDropdown.addEventListener('click', (e) => {
     e.stopPropagation();
     const option = e.target;
     if (option.classList.contains('dropdown-option')) {
         landingPageLabel.textContent = option.textContent;
-        allTabsDropdown.classList.remove('landing');
+        allTabsDropdown.classList.remove('visible');
         settings.defaultTabId = option.value;
         landingPageIcon.textContent = 'keyboard_arrow_down';
         localStorage.setItem('settings', JSON.stringify(settings));

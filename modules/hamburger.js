@@ -32,7 +32,7 @@ export function createHamburgerButton(objectsToClick = []) {
             document.body.style.top = '';
             document.body.style.width = '';
             window.scrollTo(0, parseInt(scrollYValue || '0') * -1);
-            allTabsDropdown.classList.remove('landing');
+            allTabsDropdown.classList.remove('visible');
             landingPageIcon.textContent = 'keyboard_arrow_up';
         } else {
             // lock
