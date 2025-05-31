@@ -48,14 +48,14 @@
 
 		<!-- Tabs: Hero Ranking -->
 		<div id="rank-tabs" class="tab-group" style="display: none;">
-			<div id="rank-tab" class="tab-content active rank">
+			<div id="rankTab" class="tab-content active rank">
 				<div class="scroll-container">
 					<div class="rank-list" id="rankGrid"></div>
 				</div>
 			</div>
 			<!-- Nav: Hero Ranking -->
 			<div class="nav" id="nav-hero-ranking">
-				<button data-tab="rank-tab" class="nav-button active" onclick="showTab('rank-tab', 'rank-tabs')">
+				<button data-tab="rankTab" class="nav-button active">
 					<span class="material-symbols-outlined">star</span>
 					<span class="nav-label">Overview</span>
 				</button>
@@ -64,14 +64,9 @@
 
 		<!-- Tabs: Dice Throne Missions -->
 		<div id="dtm-tabs" class="tab-group">
-			<div id="statsTab" class="tab-content">
+			<div id="statsTab" class="tab-content active">
 				<div class="scroll-container">
 					<div class="stat-list" id="statsGrid"></div>
-				</div>
-			</div>
-			<div id="perkTab" class="tab-content active">
-				<div class="scroll-container">
-					<div class="perk-list" id="perkGrid"></div>
 				</div>
 			</div>
 			<div id="missionTab" class="tab-content">
@@ -79,19 +74,24 @@
 					<div class="mission-list" id="missionGrid"></div>
 				</div>
 			</div>
+			<div id="perkTab" class="tab-content">
+				<div class="scroll-container">
+					<div class="perk-list" id="perkGrid"></div>
+				</div>
+			</div>
 			<!-- Nav: Dice Throne Missions -->
 			<div class="nav" id="nav-dice-throne-missions">
-				<button data-tab="perkTab" class="nav-button active" onclick="showTab('perkTab')">
-					<span class="material-symbols-outlined">toggle_on</span>
-					<span class="nav-label">Perks</span>
+				<button data-tab="statsTab" class="nav-button active">
+					<span class="material-symbols-outlined">leaderboard</span>
+					<span class="nav-label">Stats</span>
 				</button>
-				<button data-tab="missionTab" class="nav-button" onclick="showTab('missionTab')">
+				<button data-tab="missionTab" class="nav-button">
 					<span class="material-symbols-outlined">flag</span>
 					<span class="nav-label">Missions</span>
 				</button>
-				<button data-tab="statsTab" class="nav-button" onclick="showTab('statsTab')">
-					<span class="material-symbols-outlined">leaderboard</span>
-					<span class="nav-label">Stats</span>
+				<button data-tab="perkTab" class="nav-button">
+					<span class="material-symbols-outlined">toggle_on</span>
+					<span class="nav-label">Perks</span>
 				</button>
 			</div>
 		</div>
@@ -119,7 +119,7 @@
 			<div class="menu-settings">
 				<div class="menu-item full" id="landing-page">
 					<span class="material-symbols-outlined">home</span>
-					<span class="label">Perks</span>
+					<span class="label" id="landing-page-label">Stats</span>
 					<!-- <div class="divider"></div> -->
 					<span class="material-symbols-outlined quick-action">keyboard_arrow_down</span>
 				</div>
@@ -151,66 +151,6 @@
 	<script type="module" src="main.js"></script>
 	<script type="module" src="missions.js"></script>
 	<script type="module" src="rank.js"></script>
-	<script>
-		// --- Menu switching logic ---
-		const menuItems = document.querySelectorAll('.menu-item');
-		const tabGroups = {
-			'dice-throne-missions': {
-				topBar: document.getElementById('top-bar-dice-throne-missions'),
-				tabs: document.getElementById('dtm-tabs')
-			},
-			'hero-ranking': {
-				topBar: document.getElementById('top-bar-hero-ranking'),
-				tabs: document.getElementById('rank-tabs')
-			}
-		};
-		const menuBackdrop = document.getElementById('menu-backdrop');
-		let currentMenu = 'dice-throne-missions';
-		menuItems.forEach(item => {
-			item.addEventListener('click', (event) => {
-				// Prevent menu switch if a quick-action was clicked
-				if (event.target.closest('.quick-action')) {
-					event.stopPropagation();
-					return;
-				}
-				const id = item.id;
-				if (!tabGroups[id]) return;
-				// Hide all
-				Object.values(tabGroups).forEach(g => {
-					g.topBar.style.display = 'none';
-					g.tabs.style.display = 'none';
-				});
-				// Show selected
-				tabGroups[id].topBar.style.display = '';
-				tabGroups[id].tabs.style.display = '';
-				currentMenu = id;
-				menuBackdrop.click();
-				updateNavVisibility(tabGroups[id].tabs);
-			});
-		});
-
-		// --- Nav visibility logic ---
-		function updateNavVisibility(tabGroup) {
-			const nav = tabGroup.querySelector('.nav');
-			if (!nav) return;
-			const tabCount = tabGroup.querySelectorAll('.tab-content').length;
-			nav.style.display = tabCount > 1 ? '' : 'none';
-		}
-		Object.values(tabGroups).forEach(g => updateNavVisibility(g.tabs));
-
-		// --- Tab switching logic ---
-		window.showTab = function (tabId, tabGroupId) {
-			const groupId = tabGroupId || (currentMenu === 'hero-ranking' ? 'rank-tabs' : 'dtm-tabs');
-			const group = document.getElementById(groupId);
-			if (!group) return;
-			group.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-			const tab = document.getElementById(tabId);
-			if (tab) tab.classList.add('active');
-			group.querySelectorAll('.nav-button').forEach(btn => btn.classList.remove('active'));
-			const navBtn = group.querySelector(`.nav-button[data-tab='${tabId}']`);
-			if (navBtn) navBtn.classList.add('active');
-		};
-	</script>
 </body>
 
 </html>

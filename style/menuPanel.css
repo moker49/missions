@@ -2,7 +2,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  width: 70vw;
+  width: var(--menu-width);
   height: 100dvh;
   background-color: var(--accent-medium);
   transform: translateX(-105%);
@@ -36,26 +36,28 @@
 }
 
 .menu-item {
+  position: relative;
   display: flex;
   align-items: center;
 }
 
 .menu-item.full {
+  position: relative;
   cursor: pointer;
 }
 
-.menu-item > * {
+.menu-item .material-symbols-outlined {
   display: flex;
   min-height: 3rem;
   align-items: center;
-}
-
-.menu-item .material-symbols-outlined {
   width: 3.5rem;
   justify-content: center;
 }
 
 .menu-item .label {
+  display: flex;
+  min-height: 3rem;
+  align-items: center;
   flex-grow: 1;
   cursor: pointer;
 }

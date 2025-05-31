@@ -17,16 +17,6 @@ let undoStateData = null;
 let respecTriggered = false;
 const staticDataString = JSON.stringify(staticData);
 
-// MARK: SETTINGS
-const bossNameToggle = document.getElementById('boss-name-toggle');
-const bossNameToggleIcon = document.getElementById('boss-name-toggle-icon');
-bossNameToggle.addEventListener('click', () => {
-    settings.bossNames = !settings.bossNames
-    bossNameToggleIcon.textContent = 'check_box' + (settings.bossNames ? '' : '_outline_blank');
-    renderMissionGrid();
-    localStorage.setItem('settings', JSON.stringify(settings));
-});
-
 // MARK: LOAD
 const rawLoadedData = localStorage.getItem('staticData');
 let loadedVersion = null;
@@ -52,15 +42,15 @@ if (rawLoadedData) {
     myStaticData = JSON.parse(JSON.stringify(staticData));
 }
 
-const rawLoadedSettings = localStorage.getItem('settings');
-if (rawLoadedSettings) {
-    try {
-        const loadedSettings = JSON.parse(rawLoadedSettings);
-        Object.assign(settings, loadedSettings);
-    } catch (e) {
-        console.error('Failed to parse saved settings:', e);
-    }
-}
+// Boss Names Toggle
+const bossNameToggle = document.getElementById('boss-name-toggle');
+const bossNameToggleIcon = document.getElementById('boss-name-toggle-icon');
+bossNameToggle.addEventListener('click', () => {
+    settings.bossNames = !settings.bossNames
+    bossNameToggleIcon.textContent = 'check_box' + (settings.bossNames ? '' : '_outline_blank');
+    renderMissionGrid();
+    localStorage.setItem('settings', JSON.stringify(settings));
+});
 if (settings.bossNames) {
     bossNameToggleIcon.textContent = 'check_box';
 }

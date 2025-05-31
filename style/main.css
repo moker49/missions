@@ -21,6 +21,9 @@
   /* NAV */
   --top-bar-height: 3.5rem;
   --nav-height: calc(4rem + env(safe-area-inset-bottom, 0.5rem));
+
+  /* Menu */
+  --menu-width: 70vw;
 }
 
 body {
@@ -67,7 +70,9 @@ body {
   display: flex;
   flex-direction: column;
   left: 0;
-  bottom: -3rem;
+  bottom: 3rem;
+  width: var(--menu-width);
   background-color: var(--background);
   z-index: 1000;
+  padding: 0.5rem 0;
 }

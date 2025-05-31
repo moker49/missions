@@ -22,13 +22,15 @@
 
 .dropdown-options {
   display: none;
-  position: relative;
+  position: absolute;
   background-color: var(--table-row-alt-1);
   z-index: 1000;
-  padding: 0.5rem;
-}
+} 
 
-.option {
+.dropdown-option {
+  align-items: center;
+  height: 3rem;
+  padding: 0 1rem;
   display: flex;
   height: 3rem;
   cursor: pointer;
