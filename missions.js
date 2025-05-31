@@ -86,7 +86,7 @@ diceThroneDelete.addEventListener('click', () => {
     const respecBtn = createSpan('btn btn-conf-secondary', 'respec');
     const deleteBtn = createSpan('btn btn-conf-secondary', 'delete');
     const buttons = [cancelBtn, respecBtn, deleteBtn]
-    showConfirmation('Delete Everything?', buttons, (choice) => {
+    showConfirmation('Delete All Missions Data?', buttons, (choice) => {
         switch (choice) {
             case 'respec': {
                 if (undoButton.style.display === 'block') {
