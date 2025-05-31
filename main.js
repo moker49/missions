@@ -126,9 +126,11 @@ if (settings.defaultTabId) {
 }
 
 const landingPage = document.getElementById('landing-page');
-const allTabsDropdown = createDropdown(landingPage, tabs);
+const landingPageIcon = document.getElementById('landing-page-icon');
+export const allTabsDropdown = createDropdown(landingPage, tabs);
 landingPage.addEventListener('click', () => {
     allTabsDropdown.classList.toggle('landing');
+    landingPageIcon.textContent = allTabsDropdown.classList.contains('landing') ? 'keyboard_arrow_up' : 'keyboard_arrow_down';
 });
 allTabsDropdown.addEventListener('click', (e) => {
     e.stopPropagation();

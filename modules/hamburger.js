@@ -1,6 +1,7 @@
+import { allTabsDropdown } from '../main.js';
 import { createSpan } from '../utils/dom.js';
 
-// Export a function to create a hamburger button and wire up menu logic
+const landingPageIcon = document.getElementById('landing-page-icon');
 export function createHamburgerButton(objectsToClick = []) {
     const hamburger = createSpan('top-bar-button');
     const hamburgerIcon = createSpan('material-symbols-outlined', 'menu');
@@ -31,6 +32,8 @@ export function createHamburgerButton(objectsToClick = []) {
             document.body.style.top = '';
             document.body.style.width = '';
             window.scrollTo(0, parseInt(scrollYValue || '0') * -1);
+            allTabsDropdown.classList.remove('landing');
+            landingPageIcon.textContent = 'keyboard_arrow_up';
         } else {
             // lock
             const scrollY = window.scrollY;
