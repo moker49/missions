@@ -4,7 +4,7 @@
   right: 0;
   background-color: var(--table-row-alt-1);
   transform: translateX(105%);
-  transition: transform 0.3s ease;
+  transition: transform 0.25s ease;
   display: flex;
   flex-direction: column;
   z-index: 200;
@@ -51,7 +51,7 @@
   z-index: 150;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.25s ease;
 }
 
 .side-backdrop.visible {
