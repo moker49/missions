@@ -139,6 +139,7 @@ allTabsDropdown.addEventListener('click', (e) => {
         landingPageLabel.textContent = option.textContent;
         allTabsDropdown.classList.remove('landing');
         settings.defaultTabId = option.value;
+        landingPageIcon.textContent = 'keyboard_arrow_down';
         localStorage.setItem('settings', JSON.stringify(settings));
     }
 });
