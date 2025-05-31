@@ -21,6 +21,8 @@
   /* NAV */
   --top-bar-height: 3.5rem;
   --nav-height: calc(4rem + env(safe-area-inset-bottom, 0.5rem));
+  --nav-button: hsla(220, 12%, 80%, 0.3);
+  --nav-button-active: hsla(220, 12%, 80%, 0.9);
 
   /* Menu */
   --menu-width: 70vw;
