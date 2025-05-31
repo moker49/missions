@@ -155,8 +155,10 @@ function updateActionButtonsDisplay() {
     } else {
         const availableCurrent = getPerkPointsEarned(myStaticData);
         const availableUndo = getPerkPointsEarned(undoStateData);
+        const spentCurrent = getPerkPointsSpent(myStaticData);
+        const spentUndo = getPerkPointsSpent(undoStateData);
 
-        if (availableCurrent !== availableUndo) {
+        if (availableCurrent !== availableUndo || spentCurrent !== spentUndo) {
             undoButton.style.display = 'block';
             saveButton.style.display = 'block';
         } else {
@@ -238,7 +240,7 @@ function renderPerkGrid() {
             }
 
             row.addEventListener('click', () => {
-                // Always editing
+                createUndoState();
                 const current = perkObj.currentPoints ?? 0;
                 const totalSpent = getPerkPointsSpent();
                 const totalEarned = getPerkPointsEarned();
