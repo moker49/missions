@@ -164,38 +164,23 @@ function updateActionButtonsDisplay() {
             saveButton.style.display = 'none';
         }
     }
-
-    const spentCurrent = getPerkPointsSpent(myStaticData);
-    const availableCurrent = getPerkPointsEarned(myStaticData);
-    const icon = saveButton.querySelector('.material-symbols-outlined');
-    if (spentCurrent === availableCurrent) {
-        icon.textContent = 'save';
-        saveButton.disabled = false;
-    } else {
-        icon.textContent = 'pending';
-        saveButton.disabled = true;
-    }
 }
 
 // SAVE BUTTON
 const saveButton = document.getElementById('save-button');
 saveButton.addEventListener('click', () => {
-    const spent = getPerkPointsSpent();
-    const available = getPerkPointsEarned();
-    if (spent === available) {
-        saveDataState();
-        localStorage.setItem('staticData', JSON.stringify({
-            version: staticDataVersion,
-            data: myStaticData
-        }));
-        undoButton.style.display = 'none';
-        saveButton.style.display = 'none';
-        undoStateData = null;
-        respecTriggered = false;
-        renderPerkGrid();
-        renderMissionGrid();
-        renderStatGrid();
-    }
+    saveDataState();
+    localStorage.setItem('staticData', JSON.stringify({
+        version: staticDataVersion,
+        data: myStaticData
+    }));
+    undoButton.style.display = 'none';
+    saveButton.style.display = 'none';
+    undoStateData = null;
+    respecTriggered = false;
+    renderPerkGrid();
+    renderMissionGrid();
+    renderStatGrid();
 });
 
 function saveDataState() {
