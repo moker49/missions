@@ -191,7 +191,7 @@ function saveDataState() {
             perkObj.min = perkObj.currentPoints
         });
         difficultyObj.missions.forEach((missionObj) => {
-            missionObj.perfectLock = missionObj.perfect
+            missionObj.perfectMin = missionObj.perfect
             missionObj.newStage = false;
             missionObj.newBoss = false;
             missionObj.newStageSolo = false;
@@ -281,19 +281,36 @@ function renderMissionGrid() {
             const row = createDiv('mission-entry' + (rowAlternate ? ' alt' : ''), '', missionObj.id);
             rowAlternate = !rowAlternate;
 
+            const maxPerfected = (missionObj.perfect ?? 0) === perkData.prestige;
+            const perfectLock = maxPerfected == missionObj.perfectMin;
+            const pefectAtMin = (missionObj.perfect ?? 0) === (missionObj.perfectMin ?? 0)
+
             const toggle = createDiv('mission-toggle');
-            toggle.classList.toggle('material-symbols-outlined', missionObj.perfect ?? false);
-            const toggleClass = missionObj.perfectLock ? 'active' : 'new';
+            toggle.classList.toggle('material-symbols-outlined', maxPerfected);
+            toggle.textContent = maxPerfected ? 'trophy' : '▢';
+
+            const toggleClass = (perfectLock ? 'active' : (pefectAtMin ? 'semi' : 'new'));
             toggle.classList.toggle(toggleClass, missionObj.perfect ?? false);
-            toggle.textContent = missionObj.perfect ? 'trophy' : '▢';
+
             toggle.addEventListener('click', () => {
                 if (missionObj.perfectLock) return;
                 createUndoState();
-                missionObj.perfect = !missionObj.perfect;
-                missionObj.stage = (missionObj.stage ?? 0) + (missionObj.perfect ? 1 : -1);
-                missionObj.boss = (missionObj.boss ?? 0) + (missionObj.perfect ? 1 : -1);
+
+                if ((missionObj.perfect ?? 0) < perkData.prestige) {
+                    missionObj.perfect = (missionObj.perfect ?? 0) + 1
+                } else {
+                    missionObj.perfect = perkObj.perfectMin ?? 0;
+                }
+
+                perfectDiff = (missionObj.perfect ?? 0) - (missionObj.perfectMin ?? 0);
+                missionObj.stage = (missionObj.stage ?? 0) + (missionObj.perfect === perkData.prestige ? -perfectDiff : 1);
+                missionObj.boss = (missionObj.boss ?? 0) + (missionObj.perfect === perkData.prestige ? -perfectDiff : 1);
+
                 missionObj.newStage = missionObj.newStageSolo ? missionObj.newStage : !missionObj.newStage;
                 missionObj.newBoss = missionObj.newBossSolo ? missionObj.newBoss : !missionObj.newBoss;
+
+                //TODO process prestige
+
                 renderMissionGrid();
                 updateActionButtonsDisplay();
             });

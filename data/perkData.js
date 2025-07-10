@@ -1,4 +1,7 @@
 export const perkData = {
+    // prestige
+    prestige: 1,
+
     // momemtum
     momentumLvl: { icon: 'looks_one', label: 'Momentum Lvl ' },
     momentumLvl1: { icon: 'looks_one', label: 'Momentum Lvl ' },

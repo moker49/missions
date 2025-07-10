@@ -42,6 +42,10 @@
   color: var(--text-enabled);
 }
 
+.mission-toggle.semi {
+  background: var(--toggle-semi);
+}
+
 .mission-toggle.active {
   background: var(--toggle-on);
 }
