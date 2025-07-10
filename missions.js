@@ -296,15 +296,15 @@ function renderMissionGrid() {
                 if (missionObj.perfectLock) return;
                 createUndoState();
 
+                const perfectDiff = (missionObj.perfect ?? 0) - (missionObj.perfectMin ?? 0);
                 if ((missionObj.perfect ?? 0) < perkData.prestige) {
                     missionObj.perfect = (missionObj.perfect ?? 0) + 1
                 } else {
-                    missionObj.perfect = perkObj.perfectMin ?? 0;
+                    missionObj.perfect = missionObj.perfectMin ?? 0;
                 }
 
-                perfectDiff = (missionObj.perfect ?? 0) - (missionObj.perfectMin ?? 0);
-                missionObj.stage = (missionObj.stage ?? 0) + (missionObj.perfect === perkData.prestige ? -perfectDiff : 1);
-                missionObj.boss = (missionObj.boss ?? 0) + (missionObj.perfect === perkData.prestige ? -perfectDiff : 1);
+                missionObj.stage = (missionObj.stage ?? 0) + (missionObj.perfect === perkData.perfectMin ? -perfectDiff : 1);
+                missionObj.boss = (missionObj.boss ?? 0) + (missionObj.perfect === perkData.perfectMin ? -perfectDiff : 1);
 
                 missionObj.newStage = missionObj.newStageSolo ? missionObj.newStage : !missionObj.newStage;
                 missionObj.newBoss = missionObj.newBossSolo ? missionObj.newBoss : !missionObj.newBoss;
