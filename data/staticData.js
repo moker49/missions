@@ -3,6 +3,7 @@ export const version = 2;
 export const staticData = [
     {
         difficulty: 1,
+        prestige: 1,
         name: 'Difficulty 1',
         perks: [
             { id: 'perk_a1', label: 'Momentum Lvl 1', icons: [perkData.momentumLvl1.icon], perkPoints: 0, effects: [{ statType: 'momentumLvl', amount: 1 }] },
@@ -18,6 +19,7 @@ export const staticData = [
     },
     {
         difficulty: 2,
+        prestige: 1,
         name: 'Difficulty 2',
         perks: [
             { id: 'perk_b1', label: 'Momentum Lvl 2', icons: [perkData.momentumLvl2.icon], perkPoints: 3, effects: [{ statType: 'momentumLvl', amount: 1 }] },
@@ -36,6 +38,7 @@ export const staticData = [
     },
     {
         difficulty: 3,
+        prestige: 1,
         name: 'Difficulty 3',
         perks: [
             { id: 'perk_c1', label: 'Momentum Lvl 3', icons: [perkData.momentumLvl3.icon], perkPoints: 3, effects: [{ statType: 'momentumLvl', amount: 1 }] },
@@ -54,6 +57,7 @@ export const staticData = [
     },
     {
         difficulty: 4,
+        prestige: 1,
         name: 'Difficulty 4',
         perks: [
             { id: 'perk_d1', label: 'Momentum Lvl 4', icons: [perkData.momentumLvl4.icon], perkPoints: 4, effects: [{ statType: 'momentumLvl', amount: 1 }] },
@@ -71,6 +75,7 @@ export const staticData = [
     },
     {
         difficulty: 5,
+        prestige: 1,
         name: 'Difficulty 5',
         perks: [
             { id: 'perk_e1', label: 'Momentum Lvl 5', icons: [perkData.momentumLvl5.icon], perkPoints: 4, effects: [{ statType: 'momentumLvl', amount: 1 }] },

@@ -1,4 +1,4 @@
-import { createHamburgerButton } from './modules/hamburger.js';
+import { createHamburgerButton, toggleMenu } from './modules/hamburger.js';
 import { deepMerge } from './utils/deepMerge.js';
 import { staticData, version as staticDataVersion } from './data/staticData.js';
 import { settings } from './data/settings.js';
@@ -281,35 +281,44 @@ function renderMissionGrid() {
             const row = createDiv('mission-entry' + (rowAlternate ? ' alt' : ''), '', missionObj.id);
             rowAlternate = !rowAlternate;
 
-            const maxPerfected = (missionObj.perfect ?? 0) === perkData.prestige;
-            const perfectLock = maxPerfected == missionObj.perfectMin;
-            const pefectAtMin = (missionObj.perfect ?? 0) === (missionObj.perfectMin ?? 0)
+            missionObj.perfect = (missionObj.perfect ?? 0);
+            missionObj.perfectMin = (missionObj.perfectMin ?? 0);
+
+            const perfectAtMax = missionObj.perfect === difficultyObj.prestige;
+            const perfectAtMaxCommited = missionObj.perfectMin === difficultyObj.prestige;
+            const pefectAtMin = missionObj.perfect === missionObj.perfectMin;
 
             const toggle = createDiv('mission-toggle');
-            toggle.classList.toggle('material-symbols-outlined', maxPerfected);
-            toggle.textContent = maxPerfected ? 'trophy' : '▢';
+            toggle.classList.toggle('material-symbols-outlined', perfectAtMax);
+            toggle.textContent = perfectAtMax ? 'trophy' : '▢';
 
-            const toggleClass = (perfectLock ? 'active' : (pefectAtMin ? 'semi' : 'new'));
+            const toggleClass = (perfectAtMaxCommited ? 'active' : (pefectAtMin ? 'semi' : 'new'));
             toggle.classList.toggle(toggleClass, missionObj.perfect ?? false);
 
             toggle.addEventListener('click', () => {
-                if (missionObj.perfectLock) return;
+                const minPrestige = Math.min(...myStaticData.map(d => d.prestige));
+
+                if (missionObj.perfectMin === minPrestige) return;
                 createUndoState();
 
-                const perfectDiff = (missionObj.perfect ?? 0) - (missionObj.perfectMin ?? 0);
-                if ((missionObj.perfect ?? 0) < perkData.prestige) {
-                    missionObj.perfect = (missionObj.perfect ?? 0) + 1
+                const perfectDiff = missionObj.perfect - missionObj.perfectMin;
+
+                if (missionObj.perfect < minPrestige) {
+                    missionObj.perfect = missionObj.perfect + 1
+                    missionObj.stage = (missionObj.stage ?? 0) + 1;
+                    missionObj.boss = (missionObj.boss ?? 0) + 1;
                 } else {
                     missionObj.perfect = missionObj.perfectMin ?? 0;
+                    missionObj.stage = missionObj.stage - perfectDiff;
+                    missionObj.boss = missionObj.boss - perfectDiff;
                 }
 
-                missionObj.stage = (missionObj.stage ?? 0) + (missionObj.perfect === perkData.perfectMin ? -perfectDiff : 1);
-                missionObj.boss = (missionObj.boss ?? 0) + (missionObj.perfect === perkData.perfectMin ? -perfectDiff : 1);
+                if (missionObj.perfect === difficultyObj.prestige) {
+                    difficultyObj.prestige = difficultyObj.prestige + 1;
+                }
 
-                missionObj.newStage = missionObj.newStageSolo ? missionObj.newStage : !missionObj.newStage;
-                missionObj.newBoss = missionObj.newBossSolo ? missionObj.newBoss : !missionObj.newBoss;
-
-                //TODO process prestige
+                missionObj.newStage = missionObj.newStageSolo || missionObj.perfect > missionObj.perfectMin;
+                missionObj.newBoss = missionObj.newBossSolo || missionObj.perfect > missionObj.perfectMin;
 
                 renderMissionGrid();
                 updateActionButtonsDisplay();
