@@ -245,8 +245,9 @@ function renderPerkGrid() {
                 const current = perkObj.currentPoints ?? 0;
                 const totalSpent = getPerkPointsSpent();
                 const totalEarned = getPerkPointsEarned();
+                const perkMaxPoints = difficultyObj.prestige * perkObj.perkPoints;
 
-                if (current === perkObj.perkPoints || totalSpent >= totalEarned) {
+                if (current === perkMaxPoints || totalSpent >= totalEarned) {
                     perkObj.currentPoints = perkObj.min ?? 0;
                 } else {
                     perkObj.currentPoints = current + 1;
