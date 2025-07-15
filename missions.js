@@ -180,6 +180,7 @@ saveButton.addEventListener('click', () => {
     saveButton.style.display = 'none';
     undoStateData = null;
     respecTriggered = false;
+    updatePrestige();
     renderPerkGrid();
     renderMissionGrid();
     renderStatGrid();
@@ -268,7 +269,7 @@ function renderPerkGrid() {
 }
 
 // MARK: MISSION GRID
-function renderMissionGrid() {
+function renderMissionGrid(minPrestige) {
     missionGrid.innerHTML = '';
 
     myStaticData.forEach((difficultyObj) => {
@@ -284,9 +285,9 @@ function renderMissionGrid() {
             missionObj.perfect = (missionObj.perfect ?? 0);
             missionObj.perfectMin = (missionObj.perfectMin ?? 0);
 
-            const perfectAtMax = missionObj.perfect === difficultyObj.prestige;
-            const perfectAtMaxCommited = missionObj.perfectMin === difficultyObj.prestige;
             const pefectAtMin = missionObj.perfect === missionObj.perfectMin;
+            const perfectAtMax = missionObj.perfect === (minPrestige ?? Math.min(...myStaticData.map(d => d.prestige)));
+            const perfectAtMaxCommited = perfectAtMax && pefectAtMin;
 
             const toggle = createDiv('mission-toggle');
             toggle.classList.toggle('material-symbols-outlined', perfectAtMax);
@@ -313,14 +314,10 @@ function renderMissionGrid() {
                     missionObj.boss = missionObj.boss - perfectDiff;
                 }
 
-                if (missionObj.perfect === difficultyObj.prestige) {
-                    difficultyObj.prestige = difficultyObj.prestige + 1;
-                }
-
                 missionObj.newStage = missionObj.newStageSolo || missionObj.perfect > missionObj.perfectMin;
                 missionObj.newBoss = missionObj.newBossSolo || missionObj.perfect > missionObj.perfectMin;
 
-                renderMissionGrid();
+                renderMissionGrid(minPrestige);
                 updateActionButtonsDisplay();
             });
 
@@ -364,6 +361,13 @@ function renderMissionGrid() {
     });
     missionGrid.classList.add('hide-scrollbar');
     updatePerkTabNotification();
+}
+
+function updatePrestige() {
+    myStaticData.forEach((difficultyObj) => {
+        const difficultyMaxPerfect = Math.max(...difficultyObj.missions.map(m => m.perfect));
+        difficultyObj.prestige = difficultyMaxPerfect + 1;
+    });
 }
 
 // MARK: STATS GRID
