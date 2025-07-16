@@ -49,6 +49,10 @@
   color: var(--text-enabled);
 }
 
+.perk-icon.partial{
+  color: var(--text-partial);
+}
+
 .perk-icon.new {
   color: var(--accent-light);
 }
@@ -61,6 +65,10 @@
 
 .perk-label.active {
   color: var(--text-enabled);
+}
+
+.perk-label.partial{
+  color: var(--text-partial);
 }
 
 .perk-label.new {
@@ -78,6 +86,10 @@
   height: 10px;
   background: var(--text-disabled);
   border-radius: 50%;
+}
+
+.perk-dot.partial{
+  background: var(--text-partial);
 }
 
 .perk-dot.active {

@@ -2,6 +2,7 @@
   /* Base colors */
   --background: hsl(220, 85%, 6%);
   --text-disabled: hsl(220, 10%, 50%);
+  --text-partial: hsl(30, 40%, 40%);
   --text-enabled: hsl(220, 12%, 80%);
   --text-highlight: hsl(220, 12%, 90%);
 

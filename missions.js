@@ -62,6 +62,12 @@ function getPerkPointsSpent(data = myStaticData) {
         .reduce((total, perk) => total + (perk.currentPoints ?? 0), 0);
 }
 
+function getPerkPointsMin(data = myStaticData) {
+    return data
+        .flatMap(difficulty => difficulty.perks ?? [])
+        .reduce((total, perk) => total + (perk.min ?? 0), 0);
+}
+
 function getPerkPointsEarned(data = myStaticData) {
     return data
         .flatMap(difficulty => difficulty.missions ?? [])
@@ -211,6 +217,13 @@ function renderPerkGrid() {
 
         let rowAlternate = false;
         difficultyObj.perks.forEach((perkObj) => {
+            const minPoints = perkObj.min ?? 0;
+            const minMod = minPoints % perkObj.perkPoints;
+            const currentPoints = perkObj.currentPoints ?? 0;
+            const currentMod = currentPoints % perkObj.perkPoints;
+            const possibleMaxPoints = perkObj.perkPoints * (perkObj.prestigeLock ?? difficultyObj.prestige);
+            const abilityMaxed = (minPoints >= possibleMaxPoints);
+
             const row = createDiv('perk-entry' + (rowAlternate ? ' alt' : ''), '', perkObj.id);
             rowAlternate = !rowAlternate;
 
@@ -221,36 +234,48 @@ function renderPerkGrid() {
             });
 
             const label = createDiv('perk-label', perkObj.label);
-            if (perkObj.perkPoints === 0 || perkObj.perkPoints === perkObj.min) {
+
+            if (perkObj.perkPoints === 0 || abilityMaxed) {
                 icon.classList.add('active');
                 label.classList.add('active');
-            } else if (perkObj.perkPoints === perkObj.currentPoints) {
+            } else if (currentPoints > minPoints && currentPoints % perkObj.perkPoints === 0) {
                 icon.classList.add('new');
                 label.classList.add('new');
+            } else if (minPoints >= perkObj.perkPoints) {
+                icon.classList.add('partial');
+                label.classList.add('partial');
             }
 
             const dots = createDiv('perk-dots');
             for (let i = 0; i < perkObj.perkPoints; i++) {
                 const dot = createDiv('perk-dot');
-                if (i < (perkObj.min ?? 0)) {
+                if (minPoints > 0 && i < minMod || abilityMaxed) {
                     dot.classList.add('active');
-                } else if (i < (perkObj.currentPoints ?? 0)) {
+                } else if (currentPoints > minPoints && i >= minMod && (currentMod === 0 || i < currentMod)) {
                     dot.classList.add('new');
                 }
                 dots.appendChild(dot);
             }
 
             row.addEventListener('click', () => {
-                createUndoState();
-                const current = perkObj.currentPoints ?? 0;
+                if (getPerkPointsMin() >= getPerkPointsEarned()) return;
+
+                const minPoints = perkObj.min ?? 0;
+                const currentPoints = perkObj.currentPoints ?? 0;
                 const totalSpent = getPerkPointsSpent();
                 const totalEarned = getPerkPointsEarned();
-                const perkMaxPoints = difficultyObj.prestige * perkObj.perkPoints;
+                const curentUnlocks = Math.floor(minPoints / perkObj.perkPoints);
+                const minPrestige = perkObj.prestigeLock ?? Math.min(...myStaticData.map(d => d.prestige));
+                const currentMaxPoints = Math.min(minPrestige, (curentUnlocks + 1)) * perkObj.perkPoints;
 
-                if (current === perkMaxPoints || totalSpent >= totalEarned) {
-                    perkObj.currentPoints = perkObj.min ?? 0;
+                if (minPoints >= currentMaxPoints) return;
+
+                createUndoState();
+
+                if (currentPoints >= currentMaxPoints || totalSpent >= totalEarned) {
+                    perkObj.currentPoints = minPoints;
                 } else {
-                    perkObj.currentPoints = current + 1;
+                    perkObj.currentPoints = currentPoints + 1;
                 }
 
                 renderPerkGrid();
