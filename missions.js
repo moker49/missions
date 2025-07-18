@@ -408,22 +408,22 @@ function renderStatGrid() {
     myStaticData.forEach((difficultyObj) => {
         difficultyObj.perks.forEach((perkObj) => {
             perkObj.effects.forEach((effect) => {
-                if ((perkObj.currentPoints ?? 0) < perkObj.perkPoints) return;
+                const perkObjMin = perkObj.min ?? 0;
+                if (perkObjMin < perkObj.perkPoints) return;
+                const abilityUnlocks = Math.floor(perkObjMin / perkObj.perkPoints) || 1;
                 if (effect.statType) {
-                    if (myStats[effect.statType]) myStats[effect.statType].amount += effect.amount;
-                    else myStats[effect.statType] = { label: perkData[effect.statType].label, amount: effect.amount }
+                    if (myStats[effect.statType]) myStats[effect.statType].amount += effect.amount * abilityUnlocks;
+                    else myStats[effect.statType] = { label: perkData[effect.statType].label, amount: effect.amount * abilityUnlocks };
                 }
                 else if (effect.token) {
-                    if (myTokens[perkObj.id]) myTokens[perkObj.id].amount += effect.amount;
-                    else {
-                        myTokens[perkObj.id] = { label: perkData[perkObj.id].label, amount: effect.amount }
-                    }
+                    if (myTokens[perkObj.id]) myTokens[perkObj.id].amount += effect.amount * abilityUnlocks;
+                    else myTokens[perkObj.id] = { label: perkData[perkObj.id].label, amount: effect.amount * abilityUnlocks }
                 }
                 else if (effect.proc == "gameStart") {
-                    myGameStart[perkObj.id] = perkData[perkObj.id].label;
+                    myGameStart[perkObj.id] = { label: perkData[perkObj.id].label, amount: abilityUnlocks };
                 }
                 else if (effect.proc == "active") {
-                    myActives[perkObj.id] = perkData[perkObj.id].label;
+                    myActives[perkObj.id] = { label: perkData[perkObj.id].label, amount: abilityUnlocks };
                 }
             });
         });
@@ -487,7 +487,8 @@ function renderStatGrid() {
         });
         row.appendChild(iconList);
 
-        const label = createDiv('stat-label', myGameStart[myGameStartKey]);
+        const labelText = myGameStart[myGameStartKey].label + (myGameStart[myGameStartKey].amount > 1 ? ` x${myGameStart[myGameStartKey].amount}` : '');
+        const label = createDiv('stat-label', labelText);
         row.appendChild(label);
 
         gameStartSection.appendChild(row);
@@ -509,7 +510,8 @@ function renderStatGrid() {
         });
         row.appendChild(iconList);
 
-        const label = createDiv('stat-label', myActives[myActivesKey]);
+        const labelText = myActives[myActivesKey].label + (myActives[myActivesKey].amount > 1 ? ` x${myActives[myActivesKey].amount}` : '');
+        const label = createDiv('stat-label', labelText);
         row.appendChild(label);
 
         activesSection.appendChild(row);
