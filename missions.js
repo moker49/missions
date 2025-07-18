@@ -79,6 +79,40 @@ function getPerkPointsEarned(data = myStaticData) {
         }, 0);
 }
 
+// Utility: Get points earned per difficulty index
+function getPerkPointsEarnedByDifficulty(data = myStaticData) {
+    return data.map(difficultyObj =>
+        (difficultyObj.missions ?? []).reduce((total, mission) => {
+            const stagePoints = mission.stage ?? 0;
+            const bossPoints = mission.boss ?? 0;
+            const perfectPoints = mission.perfect ? 1 : 0;
+            return total + stagePoints + bossPoints + perfectPoints;
+        }, 0)
+    );
+}
+
+// Utility: Get points spent per difficulty index
+function getPerkPointsSpentByDifficulty(data = myStaticData) {
+    return data.map((difficultyObj, idx) => {
+        return (difficultyObj.perks ?? []).reduce((total, perk) => total + (perk.currentPoints ?? 0), 0);
+    });
+}
+
+// Utility: Get total points spent on this difficulty or lower
+function getTotalPointsSpentAbove(difficultyIdx, data = myStaticData) {
+    return getPerkPointsSpentByDifficulty(data)
+        .slice(difficultyIdx)
+        .reduce((a, b) => a + b, 0);
+}
+
+// Utility: Get total points earned for this difficulty or lower
+function getTotalPointsEarnedAbove(difficultyIdx, data = myStaticData) {
+    const test = getPerkPointsEarnedByDifficulty(data);
+    return test
+        .slice(difficultyIdx)
+        .reduce((a, b) => a + b, 0);
+}
+
 // MARK: HAMBURGER
 const hamburger = createHamburgerButton();
 const topBar = document.getElementById('top-bar-dice-throne-missions');
@@ -210,7 +244,7 @@ function saveDataState() {
 // MARK: PERK GRID
 function renderPerkGrid() {
     perkGrid.innerHTML = '';
-    myStaticData.forEach((difficultyObj) => {
+    myStaticData.forEach((difficultyObj, difficultyIdx) => {
         const section = createDiv('perk-section');
         const header = createDiv('perk-header', difficultyObj.name);
         section.appendChild(header);
@@ -258,17 +292,20 @@ function renderPerkGrid() {
             }
 
             row.addEventListener('click', () => {
-                if (getPerkPointsMin() >= getPerkPointsEarned()) return;
-
+                // Only allow spending points earned in this difficulty or lower
                 const minPoints = perkObj.min ?? 0;
                 const currentPoints = perkObj.currentPoints ?? 0;
-                const totalSpent = getPerkPointsSpent();
-                const totalEarned = getPerkPointsEarned();
                 const curentUnlocks = Math.floor(minPoints / perkObj.perkPoints);
                 const minPrestige = perkObj.prestigeLock ?? Math.min(...myStaticData.map(d => d.prestige));
                 const currentMaxPoints = Math.min(minPrestige, (curentUnlocks + 1)) * perkObj.perkPoints;
 
+                // Get total points earned and spent for this difficulty or lower
+                const totalEarned = getTotalPointsEarnedAbove(difficultyIdx);
+                const totalSpent = getTotalPointsSpentAbove(difficultyIdx);
+
+                // Prevent spending if not enough points available
                 if (minPoints >= currentMaxPoints) return;
+                if (totalSpent >= totalEarned) return;
 
                 createUndoState();
 
@@ -539,7 +576,10 @@ function updatePerkTabNotification() {
     if (!perkNavBtn) return;
 
     let dot = perkNavBtn.querySelector('.perk-dot-notification');
-    const unspent = getPerkPointsEarned(myStaticData) - getPerkPointsSpent(myStaticData);
+    // Show total unspent points for all difficulties
+    const earnedArr = getPerkPointsEarnedByDifficulty(myStaticData);
+    const spentArr = getPerkPointsSpentByDifficulty(myStaticData);
+    const unspent = earnedArr.reduce((sum, val, idx) => sum + (val - spentArr[idx]), 0);
 
     if (!dot) {
         dot = document.createElement('span');
