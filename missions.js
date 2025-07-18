@@ -62,12 +62,6 @@ function getPerkPointsSpent(data = myStaticData) {
         .reduce((total, perk) => total + (perk.currentPoints ?? 0), 0);
 }
 
-function getPerkPointsMin(data = myStaticData) {
-    return data
-        .flatMap(difficulty => difficulty.perks ?? [])
-        .reduce((total, perk) => total + (perk.min ?? 0), 0);
-}
-
 function getPerkPointsEarned(data = myStaticData) {
     return data
         .flatMap(difficulty => difficulty.missions ?? [])
@@ -244,9 +238,26 @@ function saveDataState() {
 // MARK: PERK GRID
 function renderPerkGrid() {
     perkGrid.innerHTML = '';
+    const earnedArr = getPerkPointsEarnedByDifficulty(myStaticData);
+    const spentArr = getPerkPointsSpentByDifficulty(myStaticData);
+
     myStaticData.forEach((difficultyObj, difficultyIdx) => {
         const section = createDiv('perk-section');
         const header = createDiv('perk-header', difficultyObj.name);
+
+        // --- Add notification dot for this difficulty ---
+        const diffUnspent = earnedArr[difficultyIdx] - spentArr[difficultyIdx];
+        let diffDot = document.createElement('span');
+        diffDot.className = 'perk-dot-notification';
+        if (diffUnspent > 0) {
+            diffDot.textContent = diffUnspent;
+            diffDot.style.display = 'inline-block';
+        } else {
+            diffDot.style.display = 'none';
+        }
+        header.appendChild(diffDot);
+        // --- end notification dot ---
+
         section.appendChild(header);
 
         let rowAlternate = false;
