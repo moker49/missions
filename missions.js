@@ -57,55 +57,32 @@ if (settings.bossNames) {
 
 // MARK: PERK MATH
 function getPerkPointsSpent(data = myStaticData) {
-    return data
-        .flatMap(difficulty => difficulty.perks ?? [])
-        .reduce((total, perk) => total + (perk.currentPoints ?? 0), 0);
+    return data.reduce((total, difficulty) => {
+        return total + (difficulty.perkPointsSpent ?? 0);
+    }, 0);
 }
 
 function getPerkPointsEarned(data = myStaticData) {
-    return data
-        .flatMap(difficulty => difficulty.missions ?? [])
-        .reduce((total, mission) => {
-            const stagePoints = mission.stage ?? 0;
-            const bossPoints = mission.boss ?? 0;
-            const perfectPoints = mission.perfect ? 1 : 0;
-            return total + stagePoints + bossPoints + perfectPoints;
-        }, 0);
+    return data.reduce((total, difficulty) => {
+        return total + (difficulty.perkPointsEarned ?? 0);
+    }, 0);
 }
 
-// Utility: Get points earned per difficulty index
-function getPerkPointsEarnedByDifficulty(data = myStaticData) {
-    return data.map(difficultyObj =>
-        (difficultyObj.missions ?? []).reduce((total, mission) => {
-            const stagePoints = mission.stage ?? 0;
-            const bossPoints = mission.boss ?? 0;
-            const perfectPoints = mission.perfect ? 1 : 0;
-            return total + stagePoints + bossPoints + perfectPoints;
-        }, 0)
-    );
-}
-
-// Utility: Get points spent per difficulty index
-function getPerkPointsSpentByDifficulty(data = myStaticData) {
-    return data.map((difficultyObj, idx) => {
-        return (difficultyObj.perks ?? []).reduce((total, perk) => total + (perk.currentPoints ?? 0), 0);
+function getPerkPointsAvailableAtDifficultyAndAbove(difficultyIdx = 0, data = myStaticData, callback) {
+    if (difficultyIdx < 0 || difficultyIdx >= data.length) return 0;
+    let total = 0;
+    let currentDiffUnspent = 0;
+    data.slice(difficultyIdx).forEach((difficulty, idx) => {
+        const earned = difficulty.perkPointsEarned ?? 0;
+        const spent = difficulty.perkPointsSpent ?? 0;
+        const unspent = earned - spent;
+        total += unspent;
+        if (idx === 0) currentDiffUnspent = unspent;
     });
+    if (typeof callback === 'function') callback(currentDiffUnspent);
+    return total;
 }
 
-// Utility: Get total points spent on this difficulty or lower
-function getTotalPointsSpentAbove(difficultyIdx, data = myStaticData) {
-    return getPerkPointsSpentByDifficulty(data)
-        .slice(difficultyIdx)
-        .reduce((a, b) => a + b, 0);
-}
-
-// Utility: Get total points earned for this difficulty or lower
-function getTotalPointsEarnedAbove(difficultyIdx, data = myStaticData) {
-    const test = getPerkPointsEarnedByDifficulty(data);
-    return test
-        .slice(difficultyIdx)
-        .reduce((a, b) => a + b, 0);
-}
 
 // MARK: HAMBURGER
 const hamburger = createHamburgerButton();
@@ -128,6 +105,7 @@ diceThroneDelete.addEventListener('click', () => {
                 }
                 createUndoState(true);
                 myStaticData.forEach((difficultyObj) => {
+                    difficultyObj.perkPointsSpent = 0;
                     difficultyObj.perks.forEach((perk) => {
                         perk.currentPoints = 0;
                         perk.min = 0;
@@ -187,12 +165,12 @@ function updateActionButtonsDisplay() {
         undoButton.style.display = 'block';
         saveButton.style.display = 'block';
     } else {
-        const availableCurrent = getPerkPointsEarned(myStaticData);
-        const availableUndo = getPerkPointsEarned(undoStateData);
+        const earnedCurrent = getPerkPointsEarned(myStaticData);
+        const earnedUndo = getPerkPointsEarned(undoStateData);
         const spentCurrent = getPerkPointsSpent(myStaticData);
         const spentUndo = getPerkPointsSpent(undoStateData);
 
-        if (availableCurrent !== availableUndo || spentCurrent !== spentUndo) {
+        if (earnedCurrent !== earnedUndo || spentCurrent !== spentUndo) {
             undoButton.style.display = 'block';
             saveButton.style.display = 'block';
         } else {
@@ -238,20 +216,24 @@ function saveDataState() {
 // MARK: PERK GRID
 function renderPerkGrid() {
     perkGrid.innerHTML = '';
-    const earnedArr = getPerkPointsEarnedByDifficulty(myStaticData);
-    const spentArr = getPerkPointsSpentByDifficulty(myStaticData);
 
     myStaticData.forEach((difficultyObj, difficultyIdx) => {
         const section = createDiv('perk-section');
-        const header = createDiv('perk-header', difficultyObj.name);
+        const headerText = createDiv('header', difficultyObj.name);
+        const header = createDiv('header-wrapper');
+        header.appendChild(headerText);
 
         // --- Add notification dot for this difficulty ---
-        const diffUnspent = earnedArr[difficultyIdx] - spentArr[difficultyIdx];
-        let diffDot = document.createElement('span');
-        diffDot.className = 'perk-dot-notification';
+        let currentDiffUnspent = 0;
+        const diffUnspent = getPerkPointsAvailableAtDifficultyAndAbove(difficultyIdx, myStaticData, (val) => currentDiffUnspent = val);
+        let diffDot = createSpan('perk-dot-notification alt');
         if (diffUnspent > 0) {
             diffDot.textContent = diffUnspent;
             diffDot.style.display = 'inline-block';
+            // if this point came from the current difficultyObj, remove class 'alt' from diffDot
+            if (currentDiffUnspent > 0) {
+                diffDot.classList.remove('alt');
+            }
         } else {
             diffDot.style.display = 'none';
         }
@@ -310,20 +292,35 @@ function renderPerkGrid() {
                 const minPrestige = perkObj.prestigeLock ?? Math.min(...myStaticData.map(d => d.prestige));
                 const currentMaxPoints = Math.min(minPrestige, (curentUnlocks + 1)) * perkObj.perkPoints;
 
-                // Get total points earned and spent for this difficulty or lower
-                const totalEarned = getTotalPointsEarnedAbove(difficultyIdx);
-                const totalSpent = getTotalPointsSpentAbove(difficultyIdx);
-
                 // Prevent spending if not enough points available
                 if (minPoints >= currentMaxPoints) return;
-                if (totalSpent >= totalEarned) return;
 
                 createUndoState();
 
-                if (currentPoints >= currentMaxPoints || totalSpent >= totalEarned) {
+                if (currentPoints >= currentMaxPoints || getPerkPointsAvailableAtDifficultyAndAbove(difficultyIdx) <= 0) {
                     perkObj.currentPoints = minPoints;
+                    let pointsToSubtract = currentPoints - minPoints;
+                    for (let i = myStaticData.length - 1; i >= 0 && pointsToSubtract > 0; i--) {
+                        const diff = myStaticData[i];
+                        const spent = diff.perkPointsSpent ?? 0;
+                        if (spent > 0) {
+                            const toRemove = Math.min(spent, pointsToSubtract);
+                            diff.perkPointsSpent -= toRemove;
+                            pointsToSubtract -= toRemove;
+                        }
+                    }
                 } else {
                     perkObj.currentPoints = currentPoints + 1;
+                    let remaining = 1;
+                    for (let i = difficultyIdx; i < myStaticData.length && remaining > 0; i++) {
+                        const diff = myStaticData[i];
+                        const available = (diff.perkPointsEarned ?? 0) - (diff.perkPointsSpent ?? 0);
+                        if (available > 0) {
+                            const toSpend = Math.min(available, remaining);
+                            diff.perkPointsSpent = (diff.perkPointsSpent ?? 0) + toSpend;
+                            remaining -= toSpend;
+                        }
+                    }
                 }
 
                 renderPerkGrid();
@@ -348,8 +345,10 @@ function renderMissionGrid(minPrestige) {
 
     myStaticData.forEach((difficultyObj) => {
         const section = createDiv('mission-section');
-        const header = createDiv('mission-header', difficultyObj.name);
+        const header = createDiv('header-wrapper', difficultyObj.name);
         section.appendChild(header);
+
+        difficultyObj.perkPointsEarned = difficultyObj.perkPointsEarned ?? 0;
 
         let rowAlternate = false;
         difficultyObj.missions.forEach((missionObj) => {
@@ -382,10 +381,12 @@ function renderMissionGrid(minPrestige) {
                     missionObj.perfect = missionObj.perfect + 1
                     missionObj.stage = (missionObj.stage ?? 0) + 1;
                     missionObj.boss = (missionObj.boss ?? 0) + 1;
+                    difficultyObj.perkPointsEarned += 3;
                 } else {
                     missionObj.perfect = missionObj.perfectMin ?? 0;
                     missionObj.stage = missionObj.stage - perfectDiff;
                     missionObj.boss = missionObj.boss - perfectDiff;
+                    difficultyObj.perkPointsEarned -= 3;
                 }
 
                 missionObj.newStage = missionObj.newStageSolo || missionObj.perfect > missionObj.perfectMin;
@@ -404,6 +405,7 @@ function renderMissionGrid(minPrestige) {
             stage.addEventListener('click', () => {
                 createUndoState();
                 missionObj.stage = (missionObj.stage ?? 0) + 1;
+                difficultyObj.perkPointsEarned += 1;
                 missionObj.newStage = true;
                 missionObj.newStageSolo = true;
                 renderMissionGrid();
@@ -415,6 +417,7 @@ function renderMissionGrid(minPrestige) {
             boss.addEventListener('click', () => {
                 createUndoState();
                 missionObj.boss = (missionObj.boss ?? 0) + 1;
+                difficultyObj.perkPointsEarned += 1;
                 missionObj.newBoss = true;
                 missionObj.newBossSolo = true;
                 renderMissionGrid();
@@ -479,7 +482,7 @@ function renderStatGrid() {
 
     // stats section
     const statSection = createDiv('stat-section');
-    const statHeader = createDiv('stat-header', 'Stats');
+    const statHeader = createDiv('header-wrapper', 'Stats');
     statSection.appendChild(statHeader);
     let rowAlternate = false;
     Object.keys(myStats).forEach((myStatsKey) => {
@@ -500,7 +503,7 @@ function renderStatGrid() {
 
     // tokens section
     const tokenSection = createDiv('stat-section');
-    const tokenHeader = createDiv('stat-header', 'Tokens');
+    const tokenHeader = createDiv('header-wrapper', 'Tokens');
     tokenSection.appendChild(tokenHeader);
     rowAlternate = false;
     Object.keys(myTokens).forEach((myTokenKey) => {
@@ -521,7 +524,7 @@ function renderStatGrid() {
 
     // gameStart section
     const gameStartSection = createDiv('stat-section');
-    const gameStartHeader = createDiv('stat-header', 'Game Start');
+    const gameStartHeader = createDiv('header-wrapper', 'Game Start');
     gameStartSection.appendChild(gameStartHeader);
     rowAlternate = false;
     Object.keys(myGameStart).forEach((myGameStartKey) => {
@@ -544,7 +547,7 @@ function renderStatGrid() {
 
     // actives section
     const activesSection = createDiv('stat-section');
-    const activesHeader = createDiv('stat-header', 'Actives');
+    const activesHeader = createDiv('header-wrapper', 'Actives');
     activesSection.appendChild(activesHeader);
     rowAlternate = false;
     Object.keys(myActives).forEach((myActivesKey) => {
@@ -588,13 +591,11 @@ function updatePerkTabNotification() {
 
     let dot = perkNavBtn.querySelector('.perk-dot-notification');
     // Show total unspent points for all difficulties
-    const earnedArr = getPerkPointsEarnedByDifficulty(myStaticData);
-    const spentArr = getPerkPointsSpentByDifficulty(myStaticData);
-    const unspent = earnedArr.reduce((sum, val, idx) => sum + (val - spentArr[idx]), 0);
+
+    const unspent = getPerkPointsAvailableAtDifficultyAndAbove();
 
     if (!dot) {
-        dot = document.createElement('span');
-        dot.className = 'perk-dot-notification';
+        dot = createSpan('perk-dot-notification bottom');
         perkNavBtn.style.position = 'relative';
         perkNavBtn.appendChild(dot);
     }

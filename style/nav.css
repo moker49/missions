@@ -49,18 +49,3 @@
 .nav-button .material-symbols-outlined {
   font-size: 1.5rem;
 }
-
-.perk-dot-notification {
-  min-width: 1.125rem;
-  line-height: 1.125rem;
-  font-size: 0.75rem;
-  background: #e53935;
-  color: var(--text-highlight);
-  border-radius: 9px;
-  text-align: center;
-  position: absolute;
-  margin-left: 2rem;
-  margin-bottom: 2rem;
-  z-index: 2;
-  pointer-events: none;
-}

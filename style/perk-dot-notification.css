@@ -1,0 +1,28 @@
+.perk-dot-notification {
+  font-style: normal;
+  min-width: 1.125rem;
+  line-height: 1.125rem;
+  font-size: 0.75rem;
+  background: var(--accent-light);
+  color: var(--text-highlight);
+  border-radius: 9px;
+  text-align: center;
+  pointer-events: none;
+  margin-left: auto;
+  align-self: flex-start;
+}
+
+.perk-dot-notification.alt {
+  background: none;
+  color: var(--accent-light);
+  border: solid 1px var(--accent-light);
+}
+
+.perk-dot-notification.bottom {
+  position: absolute;
+  align-self: auto;
+  margin-left: 2rem;
+  margin-bottom: 2rem;
+  background: #e53935;
+  z-index: 2;
+}

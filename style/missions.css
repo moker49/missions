@@ -11,15 +11,6 @@
   padding: 0;
 }
 
-.mission-header {
-  font-style: italic;
-  text-transform: uppercase;
-  background: var(--table-row-alt-2);
-  color: var(--text-highlight);
-  font-size: 1.2rem;
-  padding: 0.625rem;
-}
-
 .mission-entry {
   display: flex;
   align-items: center;
