@@ -30,6 +30,7 @@ if (rawLoadedData) {
         if (loadedVersion < staticDataVersion) {
             localStorage.removeItem('staticData');
             myStaticData = JSON.parse(JSON.stringify(staticData));
+            alert("New version. Data was reset.");
         } else {
             const mergedData = deepMerge(staticData, loadedData);
             myStaticData = mergedData;
