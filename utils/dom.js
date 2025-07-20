@@ -1,7 +1,7 @@
 // MARK: DIV
-export function createDiv(className, textContent = '', id = null) {
+export function createDiv(className = '', textContent = '', id = null) {
     const el = document.createElement('div');
-    el.className = className;
+    if (className) el.className = className;
     el.textContent = textContent;
     if (id !== null) el.id = id;
     return el;

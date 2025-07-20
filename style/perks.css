@@ -14,15 +14,6 @@
   width: 100%;
 }
 
-.perk-header {
-  font-style: italic;
-  text-transform: uppercase;
-  background: var(--table-row-alt-2);
-  color: var(--text-highlight);
-  font-size: 1.2rem;
-  padding: 0.625rem;
-}
-
 .perk-entry {
   display: flex;
   align-items: center;
@@ -45,11 +36,19 @@
   background: var(--table-row-alt-2);
 }
 
-.perk-icon.active {
+.perk-icon.active,
+.perk-label.active{
   color: var(--text-enabled);
 }
 
-.perk-icon.new {
+.perk-icon.partial,
+.perk-label.partial {
+  color: var(--text-partial);
+}
+
+.perk-icon.new,
+.perk-label.new,
+.perk-multiplier.new  {
   color: var(--accent-light);
 }
 
@@ -59,12 +58,10 @@
   padding-left: 0.625rem;
 }
 
-.perk-label.active {
-  color: var(--text-enabled);
-}
-
-.perk-label.new {
-  color: var(--accent-light);
+.perk-multiplier {
+  font-size: 0.8em;
+  vertical-align: super;
+  margin-left: 2px;
 }
 
 .perk-dots {
@@ -78,6 +75,10 @@
   height: 10px;
   background: var(--text-disabled);
   border-radius: 50%;
+}
+
+.perk-dot.partial{
+  background: var(--text-partial);
 }
 
 .perk-dot.active {

@@ -2,6 +2,7 @@
   /* Base colors */
   --background: hsl(220, 85%, 6%);
   --text-disabled: hsl(220, 10%, 50%);
+  --text-partial: hsl(30, 40%, 40%);
   --text-enabled: hsl(220, 12%, 80%);
   --text-highlight: hsl(220, 12%, 90%);
 
@@ -11,6 +12,7 @@
 
   /* Toggles */
   --toggle-off: hsla(0, 100%, 20%, 0.5);
+  --toggle-semi: hsla(50, 100%, 20%, 0.5);
   --toggle-on: hsla(120, 100%, 20%, 0.5);
   --toggle-accent: hsla(210, 85%, 55%, 0.5);
 
@@ -91,4 +93,14 @@ body {
   pointer-events: auto;
   transform: translateY(0);
   transition: opacity 0.15s cubic-bezier(0.4, 0, 0.2, 1), transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), visibility 0s;
+}
+
+.header-wrapper{
+  display: flex;
+  font-style: italic;
+  text-transform: uppercase;
+  background: var(--table-row-alt-2);
+  color: var(--text-highlight);
+  font-size: 1.2rem;
+  padding: 0.625rem;
 }
