@@ -36,15 +36,18 @@
   background: var(--table-row-alt-2);
 }
 
-.perk-icon.active {
+.perk-icon.active,
+.perk-label.active{
   color: var(--text-enabled);
 }
 
-.perk-icon.partial{
+.perk-icon.partial,
+.perk-label.partial {
   color: var(--text-partial);
 }
 
-.perk-icon.new {
+.perk-icon.new,
+.perk-label.new {
   color: var(--accent-light);
 }
 
@@ -54,16 +57,10 @@
   padding-left: 0.625rem;
 }
 
-.perk-label.active {
-  color: var(--text-enabled);
-}
-
-.perk-label.partial{
-  color: var(--text-partial);
-}
-
-.perk-label.new {
-  color: var(--accent-light);
+.perk-multiplier {
+  font-size: 0.8em;
+  vertical-align: super;
+  margin-left: 2px;
 }
 
 .perk-dots {

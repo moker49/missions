@@ -250,6 +250,7 @@ function renderPerkGrid() {
             const currentMod = currentPoints % perkObj.perkPoints;
             const possibleMaxPoints = perkObj.perkPoints * (perkObj.prestigeLock ?? difficultyObj.prestige);
             const abilityMaxed = (minPoints >= possibleMaxPoints);
+            const currerntUnlockedAmount = Math.floor(currentPoints / perkObj.perkPoints) || 1;
 
             const row = createDiv('perk-entry' + (rowAlternate ? ' alt' : ''), '', perkObj.id);
             rowAlternate = !rowAlternate;
@@ -260,8 +261,10 @@ function renderPerkGrid() {
                 icon.appendChild(i);
             });
 
+            const superScript = (currerntUnlockedAmount > 1 ? `(×${currerntUnlockedAmount})` : '');
             const label = createDiv('perk-label', perkObj.label);
-
+            const superScriptSpan = createSpan('perk-multiplier', superScript);
+            label.appendChild(superScriptSpan);
             if (perkObj.perkPoints === 0 || abilityMaxed) {
                 icon.classList.add('active');
                 label.classList.add('active');

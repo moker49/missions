@@ -122,7 +122,7 @@ if (settings.defaultTabId) {
             break;
         }
     }
-    landingPageLabel.textContent = tabs.find(tab => tab.value === settings.defaultTabId)?.label || 'Stats';
+    landingPageLabel.textContent = 'Landing: ' + (tabs.find(tab => tab.value === settings.defaultTabId)?.label || 'Stats');
 }
 
 const landingPage = document.getElementById('landing-page');
@@ -136,7 +136,7 @@ allTabsDropdown.addEventListener('click', (e) => {
     e.stopPropagation();
     const option = e.target;
     if (option.classList.contains('dropdown-option')) {
-        landingPageLabel.textContent = option.textContent;
+        landingPageLabel.textContent = 'Landing: ' + option.textContent;
         allTabsDropdown.classList.remove('visible');
         settings.defaultTabId = option.value;
         landingPageIcon.textContent = 'keyboard_arrow_down';
