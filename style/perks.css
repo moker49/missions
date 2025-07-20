@@ -47,7 +47,8 @@
 }
 
 .perk-icon.new,
-.perk-label.new {
+.perk-label.new,
+.perk-multiplier.new  {
   color: var(--accent-light);
 }
 

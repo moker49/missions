@@ -184,6 +184,7 @@ function updateActionButtonsDisplay() {
 const saveButton = document.getElementById('save-button');
 saveButton.addEventListener('click', () => {
     saveDataState();
+    updatePrestige();
     localStorage.setItem('staticData', JSON.stringify({
         version: staticDataVersion,
         data: myStaticData
@@ -192,7 +193,6 @@ saveButton.addEventListener('click', () => {
     saveButton.style.display = 'none';
     undoStateData = null;
     respecTriggered = false;
-    updatePrestige();
     renderPerkGrid();
     renderMissionGrid();
     renderStatGrid();
@@ -250,7 +250,9 @@ function renderPerkGrid() {
             const currentMod = currentPoints % perkObj.perkPoints;
             const possibleMaxPoints = perkObj.perkPoints * (perkObj.prestigeLock ?? difficultyObj.prestige);
             const abilityMaxed = (minPoints >= possibleMaxPoints);
-            const currerntUnlockedAmount = Math.floor(currentPoints / perkObj.perkPoints) || 1;
+            const abilityNewlyMaxed = !abilityMaxed && currentPoints >= possibleMaxPoints;
+            const minUnlockedAmount = Math.floor((minPoints / perkObj.perkPoints) ?? 1);
+            const currentUnlockedAmount = Math.floor((currentPoints / perkObj.perkPoints) ?? 1);
 
             const row = createDiv('perk-entry' + (rowAlternate ? ' alt' : ''), '', perkObj.id);
             rowAlternate = !rowAlternate;
@@ -261,19 +263,24 @@ function renderPerkGrid() {
                 icon.appendChild(i);
             });
 
-            const superScript = (currerntUnlockedAmount > 1 ? `(×${currerntUnlockedAmount})` : '');
+            const superScript = (currentUnlockedAmount > 1 ? `(×${currentUnlockedAmount})` : '');
             const label = createDiv('perk-label', perkObj.label);
             const superScriptSpan = createSpan('perk-multiplier', superScript);
             label.appendChild(superScriptSpan);
             if (perkObj.perkPoints === 0 || abilityMaxed) {
                 icon.classList.add('active');
                 label.classList.add('active');
-            } else if (currentPoints > minPoints && currentPoints % perkObj.perkPoints === 0) {
+                superScriptSpan.classList.remove('new');
+            } else if ((minUnlockedAmount < 1 && currentUnlockedAmount >= 1) || abilityNewlyMaxed) {
                 icon.classList.add('new');
                 label.classList.add('new');
             } else if (minPoints >= perkObj.perkPoints) {
                 icon.classList.add('partial');
                 label.classList.add('partial');
+            }
+
+            if (currentUnlockedAmount > minUnlockedAmount) {
+                superScriptSpan.classList.add('new');
             }
 
             const dots = createDiv('perk-dots');
@@ -360,6 +367,7 @@ function renderMissionGrid(minPrestige) {
 
             missionObj.perfect = (missionObj.perfect ?? 0);
             missionObj.perfectMin = (missionObj.perfectMin ?? 0);
+            missionObj.completedPrestiges = missionObj.completedPrestiges ?? [];
 
             const pefectAtMin = missionObj.perfect === missionObj.perfectMin;
             const perfectAtMax = missionObj.perfect === (minPrestige ?? Math.min(...myStaticData.map(d => d.prestige)));
@@ -385,11 +393,17 @@ function renderMissionGrid(minPrestige) {
                     missionObj.stage = (missionObj.stage ?? 0) + 1;
                     missionObj.boss = (missionObj.boss ?? 0) + 1;
                     difficultyObj.perkPointsEarned += 3;
+                    for (let i = difficultyObj.prestige; i > 0; i--) {
+                        if (missionObj.completedPrestiges.includes(i)) continue;
+                        missionObj.completedPrestiges.push(i);
+                        break;
+                    }
                 } else {
                     missionObj.perfect = missionObj.perfectMin ?? 0;
                     missionObj.stage = missionObj.stage - perfectDiff;
                     missionObj.boss = missionObj.boss - perfectDiff;
-                    difficultyObj.perkPointsEarned -= 3;
+                    difficultyObj.perkPointsEarned -= (3 * perfectDiff);
+                    missionObj.completedPrestiges = missionObj.completedPrestiges.filter(p => p !== difficultyObj.prestige);
                 }
 
                 missionObj.newStage = missionObj.newStageSolo || missionObj.perfect > missionObj.perfectMin;
@@ -444,9 +458,19 @@ function renderMissionGrid(minPrestige) {
 }
 
 function updatePrestige() {
-    myStaticData.forEach((difficultyObj) => {
-        const difficultyMaxPerfect = Math.max(...difficultyObj.missions.map(m => m.perfect));
-        difficultyObj.prestige = difficultyMaxPerfect + 1;
+    let prestigeLevel = 1;
+    while (true) {
+        const allHaveMission = myStaticData.every(difficultyObj =>
+            difficultyObj.missions.some(m => m.completedPrestiges && m.completedPrestiges.includes(prestigeLevel))
+        );
+        if (allHaveMission) {
+            prestigeLevel++;
+        } else {
+            break;
+        }
+    }
+    myStaticData.forEach(difficultyObj => {
+        difficultyObj.prestige = prestigeLevel;
     });
 }
 
