@@ -6,6 +6,7 @@ import { createHamburgerButton } from './modules/hamburger.js';
 import { renderMissionGrid } from './missions.js';
 import { renderPerkGrid } from './perks.js';
 import { renderStatGrid } from './stats.js';
+import { showConfirmation } from './utils/dialogue.js';
 
 
 // Global Variables
